@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#064576">
+<title>di3t.club - استشارة غذائية</title>
+<meta name="description" content="أنظمة غذائية علاجية حسب حالتك، بإشراف فريق طبي دولي">
+<link rel="icon" href="https://di3t-club.com/images/lead/logo.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0a8cff;
+    --primary-2: #1565d8;
+    --dark: #064576;
+    --bg: #eaf2fb;
+    --card: #ffffff;
+    --text: #1d2b3a;
+    --muted: #7a8797;
+    --line: #e3eaf3;
+    --soft: #eef6ff;
+    --green: #16a34a;
+    --wa: #25d366;
+    --red: #e11d48;
+    --item: 44px;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    font-family: "Tajawal", system-ui, sans-serif;
+    color: var(--text);
+    background: radial-gradient(circle at 15% 10%, #cfe6ff 0, transparent 45%),
+                radial-gradient(circle at 90% 80%, #d9f2ff 0, transparent 40%), var(--bg);
+    display: flex; justify-content: center;
+    padding: 12px;
+  }
+  button, input, select, textarea { font: inherit; color: inherit; }
+
+  .app {
+    width: 100%; max-width: 600px; height: calc(100dvh - 24px);
+    display: flex; flex-direction: column; overflow: hidden;
+    background: rgba(255,255,255,.92); border: 1px solid rgba(255,255,255,.7);
+    border-radius: 28px; box-shadow: 0 20px 50px rgba(6,69,118,.12);
+  }
+  header {
+    position: relative; padding: 16px 16px 10px; text-align: center;
+    background: linear-gradient(135deg, rgba(10,140,255,.22), rgba(21,101,216,.08) 60%, transparent);
+  }
+  header .logo {
+    width: 64px; height: 64px; margin: 0 auto; padding: 8px; border-radius: 18px; background: #fff;
+    box-shadow: 0 8px 20px rgba(10,140,255,.15); animation: float 4s ease-in-out infinite;
+  }
+  header .logo img { width: 100%; height: 100%; border-radius: 12px; display: block; }
+  header .status { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+  header .status i { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px #4ade80; }
+  header .restart {
+    position: absolute; top: 14px; left: 14px; border: 0; background: #fff; border-radius: 12px;
+    padding: 6px 10px; font-size: 12px; font-weight: 700; color: var(--primary-2); cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06); display: none;
+  }
+  @keyframes float { 50% { transform: translateY(-4px); } }
+
+  #chat { flex: 1; overflow-y: auto; padding: 16px 14px 24px; scroll-behavior: smooth; }
+  .row { display: flex; align-items: flex-end; gap: 8px; margin: 6px 0; animation: pop .3s ease both; }
+  .row.user { justify-content: flex-end; }
+  .avatar { width: 34px; height: 34px; border-radius: 50%; background: #fff; flex-shrink: 0; box-shadow: 0 2px 6px rgba(0,0,0,.08); overflow: hidden; }
+  .avatar img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+  .avatar.ghost { visibility: hidden; }
+  .bubble {
+    max-width: 80%; padding: 10px 14px; border-radius: 18px; line-height: 1.6; font-size: 15px;
+    background: var(--card); box-shadow: 0 3px 10px rgba(6,69,118,.07); white-space: pre-line;
+  }
+  .row.bot .bubble { border-bottom-right-radius: 6px; }
+  .row.user .bubble { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; border-bottom-left-radius: 6px; font-weight: 500; }
+  .typing { display: flex; gap: 4px; padding: 14px 16px; }
+  .typing span { width: 7px; height: 7px; border-radius: 50%; background: #9fb3c8; animation: blink 1s infinite; }
+  .typing span:nth-child(2) { animation-delay: .15s; } .typing span:nth-child(3) { animation-delay: .3s; }
+  @keyframes blink { 50% { opacity: .25; transform: translateY(-2px); } }
+  @keyframes pop { from { opacity: 0; transform: translateY(6px); } }
+
+  #panel { border-top: 1px solid var(--line); background: #fff; padding: 14px; max-height: 62%; overflow-y: auto; }
+  #panel:empty { display: none; }
+  .panel-title { text-align: center; font-weight: 800; font-size: 14px; color: var(--dark); margin: 0 0 10px; }
+
+  .goals { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .goal {
+    display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: 16px; cursor: pointer;
+    border: 1.5px solid var(--line); background: var(--soft); font-weight: 700; font-size: 15px; text-align: start;
+    transition: .15s;
+  }
+  .goal .ic { font-size: 22px; }
+  .goal:hover, .goal:focus-visible { border-color: var(--primary); background: #fff; outline: none; }
+
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .options.chips { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .opt {
+    padding: 12px 14px; border-radius: 14px; border: 1.5px solid var(--line); background: var(--soft);
+    font-weight: 600; cursor: pointer; text-align: start; transition: .15s;
+  }
+  .chips .opt { padding: 9px 14px; border-radius: 999px; }
+  .opt:hover { border-color: var(--primary); }
+  .opt.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .gender { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gender .opt { text-align: center; font-size: 17px; padding: 18px 10px; }
+  .gender .opt span { display: block; font-size: 34px; margin-bottom: 4px; }
+
+  .btn {
+    width: 100%; margin-top: 12px; border: 0; border-radius: 16px; padding: 14px; cursor: pointer;
+    background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; font-weight: 800; font-size: 16px;
+    box-shadow: 0 8px 18px rgba(10,140,255,.25);
+  }
+  .btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+  .btn.link { background: none; color: var(--muted); box-shadow: none; margin-top: 4px; padding: 8px; font-weight: 600; font-size: 14px; }
+
+  .wheels { display: flex; gap: 10px; }
+  .wheel-box { flex: 1; text-align: center; }
+  .wheel-box .lbl { display: inline-block; background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: #fff; font-weight: 800; font-size: 13px; padding: 5px 14px; border-radius: 999px; margin-bottom: 8px; }
+  .wheel { position: relative; height: calc(var(--item) * 3); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .wheel::before { content: ""; position: absolute; inset: var(--item) 6px; background: var(--soft); border: 1px solid #d4e7fb; border-radius: 12px; pointer-events: none; }
+  .wheel .unit { position: absolute; top: var(--item); inset-inline-start: 14px; line-height: var(--item); font-size: 12px; font-weight: 700; color: var(--primary); pointer-events: none; }
+  .wheel-list { position: relative; height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; outline: none; }
+  .wheel-list::-webkit-scrollbar { display: none; }
+  .wheel-list .pad { height: var(--item); }
+  .wheel-list .it { height: var(--item); line-height: var(--item); scroll-snap-align: start; font-size: 16px; color: #b3c0cd; cursor: pointer; transition: .1s; }
+  .wheel-list .it.on { color: var(--primary-2); font-size: 22px; font-weight: 800; }
+
+  .phone-row { display: flex; gap: 8px; direction: ltr; }
+  .phone-row select { flex: 0 0 auto; border: 1.5px solid var(--line); border-radius: 14px; padding: 0 8px; background: var(--soft); font-weight: 700; }
+  .phone-row input { flex: 1; min-width: 0; border: 1.5px solid var(--line); border-radius: 14px; padding: 14px; font-size: 18px; font-weight: 700; letter-spacing: 1px; outline: none; }
+  .phone-row input:focus, .phone-row select:focus, textarea:focus { border-color: var(--primary); outline: none; }
+  .hint { font-size: 12px; color: var(--muted); text-align: center; margin-top: 8px; }
+  .err { color: var(--red); font-size: 13px; font-weight: 700; text-align: center; margin-top: 8px; min-height: 1em; }
+  textarea { width: 100%; min-height: 84px; border: 1.5px solid var(--line); border-radius: 14px; padding: 12px; resize: vertical; }
+
+  .result { margin-top: 12px; display: flex; flex-direction: column; gap: 12px; animation: pop .4s ease both; }
+  .card { background: #fff; border-radius: 20px; padding: 16px; box-shadow: 0 6px 18px rgba(6,69,118,.08); }
+  .card h3 { margin: 0 0 8px; font-size: 18px; color: var(--dark); }
+  .card p { margin: 6px 0; line-height: 1.7; }
+  .wa-btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none;
+    background: var(--wa); color: #fff; font-weight: 800; font-size: 17px; padding: 15px; border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(37,211,102,.35); animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 50% { transform: scale(1.02); } }
+  .stats { display: flex; gap: 8px; flex-wrap: wrap; }
+  .stat { flex: 1; min-width: 90px; background: var(--soft); border-radius: 14px; padding: 10px; text-align: center; }
+  .stat b { display: block; font-size: 20px; color: var(--primary-2); }
+  .stat small { color: var(--muted); font-weight: 600; }
+  .points { list-style: none; padding: 0; margin: 8px 0 0; }
+  .points li { padding: 6px 0; display: flex; gap: 8px; line-height: 1.6; }
+  .points li::before { content: "✓"; color: var(--green); font-weight: 800; }
+  .note { font-size: 13px; color: var(--muted); background: #fff8e6; border-radius: 12px; padding: 10px 12px; line-height: 1.6; }
+  .legend { display: flex; gap: 14px; justify-content: center; font-size: 13px; font-weight: 700; margin-top: 6px; }
+  .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-inline-end: 4px; }
+  .gallery { display: flex; gap: 8px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; }
+  .gallery img { width: 150px; flex-shrink: 0; border-radius: 14px; scroll-snap-align: start; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <button class="restart" id="restart" type="button">↻ ابدأ من جديد</button>
+    <div class="logo"><img id="logo" alt="di3t.club"></div>
+    <div class="status"><i></i>مستشارك الغذائي</div>
+  </header>
+  <main id="chat" aria-live="polite"></main>
+  <footer id="panel"></footer>
+</div>
+
+<script>
+/* ================= الإعدادات ================= */
+const CONFIG = {
+  API: "https://api.di3t-club.com/api",
+  SOURCE: "di3t.club",
+  WHATSAPP_FALLBACK: "+966554734588",
+  LOGO: "https://di3t-club.com/images/lead/logo.svg",
+  FEEDBACK_BASE: "https://di3t-club.com/images/feedback/",
+  DEFAULT_COUNTRY: "SA",
+};
+
+const COUNTRIES = {
+  SA: { name: "السعودية", code: "966", flag: "🇸🇦", len: [9], start: "5" },
+  AE: { name: "الإمارات", code: "971", flag: "🇦🇪", len: [9], start: "5" },
+  KW: { name: "الكويت", code: "965", flag: "🇰🇼", len: [8] },
+  QA: { name: "قطر", code: "974", flag: "🇶🇦", len: [8] },
+  BH: { name: "البحرين", code: "973", flag: "🇧🇭", len: [8] },
+  OM: { name: "عمان", code: "968", flag: "🇴🇲", len: [8] },
+  IQ: { name: "العراق", code: "964", flag: "🇮🇶", len: [10], start: "7" },
+  JO: { name: "الأردن", code: "962", flag: "🇯🇴", len: [9], start: "7" },
+  EG: { name: "مصر", code: "20", flag: "🇪🇬", len: [10], start: "1" },
+};
+const TZ_COUNTRY = {
+  "Asia/Riyadh": "SA", "Asia/Dubai": "AE", "Asia/Kuwait": "KW", "Asia/Qatar": "QA", "Asia/Bahrain": "BH",
+  "Asia/Muscat": "OM", "Asia/Baghdad": "IQ", "Asia/Amman": "JO", "Africa/Cairo": "EG",
+};
+
+/* ================= الأهداف والأمراض =================
+   كل هدف له: أسئلة قبل البيانات الأساسية (pre) وأسئلة بعد رقم الهاتف (post)
+   ونتيجة خاصة به. female = لا نسأل عن الجنس. */
+const GOALS = {
+  rashaqa: {
+    label: "رشاقة", icon: "🏃‍♀️", folder: "رشاقة",
+    specialist: "أخصائية الرشاقة",
+    intro: ["اختيار ممتاز 👌", "خلّينا نصمم لك خطة رشاقة تناسب جسمك وأكلك اليومي"],
+    pre: [{ key: "target", q: "كم كيلو حاب تنزل؟", options: ["2 - 5 كيلو", "6 - 10 كيلو", "11 - 20 كيلو", "أكثر من 20 كيلو", "أبغى أثبت وزني وأشد جسمي"] }],
+    post: [
+      { key: "activity", q: "كيف نشاطك اليومي؟", options: ["قليل (أغلب اليوم جلوس)", "متوسط (مشي خفيف)", "عالي (رياضة منتظمة)"] },
+      { key: "tried", q: "جربت أنظمة غذائية قبل؟", options: ["لا، أول مرة", "نعم، ونزلت ثم رجع الوزن", "نعم، وما نفعت معي"] },
+    ],
+    result: {
+      title: "خطة رشاقة مصممة لك",
+      points: ["نزول وزن تدريجي وثابت بدون حرمان", "وجبات من أكلك اليومي تناسب ذوقك", "متابعة أسبوعية مع أخصائيتك على واتساب"],
+    },
+  },
+  karsh: {
+    label: "كرش", icon: "🎯", folder: "کرش",
+    specialist: "أخصائية التغذية",
+    intro: ["ولا يهمك 💪", "الكرش له نظام خاص يركز على دهون البطن، خلّينا نعرف أكثر"],
+    pre: [{ key: "area", q: "وين يتركز الوزن عندك أكثر؟", options: ["البطن فقط", "البطن والجوانب", "كل الجسم"] }],
+    post: [
+      { key: "habits", q: "أي من هذي العادات عندك؟ (اختر أكثر من خيار)", multi: true,
+        options: ["الأكل المتأخر بالليل", "المشروبات الغازية أو السكرية", "الخبز والرز بكثرة", "الوجبات السريعة", "قلة المشي والحركة"] },
+    ],
+    result: {
+      title: "خطة لتنحيف البطن وحرق دهون الكرش",
+      points: ["تقليل دهون البطن والانتفاخ", "ضبط توقيت الوجبات والسناكات الليلية", "تحسين الهضم والإحساس بالخفة"],
+    },
+  },
+  sukari: {
+    label: "سكري", icon: "🩸", folder: "سکري",
+    specialist: "أخصائية التغذية العلاجية لمرضى السكري",
+    intro: ["الله يعافيك 🤍", "التغذية الصحيحة تفرق كثير مع السكري، بنسألك كم سؤال بسيط"],
+    pre: [{ key: "type", q: "وش نوع السكري عندك؟", options: ["النوع الأول", "النوع الثاني", "مقاومة إنسولين / ما قبل السكري", "سكري الحمل", "مو متأكد"] }],
+    post: [
+      { key: "treatment", q: "وش العلاج اللي تستخدمه حالياً؟", options: ["إبر إنسولين", "حبوب", "إنسولين وحبوب", "بدون علاج"] },
+      { key: "hba1c", q: "كم كان آخر تحليل سكر تراكمي؟", options: ["أقل من 6.5", "من 6.5 إلى 8", "أعلى من 8", "ما أعرف"] },
+    ],
+    result: {
+      title: "خطة غذائية لمرضى السكري",
+      points: ["وجبات تساعد على استقرار مستوى السكر خلال اليوم", "بدائل ذكية للنشويات والحلويات", "متابعة مع أخصائية تغذية علاجية"],
+      note: "الخطة الغذائية مكمّلة لعلاجك ولا تغني عن متابعة طبيبك، ولا توقف أي دواء بدون استشارته.",
+    },
+  },
+  dhaght: {
+    label: "ضغط", icon: "❤️", folder: "ضغط",
+    specialist: "أخصائية التغذية العلاجية",
+    intro: ["الله يعافيك 🤍", "الأكل له دور كبير في ضبط الضغط، خلّينا نعرف حالتك"],
+    pre: [{ key: "meds", q: "تستخدم أدوية للضغط؟", options: ["نعم", "لا", "أحياناً"] }],
+    post: [
+      { key: "reading", q: "قراءة ضغطك المعتادة تقريباً؟", options: ["طبيعية مع العلاج", "حوالي 140/90", "أعلى من 160/100", "ما أقيسه"] },
+      { key: "salt", q: "كيف استهلاكك للملح والأكل المالح؟", options: ["قليل", "متوسط", "كثير"] },
+    ],
+    result: {
+      title: "خطة غذائية لضبط الضغط",
+      points: ["تقليل الملح بدون ما يفقد أكلك طعمه", "أطعمة غنية بالبوتاسيوم والمغنيسيوم", "نزول الوزن الزائد يخفف الحمل على القلب"],
+      note: "الخطة الغذائية مكمّلة لعلاجك ولا تغني عن متابعة طبيبك، ولا توقف أي دواء بدون استشارته.",
+    },
+  },
+  qolon: {
+    label: "قولون", icon: "🌿", folder: "قولون",
+    specialist: "أخصائية التغذية العلاجية",
+    intro: ["نفهمك تماماً 🤍", "القولون يرتاح كثير مع الأكل المناسب، خلّينا نعرف الأعراض"],
+    pre: [{ key: "symptoms", q: "وش الأعراض اللي تزعجك؟ (اختر أكثر من خيار)", multi: true,
+      options: ["انتفاخ وغازات", "ألم أو تقلصات", "إسهال", "إمساك", "حموضة أو حرقة"] }],
+    post: [
+      { key: "triggers", q: "تحس الأعراض تزيد مع؟ (اختر أكثر من خيار)", multi: true,
+        options: ["الحليب ومشتقاته", "الخبز والمعجنات", "الأكل الحار", "البقوليات", "التوتر والقلق", "ما لاحظت"] },
+    ],
+    result: {
+      title: "خطة مريحة للقولون",
+      points: ["تحديد الأطعمة المهيجة لقولونك", "تقليل الانتفاخ والغازات", "وجبات سهلة الهضم ومتوازنة"],
+    },
+  },
+  khumool: {
+    label: "خمول", icon: "😴", folder: "خمول",
+    specialist: "أخصائية التغذية",
+    intro: ["نرجع لك نشاطك إن شاء الله ⚡", "بس نبي نعرف كم شي عن يومك"],
+    pre: [{ key: "when", q: "متى تحس بالخمول أكثر؟", options: ["الصبح", "بعد الأكل", "طول اليوم"] }],
+    post: [
+      { key: "sleep", q: "كم ساعة تنام باليوم؟", options: ["أقل من 5 ساعات", "5 - 7 ساعات", "أكثر من 7 ساعات"] },
+      { key: "labs", q: "سويت تحاليل فيتامين د والحديد؟", options: ["نعم وفيه نقص", "نعم وطبيعية", "لا"] },
+    ],
+    result: {
+      title: "خطة لرفع الطاقة والنشاط",
+      points: ["توزيع وجبات يحافظ على طاقتك طول اليوم", "أطعمة غنية بالحديد وفيتامين د وب12", "تقليل هبوط الطاقة بعد الأكل"],
+    },
+  },
+  mafasel: {
+    label: "آلام المفاصل", icon: "🦴", folder: "آلام المفاصل",
+    specialist: "أخصائية التغذية العلاجية",
+    intro: ["الله يعافيك 🤍", "في أطعمة تخفف الالتهاب وأطعمة تزيده، خلّينا نعرف حالتك"],
+    pre: [{ key: "where", q: "وين الألم؟ (اختر أكثر من خيار)", multi: true,
+      options: ["الركب", "الظهر", "الرقبة والكتف", "القدمين", "اليدين"] }],
+    post: [
+      { key: "diagnosis", q: "فيه تشخيص طبي؟", options: ["خشونة", "روماتيزم", "نقرس", "ما فيه تشخيص"] },
+    ],
+    result: {
+      title: "خطة غذائية لتخفيف آلام المفاصل",
+      points: ["أطعمة مضادة للالتهاب", "تخفيف الوزن الزائد عن المفاصل", "دعم العظام بالكالسيوم وفيتامين د"],
+      note: "الخطة الغذائية مكمّلة لعلاجك ولا تغني عن متابعة طبيبك.",
+    },
+  },
+  imsak: {
+    label: "امساك", icon: "🥦", folder: "امساك",
+    specialist: "أخصائية التغذية",
+    intro: ["ولا يهمك 🤍", "الإمساك غالباً يتحسن بسرعة مع تعديل الأكل والشرب"],
+    pre: [{ key: "freq", q: "كم مرة تدخل الحمام بالأسبوع تقريباً؟", options: ["مرة أو مرتين", "3 - 4 مرات", "يومياً بس بصعوبة"] }],
+    post: [
+      { key: "water", q: "كم تشرب ماء باليوم؟", options: ["أقل من لتر", "1 - 2 لتر", "أكثر من لترين"] },
+      { key: "veg", q: "كم مرة تاكل خضار وفواكه؟", options: ["نادراً", "أحياناً", "يومياً"] },
+    ],
+    result: {
+      title: "خطة لتنظيم الهضم والتخلص من الإمساك",
+      points: ["زيادة الألياف بشكل تدريجي ومريح", "جدول شرب ماء يناسب يومك", "أطعمة طبيعية تساعد على انتظام الأمعاء"],
+    },
+  },
+  takayos: {
+    label: "تكيس", icon: "🌸", folder: "تکیس", female: true,
+    specialist: "أخصائية تغذية تكيس المبايض",
+    intro: ["الله يعافيك 🤍", "التغذية من أهم خطوات علاج التكيس، بنسألك كم سؤال"],
+    pre: [{ key: "cycle", q: "الدورة عندك؟", options: ["منتظمة", "غير منتظمة", "متأخرة كثير أو منقطعة"] }],
+    post: [
+      { key: "symptoms", q: "أي من هذي الأعراض عندك؟ (اختاري أكثر من خيار)", multi: true,
+        options: ["وزن صعب ينزل", "شعر زائد", "حب شباب", "تساقط شعر", "رغبة شديدة بالسكريات"] },
+      { key: "pregnancy", q: "تخططين لحمل قريب؟", options: ["نعم", "لا"] },
+    ],
+    result: {
+      title: "خطة غذائية لتكيس المبايض",
+      points: ["تحسين مقاومة الإنسولين", "المساعدة على انتظام الدورة", "نزول وزن مدروس يناسب هرموناتك"],
+      note: "الخطة الغذائية مكمّلة لعلاجك ولا تغني عن متابعة طبيبتك.",
+    },
+  },
+  haml: {
+    label: "حمل و رضاعة", icon: "🤱", folder: "حمل و رضاعة", female: true, noWeightGoal: true,
+    specialist: "أخصائية تغذية الحوامل والمرضعات",
+    intro: ["الله يتمم لك على خير 🤍", "تغذيتك الحين مهمة لك ولطفلك، خلّينا نعرف أكثر"],
+    pre: [{ key: "stage", q: "أنتِ حالياً؟", options: ["حامل - الشهور 1 إلى 3", "حامل - الشهور 4 إلى 6", "حامل - الشهور 7 إلى 9", "مرضعة"] }],
+    post: [
+      { key: "aim", q: "وش هدفك الأساسي؟", options: ["تغذية صحية لي ولطفلي", "التحكم بزيادة الوزن", "نزول الوزن بعد الولادة بأمان", "زيادة إدرار الحليب"] },
+    ],
+    result: {
+      title: "خطة تغذية آمنة للحمل والرضاعة",
+      points: ["احتياجاتك من الحديد والكالسيوم وحمض الفوليك", "زيادة وزن صحية ومدروسة", "وجبات تدعم الرضاعة وطاقتك اليومية"],
+      note: "الخطة لا تغني عن متابعة طبيبتك، وأي تعديل يكون بما يناسب حملك أو رضاعتك.",
+    },
+  },
+};
+
+/* عناوين مختصرة تظهر للأخصائية في لوحة التحكم ورسالة الواتساب */
+const LABELS = {
+  target: "الوزن المطلوب نزوله", activity: "النشاط اليومي", tried: "تجارب سابقة",
+  area: "تركز الوزن", habits: "العادات", type: "نوع السكري", treatment: "العلاج",
+  hba1c: "السكر التراكمي", meds: "أدوية الضغط", reading: "قراءة الضغط", salt: "الملح",
+  symptoms: "الأعراض", triggers: "تزيد الأعراض مع", when: "وقت الخمول", sleep: "النوم",
+  labs: "تحاليل فيتامين د والحديد", where: "مكان الألم", diagnosis: "التشخيص",
+  freq: "الحمام بالأسبوع", water: "شرب الماء", veg: "الخضار والفواكه", cycle: "الدورة",
+  pregnancy: "تخطط لحمل قريب", stage: "المرحلة", aim: "الهدف الأساسي",
+};
+
+/* ================= الحالة ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const chat = $("#chat"), panel = $("#panel");
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+let state, steps, run = 0;
+
+function newState() {
+  return { goal: null, answers: [], gender: null, height: 165, weight: 75, age: 30,
+           country: detectCountry(), phone: "", notes: "", lead: null };
+}
+function detectCountry() {
+  try { return TZ_COUNTRY[Intl.DateTimeFormat().resolvedOptions().timeZone] || CONFIG.DEFAULT_COUNTRY; }
+  catch { return CONFIG.DEFAULT_COUNTRY; }
+}
+
+/* ================= واجهة المحادثة ================= */
+function scrollDown() { requestAnimationFrame(() => chat.scrollTop = chat.scrollHeight); }
+function avatar(ghost) {
+  const a = document.createElement("div");
+  a.className = "avatar" + (ghost ? " ghost" : "");
+  a.innerHTML = `<img alt="" src="${CONFIG.LOGO}">`;
+  return a;
+}
+async function bot(lines, myRun) {
+  for (let i = 0; i < lines.length; i++) {
+    if (myRun !== run) return;
+    const row = document.createElement("div");
+    row.className = "row bot";
+    row.append(avatar(i < lines.length - 1));
+    const b = document.createElement("div");
+    b.className = "bubble typing";
+    b.innerHTML = "<span></span><span></span><span></span>";
+    row.append(b); chat.append(row); scrollDown();
+    await sleep(Math.min(450 + lines[i].length * 12, 1100));
+    if (myRun !== run) return;
+    b.className = "bubble"; b.textContent = lines[i]; scrollDown();
+  }
+}
+function user(text) {
+  const row = document.createElement("div");
+  row.className = "row user";
+  const b = document.createElement("div");
+  b.className = "bubble"; b.textContent = text;
+  row.append(b); chat.append(row); scrollDown();
+}
+function clearPanel() { panel.innerHTML = ""; }
+function el(html) { const t = document.createElement("template"); t.innerHTML = html.trim(); return t.content.firstElementChild; }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+
+/* عجلة اختيار الأرقام */
+function wheel(min, max, value, unit) {
+  const box = el(`<div class="wheel"><div class="wheel-list" tabindex="0"></div><div class="unit">${unit}</div></div>`);
+  const list = box.firstElementChild;
+  const H = () => list.firstElementChild.offsetHeight || 44;
+  let html = '<div class="pad"></div>';
+  for (let v = min; v <= max; v++) html += `<div class="it" data-v="${v}">${v}</div>`;
+  list.innerHTML = html + '<div class="pad"></div>';
+  const items = [...list.querySelectorAll(".it")];
+  const get = () => Math.max(min, Math.min(max, min + Math.round(list.scrollTop / H())));
+  const mark = () => { const v = get(); items.forEach(i => i.classList.toggle("on", +i.dataset.v === v)); };
+  const set = (v, smooth) => list.scrollTo({ top: (v - min) * H(), behavior: smooth ? "smooth" : "auto" });
+  list.addEventListener("scroll", mark, { passive: true });
+  list.addEventListener("click", e => { const it = e.target.closest(".it"); if (it) set(+it.dataset.v, true); });
+  list.addEventListener("keydown", e => {
+    if (e.key === "ArrowUp") { e.preventDefault(); set(get() - 1, true); }
+    if (e.key === "ArrowDown") { e.preventDefault(); set(get() + 1, true); }
+  });
+  requestAnimationFrame(() => { set(value); mark(); });
+  box.get = get;
+  return box;
+}
+
+/* ================= الاتصال بالسيرفر ================= */
+function api(path, method, body) {
+  return fetch(CONFIG.API + path, {
+    method, headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: body ? JSON.stringify(body) : undefined,
+  }).then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)));
+}
+let expertNumbers = null;
+function loadExpertNumbers() {
+  expertNumbers = api("/settings/expert_whatsapp_numbers", "GET")
+    .then(d => String(d.value || "").split(/[\s,،]+/).filter(Boolean))
+    .catch(() => []);
+}
+function logVisit() {
+  const p = new URLSearchParams(location.search), utm = {};
+  for (const [k, v] of p) if (k.startsWith("utm_") || k === "goal") utm[k] = v;
+  const ua = navigator.userAgent;
+  api("/user-visit-logs", "POST", {
+    page_url: location.href, page_path: location.pathname, page_title: document.title,
+    referrer_url: document.referrer,
+    metadata: { device: /Mobi|Android/i.test(ua) ? "mobile" : "desktop", language: navigator.language, ...utm },
+    visited_at: new Date().toISOString(),
+  }).catch(() => {});
+}
+function summary(sep) {
+  const g = GOALS[state.goal];
+  const lines = [`الهدف: ${g.label}`];
+  state.answers.forEach(a => lines.push(`${LABELS[a.key] || a.q}: ${a.a}`));
+  if (state.notes) lines.push(`ملاحظات: ${state.notes}`);
+  return lines.join(sep);
+}
+function createLead() {
+  const c = COUNTRIES[state.country];
+  state.lead = api("/diet-leads", "POST", {
+    gender: state.gender, height: state.height, weight: state.weight,
+    phone: state.phone, code: c.code, country: c.name, source: CONFIG.SOURCE,
+    notes: summary(" | "),
+  }).catch(e => { console.warn("lead", e); return null; });
+}
+function syncLead() {
+  if (!state.lead) return;
+  // التحديثات تُرسل بالترتيب حتى لا يسبق تحديث قديم تحديثاً أحدث
+  state.lead = state.lead.then(ok => ok && api("/diet-leads-edit", "PUT", {
+    phone_number: state.phone, age: state.age, additional_info: summary(" | "),
+  }).then(() => ok)).catch(e => { console.warn("lead-edit", e); return true; });
+}
+
+/* ================= الحسابات ================= */
+function body() {
+  const h = state.height / 100, bmi = state.weight / (h * h);
+  const min = Math.round(18.5 * h * h), max = Math.round(24.9 * h * h);
+  let cat = "وزن صحي";
+  if (bmi < 18.5) cat = "نحافة"; else if (bmi >= 30) cat = "سمنة"; else if (bmi >= 25) cat = "وزن زائد";
+  return { bmi: bmi.toFixed(1), min, max, cat, over: state.weight - max, under: min - state.weight };
+}
+
+/* ================= الخطوات ================= */
+function buildSteps(key) {
+  const g = GOALS[key], s = [];
+  g.pre.forEach(q => s.push({ kind: "question", ...q }));
+  if (g.female) state.gender = "female"; else s.push({ kind: "gender" });
+  s.push({ kind: "hw" }, { kind: "phone" }, { kind: "age" });
+  g.post.forEach(q => s.push({ kind: "question", ...q }));
+  s.push({ kind: "notes" }, { kind: "result" });
+  return s;
+}
+
+async function start() {
+  run++; const myRun = run;
+  state = newState(); chat.innerHTML = ""; clearPanel();
+  $("#restart").style.display = "none";
+  const pre = new URLSearchParams(location.search).get("goal");
+  await bot(["أهلا بكم 👋", "أنظمة غذائية علاجية، بإشراف فريق طبي دولي", "10 سنوات خبرة مع ثقة أكثر من 43 ألف مشترك"], myRun);
+  if (myRun !== run) return;
+  if (pre && GOALS[pre]) return chooseGoal(pre, myRun);
+  await bot(["وش هدفك أو الحالة اللي تبي نساعدك فيها؟"], myRun);
+  if (myRun !== run) return;
+  const wrap = el(`<div><p class="panel-title">اختر هدفك</p><div class="goals"></div></div>`);
+  Object.entries(GOALS).forEach(([k, g]) => {
+    const b = el(`<button class="goal" type="button"><span class="ic">${g.icon}</span>${esc(g.label)}</button>`);
+    b.onclick = () => chooseGoal(k, myRun);
+    wrap.lastElementChild.append(b);
+  });
+  panel.append(wrap);
+}
+
+async function chooseGoal(key, myRun) {
+  state.goal = key; clearPanel();
+  $("#restart").style.display = "block";
+  const g = GOALS[key];
+  user(`${g.icon} ${g.label}`);
+  await bot(g.intro, myRun);
+  steps = buildSteps(key);
+  next(0, myRun);
+}
+
+async function next(i, myRun) {
+  if (myRun !== run) return;
+  clearPanel();
+  const s = steps[i], go = () => next(i + 1, myRun);
+  const g = GOALS[state.goal];
+  const f = g.female;
+
+  if (s.kind === "question") {
+    await bot([s.q], myRun); if (myRun !== run) return;
+    const box = el(`<div class="options${s.multi ? " chips" : ""}"></div>`);
+    const picked = new Set();
+    s.options.forEach(o => {
+      const b = el(`<button class="opt" type="button">${esc(o)}</button>`);
+      b.onclick = () => {
+        if (!s.multi) return done(o);
+        picked.has(o) ? picked.delete(o) : picked.add(o);
+        b.classList.toggle("on"); cont.disabled = !picked.size;
+      };
+      box.append(b);
+    });
+    const cont = el(`<button class="btn" type="button" disabled>استمرار</button>`);
+    cont.onclick = () => done([...picked].join("، "));
+    panel.append(box); if (s.multi) panel.append(cont);
+    function done(a) {
+      state.answers.push({ key: s.key, q: s.q, a });
+      user(a); syncLead(); go();
+    }
+  }
+
+  else if (s.kind === "gender") {
+    await bot(["عرفنا عن جنسك!"], myRun); if (myRun !== run) return;
+    const box = el(`<div class="gender">
+      <button class="opt" type="button" data-g="female"><span>👩</span>امرأة</button>
+      <button class="opt" type="button" data-g="male"><span>👨</span>رجل</button></div>`);
+    box.onclick = e => {
+      const b = e.target.closest("[data-g]"); if (!b) return;
+      state.gender = b.dataset.g; state.height = state.gender === "male" ? 172 : 160;
+      state.weight = state.gender === "male" ? 80 : 68;
+      user(b.textContent.trim()); go();
+    };
+    panel.append(box);
+  }
+
+  else if (s.kind === "hw") {
+    await bot([f ? "أدخلي طولك ووزنك" : "أدخل طولك ووزنك"], myRun); if (myRun !== run) return;
+    const hW = wheel(120, 220, state.height, "Cm"), wW = wheel(35, 200, state.weight, "Kg");
+    const box = el(`<div class="wheels"><div class="wheel-box"><span class="lbl">الطول</span></div><div class="wheel-box"><span class="lbl">الوزن</span></div></div>`);
+    box.children[0].append(hW); box.children[1].append(wW);
+    const btn = el(`<button class="btn" type="button">استمرار</button>`);
+    btn.onclick = async () => {
+      state.height = hW.get(); state.weight = wW.get();
+      user(`الوزن ${state.weight} ، الطول ${state.height}`);
+      clearPanel();
+      const b = body();
+      let msg;
+      if (g.noWeightGoal) msg = "تمام، سجلنا طولك ووزنك 👍";
+      else if (b.over > 0) msg = `وزنك أعلى من الوزن المثالي بحوالي ${b.over} كيلو`;
+      else if (b.under > 0) msg = `وزنك أقل من الوزن المثالي بحوالي ${b.under} كيلو`;
+      else msg = "وزنك ضمن الوزن الصحي 👌";
+      await bot([msg], myRun); go();
+    };
+    panel.append(box, btn);
+  }
+
+  else if (s.kind === "phone") {
+    await bot(["لمعرفة خطتك بالتفصيل،", `${f ? "اتركي" : "اترك"} رقم واتسابك ✉️ وبتتواصل معك ${g.specialist} مباشرة`], myRun);
+    if (myRun !== run) return;
+    const opts = Object.entries(COUNTRIES).map(([k, c]) =>
+      `<option value="${k}"${k === state.country ? " selected" : ""}>${c.flag} +${c.code}</option>`).join("");
+    const box = el(`<div>
+      <div class="phone-row"><select aria-label="رمز الدولة">${opts}</select>
+      <input type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="رقم الواتس اب" aria-label="رقم الواتس اب"></div>
+      <div class="err"></div>
+      <button class="btn" type="button">إرسال واستلام الخطة</button>
+      <div class="hint">🔒 رقمك سري ويُستخدم فقط لتواصل الأخصائية معك</div></div>`);
+    const sel = $("select", box), inp = $("input", box), err = $(".err", box), btn = $(".btn", box);
+    const clean = v => v.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)).replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/\D/g, "");
+    const submit = () => {
+      const c = COUNTRIES[sel.value];
+      let n = clean(inp.value);
+      if (n.startsWith("00" + c.code)) n = n.slice(2 + c.code.length);
+      else if (n.startsWith(c.code) && n.length > Math.max(...c.len)) n = n.slice(c.code.length);
+      n = n.replace(/^0+/, "");
+      if (!c.len.includes(n.length) || (c.start && !n.startsWith(c.start))) {
+        err.textContent = `الرقم غير صحيح، تأكد أنه ${c.len[0]} أرقام${c.start ? ` ويبدأ بـ ${c.start}` : ""}`;
+        inp.focus(); return;
+      }
+      state.country = sel.value; state.phone = n;
+      user(`+${c.code} ${n}`);
+      createLead(); go();
+    };
+    btn.onclick = submit;
+    inp.addEventListener("keydown", e => { if (e.key === "Enter") submit(); });
+    inp.addEventListener("input", () => err.textContent = "");
+    panel.append(box);
+    setTimeout(() => inp.focus(), 50);
+  }
+
+  else if (s.kind === "age") {
+    await bot(["تم استلام رقمك ✅", "كم عمرك؟"], myRun); if (myRun !== run) return;
+    const w = wheel(12, 90, state.age, "سنة");
+    const box = el(`<div class="wheels"><div class="wheel-box"><span class="lbl">عمرك</span></div></div>`);
+    box.firstElementChild.append(w);
+    const btn = el(`<button class="btn" type="button">استمرار</button>`);
+    btn.onclick = () => { state.age = w.get(); user(String(state.age)); syncLead(); go(); };
+    panel.append(box, btn);
+  }
+
+  else if (s.kind === "notes") {
+    await bot([`في شي ثاني حاب${f ? "ة" : ""} تضيفه للأخصائية؟`, "مثلاً: أدوية، حساسية من أكل، أكلات ما تحبها"], myRun);
+    if (myRun !== run) return;
+    const box = el(`<div><textarea placeholder="اكتب ملاحظاتك هنا..." maxlength="500"></textarea>
+      <button class="btn" type="button">إرسال</button><button class="btn link" type="button">ما عندي، تخطي</button></div>`);
+    const ta = $("textarea", box);
+    const [send, skip] = box.querySelectorAll("button");
+    send.onclick = () => {
+      const v = ta.value.trim(); if (!v) return ta.focus();
+      state.notes = v; user(v); syncLead(); go();
+    };
+    skip.onclick = () => { user("ما عندي"); go(); };
+    panel.append(box);
+  }
+
+  else if (s.kind === "result") {
+    await bot([`شكراً لإرسال المعلومات 🌷`, `ستتواصل معك قريباً ${g.specialist}`], myRun);
+    if (myRun === run) renderResult();
+  }
+}
+
+/* ================= صفحة النتيجة ================= */
+async function waLink() {
+  const nums = (await expertNumbers) || [];
+  const num = (nums.length ? nums[Math.floor(Math.random() * nums.length)] : CONFIG.WHATSAPP_FALLBACK).replace(/[^\d]/g, "");
+  const g = GOALS[state.goal];
+  const text = [
+    "مرحبًا، أريد بدء استشارتي الغذائية. هذه بياناتي:",
+    `الجنس: ${state.gender === "male" ? "رجل" : "امرأة"}`,
+    `الوزن: ${state.weight}`, `الطول: ${state.height}`, `العمر: ${state.age}`,
+    summary("\n"),
+  ].join("\n");
+  return `https://api.whatsapp.com/send/?phone=${num}&text=${encodeURIComponent(text)}&type=phone_number&app_absent=0`;
+}
+
+function chart(b) {
+  const w = state.weight;
+  const loss = Math.min(b.over, Math.max(3, Math.round(w * 0.07)));
+  const target = w - loss, without = w + 2;
+  const lo = Math.min(target, w) - 3, hi = without + 3;
+  const X = [40, 300], y = v => 20 + (hi - v) / (hi - lo) * 120;
+  const d = new Date(), end = new Date(d); end.setMonth(d.getMonth() + 3);
+  const fmt = x => x.toLocaleDateString("ar", { day: "numeric", month: "long" });
+  return `
+  <div class="card">
+    <h3>رحلتك خلال ٣ أشهر</h3>
+    <p style="font-size:14px;color:var(--muted)">توقع تقريبي مبني على بياناتك، والنتيجة تختلف حسب الالتزام.</p>
+    <svg viewBox="0 0 340 170" width="100%" role="img" aria-label="توقع الوزن">
+      <line x1="${X[0]}" y1="${y(w)}" x2="${X[1]}" y2="${y(w)}" stroke="#e3eaf3" stroke-dasharray="4 4"/>
+      <path d="M${X[0]},${y(w)} C120,${y(w)} 200,${y(without)} ${X[1]},${y(without)}" fill="none" stroke="#f43f5e" stroke-width="3" stroke-linecap="round"/>
+      <path d="M${X[0]},${y(w)} C120,${y(w)} 200,${y(target)} ${X[1]},${y(target)}" fill="none" stroke="#0a8cff" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="${X[0]}" cy="${y(w)}" r="5" fill="#064576"/>
+      <circle cx="${X[1]}" cy="${y(without)}" r="5" fill="#f43f5e"/>
+      <circle cx="${X[1]}" cy="${y(target)}" r="6" fill="#0a8cff"/>
+      <text x="${X[0]}" y="${y(w) - 10}" font-size="12" font-weight="700" text-anchor="middle" fill="#064576">${w} كجم</text>
+      <text x="${X[1]}" y="${y(without) - 10}" font-size="12" font-weight="700" text-anchor="middle" fill="#f43f5e">${without} كجم</text>
+      <text x="${X[1]}" y="${y(target) + 20}" font-size="13" font-weight="800" text-anchor="middle" fill="#0a8cff">${target} كجم</text>
+      <text x="${X[0]}" y="165" font-size="11" text-anchor="middle" fill="#7a8797">اليوم</text>
+      <text x="${X[1]}" y="165" font-size="11" text-anchor="middle" fill="#7a8797">${fmt(end)}</text>
+    </svg>
+    <div class="legend"><span><i style="background:#0a8cff"></i>مع البرنامج</span><span><i style="background:#f43f5e"></i>بدون خطة</span></div>
+  </div>`;
+}
+
+async function renderResult() {
+  clearPanel();
+  const g = GOALS[state.goal], r = g.result, b = body();
+  const link = await waLink();
+  const showBody = !g.noWeightGoal;
+  const wrap = el(`<div class="result">
+    <a class="wa-btn" target="_blank" rel="noopener" href="${esc(link)}">💬 تحدث مع الأخصائية الآن</a>
+    <div class="card">
+      <h3>${g.icon} ${esc(r.title)}</h3>
+      ${showBody ? `<div class="stats">
+        <div class="stat"><b>${b.bmi}</b><small>مؤشر الكتلة</small></div>
+        <div class="stat"><b>${b.cat}</b><small>التصنيف</small></div>
+        <div class="stat"><b>${b.min}-${b.max}</b><small>الوزن المثالي (كجم)</small></div></div>` : ""}
+      <ul class="points">${r.points.map(p => `<li>${esc(p)}</li>`).join("")}</ul>
+    </div>
+    ${showBody && b.over > 0 ? chart(b) : ""}
+    ${r.note ? `<div class="note">⚠️ ${esc(r.note)}</div>` : ""}
+    <div class="card" id="fb" style="display:none"><h3>نتائج مشتركينا</h3><div class="gallery"></div></div>
+    <a class="wa-btn" target="_blank" rel="noopener" href="${esc(link)}">ابدأ الآن عبر واتساب</a>
+  </div>`);
+  chat.append(wrap);
+  const gal = $(".gallery", wrap), fb = $("#fb", wrap);
+  for (let i = 1; i <= 7; i++) {
+    const img = new Image();
+    img.loading = "lazy"; img.alt = "";
+    img.onload = () => { fb.style.display = ""; };
+    img.onerror = () => img.remove();
+    img.src = `${CONFIG.FEEDBACK_BASE}${encodeURIComponent(g.folder)}/${String(i).padStart(2, "0")}.webp`;
+    gal.append(img);
+  }
+  scrollDown();
+}
+
+/* ================= تشغيل ================= */
+$("#logo").src = CONFIG.LOGO;
+$("#restart").onclick = start;
+loadExpertNumbers();
+logVisit();
+start();
+</script>
+</body>
+</html>
