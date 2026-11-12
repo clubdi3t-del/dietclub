@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b5cff">
+<title>نظامي الغذائي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--p:#0b5cff;--p2:#6a3df0;--bg:#f4f6fb;--card:#fff;--t:#14213a;--m:#7b879b;--l:#e8edf5;--soft:#eef3ff;--g:#12b76a;--o:#ff8a00;--r:20px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--t)}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
+.app{max-width:480px;margin:auto;padding-bottom:110px}
+/* header */
+.hd{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:18px 16px 70px;border-radius:0 0 28px 28px}
+.top{display:flex;align-items:center;justify-content:space-between}
+.hi small{opacity:.8;font-size:13px}.hi b{display:block;font-size:20px}
+.ib{width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,.16);display:grid;place-items:center}
+.ib svg{width:20px;height:20px}
+.acts{display:flex;gap:8px}
+.week{display:flex;justify-content:space-between;margin-top:18px}
+.d{width:44px;padding:8px 0;border-radius:14px;text-align:center;font-size:12px;opacity:.85}
+.d b{display:block;font-size:16px;margin-top:2px}
+.d.on{background:#fff;color:var(--p);opacity:1;box-shadow:0 6px 16px rgba(0,0,0,.15)}
+.d.past::after{content:"";display:block;width:5px;height:5px;border-radius:50%;background:#7dffb8;margin:4px auto 0}
+/* summary */
+.sum{margin:-52px 16px 0;background:var(--card);border-radius:var(--r);padding:16px;box-shadow:0 10px 30px rgba(20,33,58,.08);display:flex;gap:16px;align-items:center}
+.ring{width:84px;height:84px;flex:none;position:relative}
+.ring svg{transform:rotate(-90deg)}.ring span{position:absolute;inset:0;display:grid;place-items:center;font-weight:800;font-size:18px}
+.ring span small{display:block;font-size:11px;color:var(--m);font-weight:500;text-align:center}
+.stats{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.st{background:var(--soft);border-radius:14px;padding:8px 10px}
+.st small{color:var(--m);font-size:12px}.st b{display:block;font-size:16px}
+.fire{color:var(--o)}
+/* sections */
+.sec{padding:0 16px;margin-top:20px}
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.sh h2{font-size:18px;margin:0}.sh a{font-size:13px;color:var(--p);text-decoration:none}
+.tip{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:var(--r);padding:12px;border:1px solid var(--l)}
+.tip img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--p)}
+.tip p{margin:2px 0 0;font-size:13px;color:var(--m)}
+.badge{font-size:11px;background:var(--p);color:#fff;padding:2px 8px;border-radius:99px;margin-inline-start:6px}
+.toggle{display:flex;justify-content:space-between;align-items:center;background:var(--card);border-radius:var(--r);padding:12px 14px;margin-top:10px;border:1px solid var(--l);font-size:14px}
+.sw{width:44px;height:26px;border-radius:99px;background:#d5dbe6;position:relative;transition:.2s}
+.sw::after{content:"";position:absolute;top:3px;right:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}
+.sw.on{background:var(--g)}.sw.on::after{right:21px}
+/* water */
+.water{background:var(--card);border-radius:var(--r);padding:14px;border:1px solid var(--l)}
+.cups{display:flex;gap:6px;margin-top:10px}
+.cup{flex:1;height:34px;border-radius:9px;background:var(--soft);border:1.5px dashed #b9c8e6}
+.cup.f{background:linear-gradient(#5fb4ff,#0b5cff);border:0}
+/* timeline */
+.tl{position:relative}
+.meal{display:flex;gap:12px;margin-bottom:12px;position:relative}
+.dot{width:28px;flex:none;display:flex;flex-direction:column;align-items:center}
+.dot i{width:28px;height:28px;border-radius:50%;border:2px solid #c9d3e3;background:#fff;display:grid;place-items:center;z-index:1}
+.dot::after{content:"";flex:1;width:2px;background:var(--l);margin-top:4px}
+.meal:last-child .dot::after{display:none}
+.meal.done .dot i{background:var(--g);border-color:var(--g);color:#fff}
+.meal.now .dot i{border-color:var(--p);box-shadow:0 0 0 5px rgba(11,92,255,.15)}
+.mc{flex:1;background:var(--card);border-radius:var(--r);padding:12px;border:1px solid var(--l);transition:.2s}
+.meal.now .mc{border-color:var(--p);box-shadow:0 8px 24px rgba(11,92,255,.12)}
+.meal.done .mc{opacity:.65}
+.mh{display:flex;gap:12px;align-items:center}
+.mh img{width:56px;height:56px;border-radius:14px;object-fit:cover;background:var(--soft)}
+.mt{flex:1}.mt b{font-size:16px}.mt small{display:block;color:var(--m);font-size:12px;margin-top:2px}
+.now-tag{font-size:11px;background:#e7efff;color:var(--p);padding:2px 8px;border-radius:99px;margin-inline-start:6px;font-weight:700}
+.items{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.it{background:var(--soft);border-radius:10px;padding:6px 10px;font-size:13px}
+.it b{color:var(--p)}
+.mf{display:flex;gap:8px;margin-top:10px}
+.btn{flex:1;height:38px;border-radius:12px;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn.pri{background:var(--p);color:#fff}.btn.sec{background:var(--soft);color:var(--p)}
+.meal.done .btn.pri{background:var(--g)}
+/* portions */
+.por{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.pc{background:var(--card);border-radius:var(--r);padding:12px 8px;text-align:center;border:1px solid var(--l)}
+.pc img{width:52px;height:52px;object-fit:contain}
+.pc small{display:block;color:var(--m);font-size:12px}.pc b{display:block;font-size:14px;margin:4px 0}
+.pc button{font-size:12px;color:var(--p);font-weight:700}
+/* nav */
+.nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:center;padding:0 12px calc(12px + env(safe-area-inset-bottom))}
+.nav div{max-width:456px;width:100%;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-radius:22px;box-shadow:0 10px 30px rgba(20,33,58,.15);display:flex;padding:8px}
+.nav button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;color:var(--m);padding:6px 0;border-radius:14px}
+.nav button svg{width:22px;height:22px}
+.nav button.on{color:var(--p);background:var(--soft);font-weight:700}
+/* sheet */
+.ov{position:fixed;inset:0;background:rgba(10,20,40,.45);display:none;align-items:flex-end;justify-content:center;z-index:9}
+.ov.open{display:flex}
+.sheet{background:#fff;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:10px 16px 24px;animation:up .25s}
+@keyframes up{from{transform:translateY(100%)}}
+.grab{width:40px;height:5px;background:#d5dbe6;border-radius:9px;margin:0 auto 12px}
+.opt{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid var(--l);border-radius:14px;margin-top:8px}
+.opt small{color:var(--m)}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:var(--t);color:#fff;padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;transition:.3s;pointer-events:none}
+.toast.s{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="hd">
+    <div class="top">
+      <div class="hi"><small>صباح الخير 👋</small><b>نظامك لليوم</b></div>
+      <div class="acts">
+        <button class="ib" aria-label="تحميل PDF"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg></button>
+        <button class="ib" aria-label="التقويم"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button>
+        <button class="ib" aria-label="القائمة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+      </div>
+    </div>
+    <nav class="week" id="week"></nav>
+  </header>
+
+  <section class="sum">
+    <div class="ring"><svg width="84" height="84"><circle cx="42" cy="42" r="36" stroke="#eef3ff" stroke-width="9" fill="none"/><circle id="arc" cx="42" cy="42" r="36" stroke="url(#gr)" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="226" stroke-dashoffset="226" style="transition:.5s"/><defs><linearGradient id="gr"><stop offset="0" stop-color="#0b5cff"/><stop offset="1" stop-color="#6a3df0"/></linearGradient></defs></svg><span><div id="pct">0%<small>اليوم</small></div></span></div>
+    <div class="stats">
+      <div class="st"><small>الوجبات</small><b id="mcount">0/6</b></div>
+      <div class="st"><small>الالتزام</small><b class="fire">🔥 5 أيام</b></div>
+      <div class="st"><small>الماء</small><b id="wcount">0/8</b></div>
+      <div class="st"><small>الوجبة القادمة</small><b id="next">—</b></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="tip">
+      <img src="https://di3t-club.com/images/other/shirin.webp" alt="">
+      <div style="flex:1"><b>د. شيرين محمد</b><span class="badge">نصيحة اليوم</span>
+        <p>استبدل المشروبات المحلاة بالماء والشاي غير المحلّى.</p></div>
+    </div>
+    <div class="toggle"><span>🌙 وضع الصيام الإسلامي</span><button class="sw" id="fast" aria-label="الصيام"></button></div>
+  </section>
+
+  <section class="sec">
+    <div class="water">
+      <div class="sh" style="margin:0"><h2 style="font-size:16px">💧 شرب الماء</h2><small style="color:var(--m)">اضغط لإضافة كوب</small></div>
+      <div class="cups" id="cups"></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sh"><h2>وجباتك اليوم</h2><a href="#">قائمة التسوق</a></div>
+    <div class="tl" id="meals"></div>
+  </section>
+
+  <section class="sec">
+    <div class="sh"><h2>حصصك الإضافية</h2></div>
+    <div class="por" id="por"></div>
+  </section>
+</div>
+
+<div class="nav"><div>
+  <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12v16H6a2 2 0 0 0-2 2Z"/></svg>الدليل</button>
+  <button class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11h16a8 8 0 0 1-16 0ZM8 7c0-2 2-2 2-4M13 7c0-2 2-2 2-4"/></svg>وجبات</button>
+  <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8v8M18 8v8M3 10v4M21 10v4M6 12h12"/></svg>تمارين</button>
+  <button><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg>حالتي</button>
+</div></div>
+
+<div class="ov" id="ov"><div class="sheet"><div class="grab"></div><h3 style="margin:0" id="stitle">استبدال</h3><div id="opts"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const I='https://di3t-club.com/_next/image?w=256&q=75&url=%2Fimages%2Fmeals%2F';
+const meals=[
+ {n:'الفطور',t:'08:00 - 10:00',h:8,img:'breakfast.png',it:[['2 ملعقة','قشطة'],['60 غ','خبز'],['1.5 ملعقة','عسل']]},
+ {n:'سناك صباحي',t:'10:00 - 12:00',h:10,img:'fats.png',it:[['½ حفنة','مكسرات']]},
+ {n:'قبل الغداء',t:'12:30',h:12.5,img:'carbohydrates.png',it:[['1','تفاحة'],['2 كوب','ماء']]},
+ {n:'الغداء',t:'13:00 - 15:00',h:13,img:'lunch.png',it:[['172 غ','كنتاكي روبيان']]},
+ {n:'سناك العصر',t:'17:00 - 19:50',h:17,img:'carbohydrates.png',it:[['22 غ','كيك الشوكولا']]},
+ {n:'العشاء',t:'20:00 - 22:00',h:20,img:'dinner.png',it:[['60 غ','خبز'],['67 غ','كبد وقوانص']]}];
+const por=[['حصص السكريات','2 ملعقة شاي سكر','carbohydrates.png'],['حصص الألبان','½ كوب زبادي','breakfast.png'],['حصص الدهون','7 حبات لوز','fats.png']];
+const alts=[['خبز توست أسمر','نفس السعرات تقريباً'],['شوفان + حليب','أعلى بالألياف'],['بيض مسلوق + خبز','أعلى بالبروتين']];
+const S=JSON.parse(localStorage.getItem('dc')||'{"done":[],"w":0}');const save=()=>{try{localStorage.setItem('dc',JSON.stringify(S))}catch(e){}};
+const hr=new Date().getHours()+new Date().getMinutes()/60;
+const nowIdx=meals.reduce((a,m,i)=>hr>=m.h?i:a,0);
+const toast=t=>{const e=document.getElementById('toast');e.textContent=t;e.classList.add('s');setTimeout(()=>e.classList.remove('s'),1600)};
+
+// week
+const days=['أحد','إثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];const td=new Date();const st=new Date(td);st.setDate(td.getDate()-((td.getDay()+1)%7));
+week.innerHTML=[...Array(7)].map((_,i)=>{const d=new Date(st);d.setDate(st.getDate()+i);const on=d.toDateString()==td.toDateString();return`<button class="d ${on?'on':d<td?'past':''}">${days[d.getDay()]}<b>${d.getDate()}</b></button>`}).join('');
+
+function render(){
+ meals.forEach((m,i)=>m.d=S.done.includes(i));
+ document.getElementById('meals').innerHTML=meals.map((m,i)=>`
+ <div class="meal ${m.d?'done':i==nowIdx?'now':''}">
+  <div class="dot"><i>${m.d?'✓':''}</i></div>
+  <div class="mc"><div class="mh"><img src="${I+m.img}" alt="" loading="lazy">
+   <div class="mt"><b>${m.n}</b>${i==nowIdx&&!m.d?'<span class="now-tag">الآن</span>':''}<small>🕒 ${m.t}</small></div></div>
+   <div class="items">${m.it.map(x=>`<span class="it"><b>${x[0]}</b> ${x[1]}</span>`).join('')}</div>
+   <div class="mf"><button class="btn pri" onclick="tog(${i})">${m.d?'✓ تم الأكل':'تم الأكل'}</button><button class="btn sec" onclick="swap('${m.n}')">⇄ استبدال</button></div>
+  </div></div>`).join('');
+ const n=S.done.length,p=Math.round((n/meals.length*0.8+Math.min(S.w,8)/8*0.2)*100);
+ pct.innerHTML=p+'%<small>اليوم</small>';arc.style.strokeDashoffset=226-226*p/100;
+ mcount.textContent=n+'/'+meals.length;wcount.textContent=S.w+'/8';
+ const nx=meals.find(m=>!m.d);next.textContent=nx?nx.n:'أحسنت! 🎉';
+ cups.innerHTML=[...Array(8)].map((_,i)=>`<button class="cup ${i<S.w?'f':''}" onclick="water(${i})" aria-label="كوب ${i+1}"></button>`).join('');
+}
+function tog(i){S.done=S.done.includes(i)?S.done.filter(x=>x!=i):[...S.done,i];save();render();if(S.done.includes(i))toast('أحسنت! تم تسجيل الوجبة ✅')}
+function water(i){S.w=S.w==i+1?i:i+1;save();render()}
+function swap(n){stitle.textContent='استبدال: '+n;opts.innerHTML=alts.map(a=>`<button class="opt" style="width:100%" onclick="ov.classList.remove('open');toast('تم الاستبدال بـ ${a[0]}')"><span><b>${a[0]}</b><br><small>${a[1]}</small></span><span style="color:var(--p)">اختيار</span></button>`).join('');ov.classList.add('open')}
+ov.onclick=e=>{if(e.target==ov)ov.classList.remove('open')};
+fast.onclick=()=>{fast.classList.toggle('on');toast(fast.classList.contains('on')?'تم تفعيل وضع الصيام':'تم إيقاف وضع الصيام')};
+document.getElementById('por').innerHTML=por.map(p=>`<div class="pc"><img src="${I+p[2]}" alt=""><small>${p[0]}</small><b>${p[1]}</b><button onclick="swap('${p[0]}')">⇄ استبدال</button></div>`).join('');
+render();
+</script>
+</body>
+</html>
