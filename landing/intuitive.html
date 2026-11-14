@@ -54,6 +54,8 @@ textarea:focus{border-color:var(--blue)}
 .conf{position:fixed;top:-10px;width:9px;height:14px;z-index:10;animation:fall 2.4s linear forwards}
 @keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
 @keyframes pop{from{transform:scale(.7);opacity:0}}
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.kp div{background:#f4f6fb;border-radius:14px;padding:10px 4px;text-align:center}.kp b{display:block;font-size:20px;color:var(--g1)}.kp span{font-size:11px;color:var(--muted)}
+.cmp{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}.cmp b{color:var(--green)}
 .tracks{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
 .tracks button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--muted)}
 .tracks button.on{border-color:var(--blue);color:var(--blue);background:#eef5ff}
@@ -62,13 +64,14 @@ textarea:focus{border-color:var(--blue)}
 <body>
 <div class="app">
   <div class="top">
-    <div class="bar1"><span class="pill">🧠 الأكل الحدسي</span><span class="pill" id="streak"></span></div>
+    <div class="bar1"><span class="pill">🧠 الأكل الحدسي</span><span style="display:flex;gap:6px"><button class="pill" id="resBtn" style="border:0;color:#fff;font:inherit;font-weight:700;cursor:pointer">📊 نتيجتي</button><span class="pill" id="streak"></span></span></div>
     <h1 id="dayT"></h1><p id="weekT"></p>
     <div class="dots" id="dots"></div>
   </div>
   <div class="wrap" id="main"></div>
 </div>
 <div class="cta"><button id="btn"></button><div class="lock" id="lock"></div></div>
+<div class="ov" id="res"><div class="box" style="max-width:420px;width:100%;text-align:right;max-height:85dvh;overflow:auto"><h3 style="text-align:center">📊 نتيجتي</h3><div id="resB"></div><button style="display:block;margin:14px auto 0" onclick="res.classList.remove('show')">إغلاق</button></div></div>
 <div class="ov" id="ov"><div class="box"><div class="big">🎉</div><h3 id="ovT"></h3><p id="ovP"></p><button onclick="ov.classList.remove('show')">تمام</button></div></div>
 <script>
 const TRACKS={
@@ -127,7 +130,7 @@ if(TRACKS[P.get("goal")])S.track=P.get("goal");
 const today0=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
 if(!S.start)S.start=today0();
 const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};save();
-const DAY=Math.min(30,Math.max(1,+P.get("day")||Math.floor((today0()-S.start)/864e5)+1));
+const calcDay=()=>Math.min(30,Math.max(1,+P.get("day")||Math.floor((today0()-S.start)/864e5)+1));let DAY=calcDay();
 const steps=t=>t.split(/[،,.؛]\s*(?=\S)|\s+ثم\s+/).map(s=>s.trim()).filter(s=>s.length>3);
 function scale(id,label,hint){const v=S.notes[id];return `<div class="lbl">${label}<span>${hint}</span></div><div class="sc">${[...Array(10)].map((_,i)=>`<button data-s="${id}" data-v="${i+1}" class="${v==i+1?"on":""}" style="${v==i+1?"background:"+COLORS()[i]:""}">${i+1}</button>`).join("")}</div>`}
 function render(){
@@ -138,6 +141,7 @@ function render(){
  let rec="";
  if(t==="hs")rec=scale(k+"h","الجوع قبل الأكل","1 جوع شديد • 10 تخمة")+scale(k+"s","الشبع بعد الأكل","الهدف 6–7");
  if(t==="sat")rec=scale(k+"r","الرضا من الوجبة","1 لا شي • 10 رضا تام")+scale(k+"f","الامتلاء","الهدف 6–7");
+ rec=scale(k+"a","كم طبّقت تمرين اليوم؟","1 ما طبقت • 10 طبقته تماماً")+rec;
  const ph={list:"1)\n2)\n3)",hs:"السبب: جوع / ملل / توتر / عادة…",sat:"وش لاحظت؟",note:"وش لاحظت اليوم؟"}[t];
  main.innerHTML=`
  <div class="card"><div class="hero"><div class="ico">${ICONS[DAY-1]}</div><div>
@@ -153,13 +157,40 @@ function render(){
  lock.textContent=done?(DAY<30?"🔒 تمرين بكرة يفتح الساعة 12 بالليل":"🏆 خلصت البرنامج كامل!"):"";
 }
 function confetti(){for(let i=0;i<40;i++){const c=document.createElement("i");c.className="conf";c.style.left=Math.random()*100+"vw";c.style.background=COLORS()[i%10];c.style.animationDelay=Math.random()*.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
-btn.onclick=()=>{if(S.done[DAY])return;S.done[DAY]=true;save();render();confetti();
+// ===== الربط مع السيرفر (لوحة الأدمن) =====
+// التطبيق يفتح الصفحة هكذا: intuitive.html?token=USER_TOKEN&api=https://di3t-club.com/api
+const API=P.get("api")||window.DI3T_API||"",TOKEN=P.get("token")||"";
+const hdr={"Content-Type":"application/json","Accept":"application/json",...(TOKEN?{Authorization:"Bearer "+TOKEN}:{})};
+function payload(d){const k="d"+d,n=S.notes;return {day:d,track:S.track,done:!!S.done[d],commitment:n[k+"a"]||null,hunger:n[k+"h"]||null,fullness:n[k+"s"]||n[k+"f"]||null,satisfaction:n[k+"r"]||null,note:n[k]||"",final_answers:d===30?[0,1,2,3].map(i=>n["f"+i]||""):undefined,completed_at:new Date().toISOString()}}
+function sync(d){if(!API)return;fetch(API+"/intuitive/progress",{method:"POST",headers:hdr,body:JSON.stringify(payload(d))}).catch(()=>{S.pending=[...new Set([...(S.pending||[]),d])];save()})}
+async function pull(){if(!API)return;try{(S.pending||[]).forEach(sync);S.pending=[];
+ const r=await fetch(API+"/intuitive/progress",{headers:hdr});if(!r.ok)return;const j=await r.json();
+ if(j.start_date)S.start=new Date(j.start_date).setHours(0,0,0,0);if(j.track)S.track=j.track;
+ (j.days||[]).forEach(x=>{const k="d"+x.day;S.done[x.day]=x.done;if(x.commitment)S.notes[k+"a"]=x.commitment;if(x.hunger)S.notes[k+"h"]=x.hunger;if(x.fullness)S.notes[k+(D[x.day-1][3]==="sat"?"f":"s")]=x.fullness;if(x.satisfaction)S.notes[k+"r"]=x.satisfaction;if(x.note)S.notes[k]=x.note});
+ DAY=calcDay();save();render()}catch(e){}}
+// ===== شاشة النتيجة للمشترك =====
+function avg(a){a=a.filter(Boolean);return a.length?(a.reduce((x,y)=>x+y,0)/a.length):null}
+function results(){const n=S.notes,days=[...Array(30)].map((_,i)=>i+1),done=days.filter(d=>S.done[d]).length;
+ const wk=w=>days.slice(w*7,w===3?30:w*7+7),com=w=>avg(wk(w).map(d=>n["d"+d+"a"]));
+ const ful=days.map(d=>n["d"+d+"s"]||n["d"+d+"f"]).filter(Boolean),hun=days.map(d=>n["d"+d+"h"]).filter(Boolean),sat=days.map(d=>n["d"+d+"r"]).filter(Boolean);
+ const f=v=>v==null?"—":v.toFixed(1);const cur=Math.min(3,Math.floor((DAY-1)/7));
+ const bars=days.map(d=>{const v=n["d"+d+"a"]||0;return `<rect x="${(30-d)*10+1}" y="${60-v*6}" width="8" height="${v*6}" rx="2" fill="${S.done[d]?"#6d4fd8":"#d9dceb"}"/>`}).join("");
+ resB.innerHTML=`<div class="kp"><div><b>${done}/30</b><span>يوم منجز</span></div><div><b>${Math.round(done/Math.max(1,DAY)*100)}%</b><span>نسبة الالتزام</span></div><div><b>${f(avg(days.map(d=>n["d"+d+"a"])))}</b><span>متوسط التطبيق</span></div></div>
+ <div class="lbl">التطبيق اليومي</div><svg viewBox="0 0 300 62" style="width:100%;background:#fafbfd;border-radius:12px">${bars}</svg>
+ <div class="cmp"><span>التطبيق: الأسبوع 1 ← الأسبوع ${cur+1}</span><span>${f(com(0))} ← <b>${f(com(cur))}</b></span></div>
+ <div class="cmp"><span>الشبع عند التوقف (الهدف 6–7)</span><span>${ful.length?f(ful[0])+" ← <b>"+f(ful[ful.length-1])+"</b>":"—"}</span></div>
+ <div class="cmp"><span>الجوع قبل الأكل (الهدف 3–4)</span><span>${hun.length?f(hun[0])+" ← <b>"+f(hun[hun.length-1])+"</b>":"—"}</span></div>
+ <div class="cmp"><span>متوسط الرضا من الأكل</span><span><b>${f(avg(sat))}</b></span></div>
+ <p style="font-size:12.5px;margin-top:10px">💙 نتائجك تُرسل لأخصائيتك وتنعرض مع وزنك وقياساتك في ملفك.</p>`;res.classList.add("show")}
+resBtn.onclick=results;
+pull();
+btn.onclick=()=>{if(S.done[DAY])return;S.done[DAY]=true;save();render();confetti();sync(DAY);if(DAY===30)return setTimeout(results,1500);
  ovT.textContent=DAY===30?"مبروك! خلصت 30 يوم":`أحسنت! يوم ${DAY} ✓`;
  ovP.textContent=DAY===30?"علاقتك مع الأكل صارت أهدأ وأوعى. كمّل على نفس الطريق.":`باقي ${30-DAY} يوم. نشوفك بكرة مع تمرين جديد 💙`;ov.classList.add("show")};
 document.addEventListener("click",e=>{const s=e.target.closest("[data-s]"),t=e.target.closest("[data-t]");
- if(s){S.notes[s.dataset.s]=+s.dataset.v;save();render()}
+ if(s){S.notes[s.dataset.s]=+s.dataset.v;save();render();if(S.done[DAY])sync(DAY)}
  if(t){S.track=t.dataset.t;save();render()}});
-document.addEventListener("input",e=>{if(e.target.dataset.k){S.notes[e.target.dataset.k]=e.target.value;save()}});
+let tmr;document.addEventListener("input",e=>{if(e.target.dataset.k){S.notes[e.target.dataset.k]=e.target.value;save();if(S.done[DAY]){clearTimeout(tmr);tmr=setTimeout(()=>sync(DAY),1500)}}});
 render();
 </script>
 </body>
