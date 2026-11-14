@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#064576">
+<title>di3t.club - برنامج الأكل الحدسي</title>
+<meta name="description" content="برنامج الأكل الحدسي 30 يوم، مرافق لنظامك الغذائي العلاجي أو نظام الرشاقة">
+<link rel="icon" href="https://di3t-club.com/images/lead/logo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--primary:#0a8cff;--primary-2:#1565d8;--dark:#064576;--bg:#eaf2fb;--card:#fff;--text:#1d2b3a;--muted:#6b7887;--line:#e3eaf3;--soft:#eef6ff;--green:#16a34a;--gold:#b7791f}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Tajawal",system-ui,sans-serif;color:var(--text);background:var(--bg);padding:16px}
+  .wrap{max-width:760px;margin:0 auto}
+  header{text-align:center;padding:20px 12px;background:linear-gradient(135deg,#d6ebff,#fff);border-radius:24px;margin-bottom:14px}
+  h1{margin:0 0 6px;color:var(--dark);font-size:24px}
+  header p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
+  .card h2{margin:0 0 10px;font-size:17px;color:var(--dark)}
+  .tracks{display:flex;flex-wrap:wrap;gap:8px}
+  .tracks button{border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer;color:var(--dark)}
+  .tracks button.on{background:var(--primary-2);color:#fff;border-color:var(--primary-2)}
+  .bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:8px}
+  .bar i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
+  .week{font-weight:800;color:var(--primary-2);margin:18px 4px 8px}
+  .day{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:8px;overflow:hidden}
+  .day summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:10px;align-items:center}
+  .day summary::-webkit-details-marker{display:none}
+  .num{min-width:44px;height:44px;border-radius:12px;background:var(--soft);color:var(--dark);display:grid;place-items:center;font-weight:800;font-size:13px}
+  .day.done .num{background:var(--green);color:#fff}
+  .ttl{font-weight:700;flex:1}
+  .body{padding:0 14px 14px;font-size:14.5px;line-height:1.8}
+  .body b{color:var(--dark)}
+  .tip{background:#fff8e6;border-right:4px solid var(--gold);padding:8px 10px;border-radius:8px;margin:8px 0}
+  .trk{background:var(--soft);border-right:4px solid var(--primary);padding:8px 10px;border-radius:8px;margin:8px 0}
+  textarea{width:100%;min-height:60px;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit}
+  .scale{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 8px}
+  .scale label{font-size:12px}
+  .chk{display:flex;gap:6px;align-items:center;font-weight:700;margin-top:8px}
+  .q{margin:8px 0}
+  footer{text-align:center;color:var(--muted);font-size:12px;margin:20px 0}
+  @media print{.tracks,textarea,.chk{display:none}details{display:block}.day:not([open]) .body{display:block}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>برنامج الأكل الحدسي – 30 يوم</h1>
+  <p>يمشي جنب نظامك الغذائي من di3t.club: النظام يحدد <b>ماذا</b> تأكل، وهذا البرنامج يعلّمك <b>كيف ومتى ولماذا</b> تأكل، عشان النتيجة تدوم بعد ما تخلص الاشتراك.</p>
+</header>
+
+<div class="card">
+  <h2>اختر نظامك الحالي</h2>
+  <div class="tracks" id="tracks"></div>
+  <div class="bar"><i id="prog"></i></div>
+  <small id="progTxt" style="color:var(--muted)"></small>
+</div>
+
+<div class="card">
+  <h2>قبل ما تبدأ</h2>
+  <div style="font-size:14px;line-height:1.8">
+  • الأكل الحدسي <b>لا يلغي</b> نظامك: التزم بالكميات والأصناف المكتوبة لك، وطبّق التمرين اليومي داخل وجباتك.<br>
+  • مقياس الجوع/الشبع من 1 إلى 10: <b>1</b> جوع شديد، <b>5</b> مرتاح، <b>10</b> تخمة. الهدف: تبدأ الأكل عند 3–4 وتوقف عند 6–7.<br>
+  • لمرضى السكري أو من يستخدم أنسولين/حبوب: لا تؤخر وجبة بسبب التمرين، ولو حسيت بأعراض هبوط كُل فوراً وراجع الطبيب.<br>
+  • في رمضان: طبّق نفس التمارين على الفطور والسحور فقط.
+  </div>
+</div>
+
+<div id="days"></div>
+
+<div class="card">
+  <h2>التقييم النهائي</h2>
+  <div id="final"></div>
+</div>
+
+<footer>di3t.club • ملاحظاتك تنحفظ على جهازك فقط. للطباعة: Ctrl+P</footer>
+</div>
+
+<script>
+const TRACKS={
+ rashaqa:"رشاقة / كرش", sukari:"سكري", dhaght:"ضغط", qolon:"قولون", takayos:"تكيس", haml:"حمل ورضاعة"
+};
+// [هدف اليوم, كيف أنفذ, لمسة خليجية, نوع التسجيل]
+const D=[
+["الاستماع إلى الجوع الحقيقي","قبل كل وجبة اسأل نفسك: هل أنا جائع فعلاً أم ملل/توتر/إرهاق؟ سجّل شدة الجوع قبل الأكل والشبع بعده.","العزايم والمناسبات: قيّم جوعك قبل ما تمد يدك للصينية، مو لأن الكل بدأ.","hs"],
+["أكل بوعي (Mindful Eating)","أبعد الجوال والتلفزيون، امضغ كل لقمة ~20 مرة، وخلّ الوجبة تاخذ 20 دقيقة على الأقل.","كُل الأرز بالملعقة الصغيرة بدل اليد أو الملعقة الكبيرة لتبطيء الأكل.","note"],
+["عدم الحكم على الطعام","إذا اشتهيت شي، كُل حصة صغيرة ضمن نظامك بلا ذنب، ولاحظ شعورك.","تمرة أو قطعة لقيمات ضمن الحصة المسموحة = مو \"خربت الدايت\".","note"],
+["التوقف عند 70–80% شبع","في منتصف الوجبة توقف وقيّم الشبع، وإذا وصلت 7 انتظر 10 دقائق قبل أي إضافة.","لا تكمّل الصحن مجاملة للمعزّب؛ \"الحمد لله شبعت\" تكفي.","hs"],
+["اكتشاف الرضا من الطعام","اختر أكلك المفضل من أصناف نظامك وكُله ببطء، وقيّم الرضا مقابل الامتلاء.","المجبوس/الكبسة بصدر دجاج وأرز بني من نظامك ممكن تكون وجبة مُرضية جداً.","sat"],
+["التعامل مع المشاعر بلا طعام","عند الملل أو التوتر: 5 أنفاس عميقة، ثم جرّب بديل: مشي، اتصال بصديق، حمام دافئ، موسيقى.","بدل فتح الثلاجة بالليل: فنجان قهوة عربية بلا سكر أو شاي أعشاب.","note"],
+["المصالحة مع الجسد","قف أمام المرآة وقل: جسدي ذو قيمة حتى لو لم يكن مثالياً. اكتب 5 سلوكيات للعناية بجسدك.","","list"],
+["وقفة 5 أنفاس قبل الأكل العاطفي","عند رغبة مفاجئة: 5 أنفاس بطيئة (شهيق 4، حبس 4، زفير 6) ثم قرّر.","","note"],
+["المشي بدل الأكل","10 دقائق مشي أو موسيقى مهدئة قبل أي أكل عاطفي.","في الصيف: امشِ في المول أو الممشى المكيّف، أو بعد المغرب.","note"],
+["خريطة المحفزات العاطفية","اكتب المواقف اللي تدفعك للأكل العاطفي، وحدّد حل عملي لكل واحد.","محفزات شائعة: الدوام، زحمة الطريق، سهرات الويكند، القروبات.","list"],
+["التواصل وقت التوتر","عند القلق، أرسل رسالة لصديق أو أجرِ اتصالاً قصيراً بدل الأكل.","تقدر تراسل أخصائيتك في di3t.club بدل ما تفتح تطبيق التوصيل.","note"],
+["وسائل تهدئة خاصة بك","صمّم 3 بدائل شخصية للراحة وجرّبها.","بخور، وضوء وصلاة، جلسة هادئة على البحر.","list"],
+["مراجعة آخر أكل عاطفي","حلّل موقف حديث بلا قسوة: ماذا حدث قبل/أثناء/بعد؟ وما الذي تعلمته؟","","note"],
+["الطعام مسكّن وليس حلاً","ضع عبارة اليوم أمامك وسجّل المواقف المرتبطة.","عبارة مقترحة: \"الأكل ما راح يحل المشكلة، بس راح يأجلها\".","note"],
+["أكل واعٍ لطعام كان ممنوعاً","اختر طعاماً كنت تمنعه، خذ حصة مناسبة ضمن بدائل نظامك وسجّل التجربة.","مثال: نصف رقاقة خبز رقاق مع جبن قليل الدسم، أو 2 لقيمات.","sat"],
+["قائمة الأطعمة المخيفة","اكتب الأطعمة التي تخيفك، وضع بجانب كل منها \"حصة آمنة\".","حلويات العيد، الهريس، الحلوى العمانية، الكنافة…","list"],
+["كل الأطعمة لها مكان","كرّر اليوم عبارة تأكيد وراقب سلوكك الغذائي.","","note"],
+["الأكل بلا قضاء ولا تصنيف","بدّل \"سيئ/جيد\" بـ \"منخفض/مرتفع، قليل/عالي الحجم\".","","note"],
+["إن أكلت أكثر: تعلّم لا توبّخ","لو حدث إفراط، اكتب 3 دروس واترك الجسم وقتاً ليستعيد توازنه، وارجع لوجبتك التالية عادي.","لا تعوّض بالحرمان أو تفوّت وجبة بعد العزيمة.","list"],
+["إيقاف مقارنة الجسد","كلما لاحظت مقارنة (سناب/انستقرام)، أعد الانتباه إلى وظائف جسدك.","اكتم مؤقتاً الحسابات اللي تحسسك بالنقص.","note"],
+["رؤية الجسد بلطف","انظر لجسدك بعين داعمة واكتب رسالة شكر قصيرة.","","note"],
+["اختيار صحي ولذيذ دون إجبار","اختر وجبة من نظامك ترضي ذوقك وتغذيتك معاً.","استخدم البهارات الخليجية (لومي، هيل، زعفران) لنكهة بدون سعرات.","note"],
+["تأمل 5 دقائق للجسد","ركّز على الأنفاس وافحص إحساس الجسد من الرأس للقدم.","","sat"],
+["تحضير وجبة مُرضية ومغذية","ابنِ وجبة تجمع بروتين + ألياف + دهون مفيدة + ملعقة طعم.","مثال: سمك هامور مشوي + سلطة + ملعقة زيت زيتون + صلصة دقوس.","sat"],
+["التوقف عند الشبع الحقيقي","توقف عند نقطة الشبع المتوازن وأعد التحقق بعد 10 دقائق.","","hs"],
+["يوم بلا أحكام غذائية","لا تُلصق أي تصنيف بالطعام اليوم؛ راقب واختر بوعي فقط.","","note"],
+["القهوة والمشروبات بوعي","لاحظ المشروبات المحلّاة اليوم: كم كوب كرك/قهوة مختصة بسكر؟ وهل كنت عطشان أم متعوّد؟","بدّل كوب كرك واحد بكرك بحليب قليل الدسم بلا سكر أو قهوة عربية.","note"],
+["تسجيل التغييرات الإيجابية","اكتب أي تغيير لاحظته (طاقة، نوم، مزاج، هوس، جوع/شبع).","","list"],
+["الامتنان لمرونة الجسد","قم بسلوك رعاية خاص (مساج، إطالة، حمام دافئ).","","sat"],
+["الاحتفال بالتقدم","احتفل بنشاط أو وجبة تُفرحك، واكتب الخطوة التالية.","احتفل بشي غير الأكل: ملابس جديدة، طلعة بر، جلسة سبا.","note"]
+];
+// لمسة لكل مسار حسب أسبوع البرنامج
+const TT={
+ rashaqa:["سجّل وزنك مرة واحدة أسبوعياً فقط، والتركيز اليوم على الإشارات مو الميزان.","الأكل العاطفي أكبر سبب لتوقف نزول الوزن؛ تمارين هذا الأسبوع هي مفتاح كسر الثبات.","الحصص المسموحة من نظامك هي \"الحصة الآمنة\" للأطعمة المخيفة.","قِس محيط الخصر هذا الأسبوع وقارنه ببداية البرنامج."],
+ sukari:["قيس السكر قبل الوجبة وبعدها بساعتين وقارنه بدرجة الجوع؛ الجوع الشديد أحياناً هبوط سكر وليس جوعاً عاطفياً.","الأكل العاطفي غالباً سكريات سريعة؛ البديل لازم يكون غير غذائي أو حبة فاكهة ضمن الحصص.","\"الطعام الممنوع\" للسكري يكون بحصة صغيرة بعد وجبة رئيسية وليس على معدة فارغة، وبعد استشارة أخصائيتك.","اربط مقياس الشبع بقراءات السكر: هل الأكل البطيء حسّن قراءة بعد الأكل؟"],
+ dhaght:["الأكل البطيء يساعدك تحس بالملوحة؛ ذق قبل ما تضيف ملح.","التوتر يرفع الضغط والشهية معاً: تمارين التنفس اليوم لها فائدة مزدوجة.","انتبه للأطعمة المخيفة المالحة (مخللات، شيبس، أجبان مالحة): الحصة الآمنة أصغر.","سجّل قراءة ضغطك هذا الأسبوع وقارنها ببداية البرنامج."],
+ qolon:["لاحظ أي أكل يسبب انتفاخ أو تقلص، واكتبه مع مستوى توترك؛ القولون يتأثر بالمشاعر بقوة.","التوتر محفز أساسي للقولون العصبي؛ التنفس قبل الأكل يخفف الأعراض.","جرّب الأطعمة المخيفة بحصص صغيرة جداً ومتباعدة لتعرف حدك الحقيقي.","المضغ الجيد والأكل البطيء من أهم مكاسب البرنامج لك."],
+ takayos:["التكيس يرفع الرغبة في السكريات؛ هذا مو ضعف إرادة. سجّل وقت الرغبة بالنسبة للدورة.","التقلبات الهرمونية تزيد الأكل العاطفي قبل الدورة؛ جهّز بدائلك مسبقاً.","ثبات وجباتك (بروتين في كل وجبة) يقلل الرغبة في الحلويات.","لاحظ تحسن الطاقة والمزاج وانتظام الدورة."],
+ haml:["في الحمل/الرضاعة جوعك حقيقي وأعلى، لا تقاومه؛ اختاري سناكات نظامك.","التعب وقلة النوم مع الطفل محفزات قوية؛ ضعي سناك جاهز صحي قريب منك.","لا يوجد \"طعام ممنوع\" إلا ما منعه الطبيب لسلامة الحمل.","الامتنان لجسدك أهم من الوزن في هذه المرحلة."]
+};
+const KEY="di3t_intuitive_v1";
+let S={track:"rashaqa",done:{},notes:{}};
+try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
+const goal=new URLSearchParams(location.search).get("goal");if(goal&&TRACKS[goal])S.track=goal;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+function scale(id,label){let h=`<div>${label}</div><div class="scale">`;for(let i=1;i<=10;i++)h+=`<label><input type="radio" name="${id}" value="${i}" ${S.notes[id]==i?"checked":""}>${i}</label>`;return h+"</div>"}
+function field(d){const k="d"+d,t=D[d-1][3];
+ if(t==="hs")return scale(k+"h","الجوع قبل الأكل")+scale(k+"s","الشبع بعد الأكل")+`<textarea data-k="${k}" placeholder="السبب: جوع / ملل / توتر / عادة…">${S.notes[k]||""}</textarea>`;
+ if(t==="sat")return scale(k+"r","الرضا")+scale(k+"f","الامتلاء")+`<textarea data-k="${k}" placeholder="ملاحظاتك">${S.notes[k]||""}</textarea>`;
+ if(t==="list")return `<textarea data-k="${k}" placeholder="1)\n2)\n3)">${S.notes[k]||""}</textarea>`;
+ return `<textarea data-k="${k}" placeholder="ماذا لاحظت اليوم؟">${S.notes[k]||""}</textarea>`}
+function render(){
+ tracks.innerHTML=Object.entries(TRACKS).map(([k,v])=>`<button class="${S.track===k?"on":""}" data-t="${k}">${v}</button>`).join("");
+ let h="";D.forEach((x,i)=>{const d=i+1,w=Math.min(3,Math.floor(i/7));
+  if(i%7===0&&i<28)h+=`<div class="week">الأسبوع ${w+1}</div>`;
+  const trk=(i%7===0||x[3]!=="note"&&x[3]!=="list")?`<div class="trk"><b>لمسارك (${TRACKS[S.track]}):</b> ${TT[S.track][w]}</div>`:"";
+  h+=`<details class="day ${S.done[d]?"done":""}"><summary><span class="num">يوم ${d}</span><span class="ttl">${x[0]}</span></summary><div class="body">
+  <b>كيف أنفّذ؟</b> ${x[1]}${x[2]?`<div class="tip">🌴 ${x[2]}</div>`:""}${trk}${field(d)}
+  <label class="chk"><input type="checkbox" data-d="${d}" ${S.done[d]?"checked":""}> أنجزت تمرين اليوم</label></div></details>`});
+ days.innerHTML=h;
+ final.innerHTML=["ما الذي تغيّر في علاقتك مع الطعام؟","هل صرت أكثر وعياً بإشارات الجوع والشبع؟","هل تحسّنت قراءاتك أو قياساتك مع نظامك الغذائي؟","ما التحدي الأكبر الذي واجهته؟","كيف شعرت في هذا الشهر؟","هل تريد تكرار البرنامج أو الانتقال للمستوى الثاني؟"].map((q,i)=>`<div class="q"><b>${q}</b><textarea data-k="f${i}">${S.notes["f"+i]||""}</textarea></div>`).join("");
+ const n=Object.values(S.done).filter(Boolean).length;prog.style.width=(n/30*100)+"%";progTxt.textContent=`أنجزت ${n} من 30 يوم`;
+}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-t]");if(t){S.track=t.dataset.t;save();render()}});
+document.addEventListener("change",e=>{const el=e.target;
+ if(el.dataset.d){S.done[el.dataset.d]=el.checked;save();render();return}
+ if(el.type==="radio"){S.notes[el.name]=+el.value;save()}});
+document.addEventListener("input",e=>{if(e.target.dataset.k){S.notes[e.target.dataset.k]=e.target.value;save()}});
+render();
+</script>
+</body>
+</html>
