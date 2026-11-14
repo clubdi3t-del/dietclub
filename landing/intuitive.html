@@ -3,80 +3,73 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#064576">
-<title>di3t.club - برنامج الأكل الحدسي</title>
-<meta name="description" content="برنامج الأكل الحدسي 30 يوم، مرافق لنظامك الغذائي العلاجي أو نظام الرشاقة">
+<meta name="theme-color" content="#5b4fd6">
+<title>di3t.club - تمرين اليوم</title>
 <link rel="icon" href="https://di3t-club.com/images/lead/logo.ico">
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{--primary:#0a8cff;--primary-2:#1565d8;--dark:#064576;--bg:#eaf2fb;--card:#fff;--text:#1d2b3a;--muted:#6b7887;--line:#e3eaf3;--soft:#eef6ff;--green:#16a34a;--gold:#b7791f}
-  *{box-sizing:border-box}
-  body{margin:0;font-family:"Tajawal",system-ui,sans-serif;color:var(--text);background:var(--bg);padding:16px}
-  .wrap{max-width:760px;margin:0 auto}
-  header{text-align:center;padding:20px 12px;background:linear-gradient(135deg,#d6ebff,#fff);border-radius:24px;margin-bottom:14px}
-  h1{margin:0 0 6px;color:var(--dark);font-size:24px}
-  header p{margin:0;color:var(--muted);font-size:14px;line-height:1.7}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin-bottom:12px}
-  .card h2{margin:0 0 10px;font-size:17px;color:var(--dark)}
-  .tracks{display:flex;flex-wrap:wrap;gap:8px}
-  .tracks button{border:1px solid var(--line);background:var(--soft);border-radius:12px;padding:8px 12px;font:inherit;font-weight:700;cursor:pointer;color:var(--dark)}
-  .tracks button.on{background:var(--primary-2);color:#fff;border-color:var(--primary-2)}
-  .bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin-top:8px}
-  .bar i{display:block;height:100%;background:var(--green);width:0;transition:width .3s}
-  .week{font-weight:800;color:var(--primary-2);margin:18px 4px 8px}
-  .day{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:8px;overflow:hidden}
-  .day summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;gap:10px;align-items:center}
-  .day summary::-webkit-details-marker{display:none}
-  .num{min-width:44px;height:44px;border-radius:12px;background:var(--soft);color:var(--dark);display:grid;place-items:center;font-weight:800;font-size:13px}
-  .day.done .num{background:var(--green);color:#fff}
-  .ttl{font-weight:700;flex:1}
-  .body{padding:0 14px 14px;font-size:14.5px;line-height:1.8}
-  .body b{color:var(--dark)}
-  .tip{background:#fff8e6;border-right:4px solid var(--gold);padding:8px 10px;border-radius:8px;margin:8px 0}
-  .trk{background:var(--soft);border-right:4px solid var(--primary);padding:8px 10px;border-radius:8px;margin:8px 0}
-  textarea{width:100%;min-height:60px;border:1px solid var(--line);border-radius:10px;padding:8px;font:inherit}
-  .scale{display:flex;gap:4px;flex-wrap:wrap;margin:4px 0 8px}
-  .scale label{font-size:12px}
-  .chk{display:flex;gap:6px;align-items:center;font-weight:700;margin-top:8px}
-  .q{margin:8px 0}
-  footer{text-align:center;color:var(--muted);font-size:12px;margin:20px 0}
-  @media print{.tracks,textarea,.chk{display:none}details{display:block}.day:not([open]) .body{display:block}}
+:root{--g1:#6d4fd8;--g2:#3b8cf0;--blue:#1d8cf8;--text:#2a2f3a;--muted:#8a93a3;--line:#edf0f5;--bg:#f6f7fb;--card:#fff;--gold:#f5a524;--green:#22c55e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:"Tajawal",system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;padding-bottom:110px}
+.top{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;padding:18px 18px 70px;border-radius:0 0 30px 30px;position:relative;overflow:hidden}
+.top:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08);top:-80px;left:-60px}
+.bar1{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
+.pill{background:rgba(255,255,255,.18);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;display:flex;gap:6px;align-items:center}
+.top h1{margin:18px 0 4px;font-size:22px;position:relative;z-index:1}
+.top p{margin:0;opacity:.85;font-size:13px;position:relative;z-index:1}
+.dots{display:flex;gap:4px;margin-top:16px;position:relative;z-index:1}
+.dots i{flex:1;height:6px;border-radius:9px;background:rgba(255,255,255,.25)}
+.dots i.ok{background:#fff}.dots i.now{background:var(--gold)}
+.wrap{padding:0 16px;margin-top:-52px;position:relative;z-index:2}
+.card{background:var(--card);border-radius:24px;padding:18px;box-shadow:0 10px 30px rgba(40,50,90,.08);margin-bottom:14px}
+.hero{display:flex;gap:14px;align-items:center}
+.ico{width:76px;height:76px;flex:none;border-radius:22px;display:grid;place-items:center;font-size:40px;background:linear-gradient(135deg,#efe9ff,#e3f0ff)}
+.chip{display:inline-block;font-size:11px;font-weight:800;color:#fff;background:var(--blue);border-radius:8px;padding:2px 8px}
+.hero h2{margin:6px 0 4px;font-size:19px}
+.meta{color:var(--muted);font-size:12.5px;display:flex;gap:10px}
+.sec{font-weight:800;font-size:15px;margin:2px 0 12px;display:flex;align-items:center;gap:6px}
+.sec:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--blue)}
+.step{display:flex;gap:10px;margin-bottom:10px;line-height:1.7;font-size:14.5px}
+.step b{flex:none;width:26px;height:26px;border-radius:9px;background:#eef5ff;color:var(--blue);display:grid;place-items:center;font-size:13px}
+.tip{border-radius:18px;padding:12px 14px;font-size:14px;line-height:1.7;margin-bottom:14px;display:flex;gap:10px}
+.tip .e{font-size:22px}
+.gulf{background:#fff6e5;color:#7a4b00}.trk{background:#eaf3ff;color:#0f4c8a}
+.lbl{font-size:13px;font-weight:700;margin:6px 0 8px;display:flex;justify-content:space-between}
+.lbl span{color:var(--muted);font-weight:500;font-size:11.5px}
+.sc{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin-bottom:12px}
+.sc button{border:0;height:36px;border-radius:10px;background:#f1f3f8;font:inherit;font-weight:800;color:var(--muted);cursor:pointer;transition:.15s}
+.sc button.on{color:#fff;transform:scale(1.08)}
+textarea{width:100%;min-height:84px;border:1.5px solid var(--line);border-radius:16px;padding:12px;font:inherit;font-size:14px;resize:none;background:#fafbfd;outline:none}
+textarea:focus{border-color:var(--blue)}
+.cta{z-index:5;position:fixed;bottom:0;left:0;right:0;padding:12px 16px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%)}
+.cta button{display:block;width:100%;max-width:448px;margin:0 auto;border:0;border-radius:18px;padding:16px;font:inherit;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--g1),var(--g2));box-shadow:0 10px 24px rgba(91,79,214,.35);cursor:pointer}
+.cta button.done{background:var(--green);box-shadow:0 10px 24px rgba(34,197,94,.3)}
+.lock{text-align:center;color:var(--muted);font-size:13px;margin-top:4px}
+.ov{position:fixed;inset:0;background:rgba(20,20,40,.55);display:none;align-items:center;justify-content:center;z-index:9;padding:24px}
+.ov.show{display:flex}
+.ov .box{background:#fff;border-radius:28px;padding:28px 22px;text-align:center;max-width:340px;animation:pop .4s}
+.ov .big{font-size:60px}.ov h3{margin:6px 0;font-size:21px}.ov p{color:var(--muted);line-height:1.7;margin:0 0 16px}
+.ov button{border:0;border-radius:14px;padding:12px 28px;background:var(--blue);color:#fff;font:inherit;font-weight:800}
+.conf{position:fixed;top:-10px;width:9px;height:14px;z-index:10;animation:fall 2.4s linear forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.tracks{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.tracks button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--muted)}
+.tracks button.on{border-color:var(--blue);color:var(--blue);background:#eef5ff}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header>
-  <h1>برنامج الأكل الحدسي – 30 يوم</h1>
-  <p>يمشي جنب نظامك الغذائي من di3t.club: النظام يحدد <b>ماذا</b> تأكل، وهذا البرنامج يعلّمك <b>كيف ومتى ولماذا</b> تأكل، عشان النتيجة تدوم بعد ما تخلص الاشتراك.</p>
-</header>
-
-<div class="card">
-  <h2>اختر نظامك الحالي</h2>
-  <div class="tracks" id="tracks"></div>
-  <div class="bar"><i id="prog"></i></div>
-  <small id="progTxt" style="color:var(--muted)"></small>
-</div>
-
-<div class="card">
-  <h2>قبل ما تبدأ</h2>
-  <div style="font-size:14px;line-height:1.8">
-  • الأكل الحدسي <b>لا يلغي</b> نظامك: التزم بالكميات والأصناف المكتوبة لك، وطبّق التمرين اليومي داخل وجباتك.<br>
-  • مقياس الجوع/الشبع من 1 إلى 10: <b>1</b> جوع شديد، <b>5</b> مرتاح، <b>10</b> تخمة. الهدف: تبدأ الأكل عند 3–4 وتوقف عند 6–7.<br>
-  • لمرضى السكري أو من يستخدم أنسولين/حبوب: لا تؤخر وجبة بسبب التمرين، ولو حسيت بأعراض هبوط كُل فوراً وراجع الطبيب.<br>
-  • في رمضان: طبّق نفس التمارين على الفطور والسحور فقط.
+<div class="app">
+  <div class="top">
+    <div class="bar1"><span class="pill">🧠 الأكل الحدسي</span><span class="pill" id="streak"></span></div>
+    <h1 id="dayT"></h1><p id="weekT"></p>
+    <div class="dots" id="dots"></div>
   </div>
+  <div class="wrap" id="main"></div>
 </div>
-
-<div id="days"></div>
-
-<div class="card">
-  <h2>التقييم النهائي</h2>
-  <div id="final"></div>
-</div>
-
-<footer>di3t.club • ملاحظاتك تنحفظ على جهازك فقط. للطباعة: Ctrl+P</footer>
-</div>
-
+<div class="cta"><button id="btn"></button><div class="lock" id="lock"></div></div>
+<div class="ov" id="ov"><div class="box"><div class="big">🎉</div><h3 id="ovT"></h3><p id="ovP"></p><button onclick="ov.classList.remove('show')">تمام</button></div></div>
 <script>
 const TRACKS={
  rashaqa:"رشاقة / كرش", sukari:"سكري", dhaght:"ضغط", qolon:"قولون", takayos:"تكيس", haml:"حمل ورضاعة"
@@ -123,33 +116,49 @@ const TT={
  takayos:["التكيس يرفع الرغبة في السكريات؛ هذا مو ضعف إرادة. سجّل وقت الرغبة بالنسبة للدورة.","التقلبات الهرمونية تزيد الأكل العاطفي قبل الدورة؛ جهّز بدائلك مسبقاً.","ثبات وجباتك (بروتين في كل وجبة) يقلل الرغبة في الحلويات.","لاحظ تحسن الطاقة والمزاج وانتظام الدورة."],
  haml:["في الحمل/الرضاعة جوعك حقيقي وأعلى، لا تقاومه؛ اختاري سناكات نظامك.","التعب وقلة النوم مع الطفل محفزات قوية؛ ضعي سناك جاهز صحي قريب منك.","لا يوجد \"طعام ممنوع\" إلا ما منعه الطبيب لسلامة الحمل.","الامتنان لجسدك أهم من الوزن في هذه المرحلة."]
 };
-const KEY="di3t_intuitive_v1";
-let S={track:"rashaqa",done:{},notes:{}};
+const WEEKS=["الأسبوع 1: الاستماع لجسدك","الأسبوع 2: المشاعر بدون أكل","الأسبوع 3: السلام مع الطعام","الأسبوع 4: الثقة بجسدك"];
+const ICONS=["👂","🍽️","💛","✋","😋","🌿","🪞","🌬️","🚶","🗺️","📱","🕯️","🔍","💊","🍮","📝","⚖️","🏷️","📚","🚫","🤍","🥗","🧘","🐟","🎯","🌙","☕","📈","💆","🏆"];
+const COLORS=d=>["#ef4444","#f97316","#f59e0b","#eab308","#84cc16","#22c55e","#14b8a6","#0ea5e9","#6366f1","#a855f7"];
+const KEY="di3t_intuitive_v2";
+let S={track:"rashaqa",start:null,done:{},notes:{}};
 try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
-const goal=new URLSearchParams(location.search).get("goal");if(goal&&TRACKS[goal])S.track=goal;
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
-function scale(id,label){let h=`<div>${label}</div><div class="scale">`;for(let i=1;i<=10;i++)h+=`<label><input type="radio" name="${id}" value="${i}" ${S.notes[id]==i?"checked":""}>${i}</label>`;return h+"</div>"}
-function field(d){const k="d"+d,t=D[d-1][3];
- if(t==="hs")return scale(k+"h","الجوع قبل الأكل")+scale(k+"s","الشبع بعد الأكل")+`<textarea data-k="${k}" placeholder="السبب: جوع / ملل / توتر / عادة…">${S.notes[k]||""}</textarea>`;
- if(t==="sat")return scale(k+"r","الرضا")+scale(k+"f","الامتلاء")+`<textarea data-k="${k}" placeholder="ملاحظاتك">${S.notes[k]||""}</textarea>`;
- if(t==="list")return `<textarea data-k="${k}" placeholder="1)\n2)\n3)">${S.notes[k]||""}</textarea>`;
- return `<textarea data-k="${k}" placeholder="ماذا لاحظت اليوم؟">${S.notes[k]||""}</textarea>`}
+const P=new URLSearchParams(location.search);
+if(TRACKS[P.get("goal")])S.track=P.get("goal");
+const today0=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
+if(!S.start)S.start=today0();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};save();
+const DAY=Math.min(30,Math.max(1,+P.get("day")||Math.floor((today0()-S.start)/864e5)+1));
+const steps=t=>t.split(/[،,.؛]\s*(?=\S)|\s+ثم\s+/).map(s=>s.trim()).filter(s=>s.length>3);
+function scale(id,label,hint){const v=S.notes[id];return `<div class="lbl">${label}<span>${hint}</span></div><div class="sc">${[...Array(10)].map((_,i)=>`<button data-s="${id}" data-v="${i+1}" class="${v==i+1?"on":""}" style="${v==i+1?"background:"+COLORS()[i]:""}">${i+1}</button>`).join("")}</div>`}
 function render(){
- tracks.innerHTML=Object.entries(TRACKS).map(([k,v])=>`<button class="${S.track===k?"on":""}" data-t="${k}">${v}</button>`).join("");
- let h="";D.forEach((x,i)=>{const d=i+1,w=Math.min(3,Math.floor(i/7));
-  if(i%7===0&&i<28)h+=`<div class="week">الأسبوع ${w+1}</div>`;
-  const trk=(i%7===0||x[3]!=="note"&&x[3]!=="list")?`<div class="trk"><b>لمسارك (${TRACKS[S.track]}):</b> ${TT[S.track][w]}</div>`:"";
-  h+=`<details class="day ${S.done[d]?"done":""}"><summary><span class="num">يوم ${d}</span><span class="ttl">${x[0]}</span></summary><div class="body">
-  <b>كيف أنفّذ؟</b> ${x[1]}${x[2]?`<div class="tip">🌴 ${x[2]}</div>`:""}${trk}${field(d)}
-  <label class="chk"><input type="checkbox" data-d="${d}" ${S.done[d]?"checked":""}> أنجزت تمرين اليوم</label></div></details>`});
- days.innerHTML=h;
- final.innerHTML=["ما الذي تغيّر في علاقتك مع الطعام؟","هل صرت أكثر وعياً بإشارات الجوع والشبع؟","هل تحسّنت قراءاتك أو قياساتك مع نظامك الغذائي؟","ما التحدي الأكبر الذي واجهته؟","كيف شعرت في هذا الشهر؟","هل تريد تكرار البرنامج أو الانتقال للمستوى الثاني؟"].map((q,i)=>`<div class="q"><b>${q}</b><textarea data-k="f${i}">${S.notes["f"+i]||""}</textarea></div>`).join("");
- const n=Object.values(S.done).filter(Boolean).length;prog.style.width=(n/30*100)+"%";progTxt.textContent=`أنجزت ${n} من 30 يوم`;
+ const x=D[DAY-1],w=Math.min(3,Math.floor((DAY-1)/7)),k="d"+DAY,t=x[3],done=S.done[DAY];
+ dayT.textContent=`اليوم ${DAY} من 30`;weekT.textContent=DAY===30?"🏁 اليوم الأخير":WEEKS[w];
+ dots.innerHTML=[...Array(30)].map((_,i)=>`<i class="${S.done[i+1]?"ok":i+1===DAY?"now":""}"></i>`).join("");
+ const n=Object.values(S.done).filter(Boolean).length;streak.textContent=`🔥 ${n} يوم`;
+ let rec="";
+ if(t==="hs")rec=scale(k+"h","الجوع قبل الأكل","1 جوع شديد • 10 تخمة")+scale(k+"s","الشبع بعد الأكل","الهدف 6–7");
+ if(t==="sat")rec=scale(k+"r","الرضا من الوجبة","1 لا شي • 10 رضا تام")+scale(k+"f","الامتلاء","الهدف 6–7");
+ const ph={list:"1)\n2)\n3)",hs:"السبب: جوع / ملل / توتر / عادة…",sat:"وش لاحظت؟",note:"وش لاحظت اليوم؟"}[t];
+ main.innerHTML=`
+ <div class="card"><div class="hero"><div class="ico">${ICONS[DAY-1]}</div><div>
+   <span class="chip">تمرين اليوم</span><h2>${x[0]}</h2>
+   <div class="meta"><span>⏱ 5–10 دقائق</span><span>🎯 ${TRACKS[S.track]}</span></div></div></div></div>
+ <div class="card"><div class="sec">كيف أنفّذ؟</div>${steps(x[1]).map((s,i)=>`<div class="step"><b>${i+1}</b><div>${s}</div></div>`).join("")}</div>
+ ${x[2]?`<div class="tip gulf"><span class="e">🌴</span><div><b>من واقعنا</b><br>${x[2]}</div></div>`:""}
+ <div class="tip trk"><span class="e">🩺</span><div><b>لنظامك (${TRACKS[S.track]})</b><br>${TT[S.track][w]}</div></div>
+ <div class="card"><div class="sec">سجّل تجربتك</div>${rec}<textarea data-k="${k}" placeholder="${ph}">${S.notes[k]||""}</textarea></div>
+ ${DAY===30?`<div class="card"><div class="sec">تقييم الشهر</div>${["وش تغيّر في علاقتك مع الأكل؟","صرت أوعى بإشارات الجوع والشبع؟","تحسّنت قراءاتك أو قياساتك؟","أكبر تحدي واجهته؟"].map((q,i)=>`<div class="lbl">${q}</div><textarea data-k="f${i}">${S.notes["f"+i]||""}</textarea>`).join("")}</div>`:""}
+ <div class="card"><div class="lbl">نوع نظامك</div><div class="tracks">${Object.entries(TRACKS).map(([a,b])=>`<button data-t="${a}" class="${S.track===a?"on":""}">${b}</button>`).join("")}</div></div>`;
+ btn.className=done?"done":"";btn.textContent=done?"✓ أنجزت تمرين اليوم":"أنجزت تمرين اليوم";
+ lock.textContent=done?(DAY<30?"🔒 تمرين بكرة يفتح الساعة 12 بالليل":"🏆 خلصت البرنامج كامل!"):"";
 }
-document.addEventListener("click",e=>{const t=e.target.closest("[data-t]");if(t){S.track=t.dataset.t;save();render()}});
-document.addEventListener("change",e=>{const el=e.target;
- if(el.dataset.d){S.done[el.dataset.d]=el.checked;save();render();return}
- if(el.type==="radio"){S.notes[el.name]=+el.value;save()}});
+function confetti(){for(let i=0;i<40;i++){const c=document.createElement("i");c.className="conf";c.style.left=Math.random()*100+"vw";c.style.background=COLORS()[i%10];c.style.animationDelay=Math.random()*.6+"s";document.body.appendChild(c);setTimeout(()=>c.remove(),3200)}}
+btn.onclick=()=>{if(S.done[DAY])return;S.done[DAY]=true;save();render();confetti();
+ ovT.textContent=DAY===30?"مبروك! خلصت 30 يوم":`أحسنت! يوم ${DAY} ✓`;
+ ovP.textContent=DAY===30?"علاقتك مع الأكل صارت أهدأ وأوعى. كمّل على نفس الطريق.":`باقي ${30-DAY} يوم. نشوفك بكرة مع تمرين جديد 💙`;ov.classList.add("show")};
+document.addEventListener("click",e=>{const s=e.target.closest("[data-s]"),t=e.target.closest("[data-t]");
+ if(s){S.notes[s.dataset.s]=+s.dataset.v;save();render()}
+ if(t){S.track=t.dataset.t;save();render()}});
 document.addEventListener("input",e=>{if(e.target.dataset.k){S.notes[e.target.dataset.k]=e.target.value;save()}});
 render();
 </script>
