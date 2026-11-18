@@ -86,3 +86,27 @@ ALTER TABLE users ADD intuitive_start_date DATE NULL;
 
 موجود في الصفحة: زر **📊 نتيجتي** (أيام منجزة، نسبة الالتزام، رسم التطبيق اليومي، مقارنة الأسبوع الأول بالحالي للجوع والشبع والرضا). يظهر تلقائياً بعد اليوم 30.
 واختياري في التطبيق: إضافة خط "الالتزام بالأكل الحدسي" في تبويب **حالة** بجانب الوزن، من نفس `GET`.
+
+## 6) صفحة الأدمن الجاهزة: `admin-intuitive.html`
+
+صفحة كاملة (قائمة مشتركين + فلاتر + تنبيهات + رسم الالتزام مقابل الوزن + سجل الأيام + الرد). تُضمَّن في البنل كصفحة أو iframe:
+
+```
+admin-intuitive.html?api=https://di3t-club.com/api&token={ADMIN_TOKEN}&user={USER_ID}
+```
+
+بدون `api` تشتغل ببيانات تجريبية للعرض. تحتاج endpointين للأدمن:
+
+### `GET /api/admin/intuitive/users`
+```json
+[{"id":12,"name":"نورة العتيبي","track":"rashaqa","start_date":"2026-11-01",
+  "days":[{"day":1,"done":true,"commitment":8,"hunger":3,"fullness":7,"satisfaction":null,"note":"...","reply":null}],
+  "weights":[{"date":"2026-11-01","day":1,"weight":87.2}]}]
+```
+`weights` من جدول القياسات الموجود، و `day` = (تاريخ القياس − start_date) + 1.
+
+### `POST /api/admin/users/{id}/intuitive/{day}/reply`
+```json
+{"reply":"ممتاز، استمري 💙"}
+```
+يحفظ في عمود `reply TEXT NULL` بجدول `intuitive_progress`، ويُرجع ضمن `GET /api/intuitive/progress` ليظهر للمشترك.

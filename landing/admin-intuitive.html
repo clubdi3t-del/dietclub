@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحة الأدمن - الأكل الحدسي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--g1:#6d4fd8;--g2:#3b8cf0;--text:#2a2f3a;--muted:#8a93a3;--line:#edf0f5;--bg:#f4f6fa;--green:#16a34a;--red:#e11d48;--orange:#f59e0b}
+*{box-sizing:border-box}body{margin:0;font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.wrap{max-width:1150px;margin:0 auto;padding:20px}
+h1{font-size:21px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px;margin-bottom:16px}
+.grid{display:grid;grid-template-columns:330px 1fr;gap:16px}@media(max-width:860px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border-radius:18px;padding:16px;box-shadow:0 4px 16px rgba(40,50,90,.06);margin-bottom:16px}
+.card h2{font-size:15px;margin:0 0 12px;display:flex;justify-content:space-between;align-items:center}
+.flt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}.flt button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:5px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted)}.flt button.on{background:var(--g1);color:#fff;border-color:var(--g1)}
+.u{display:flex;gap:10px;align-items:center;padding:10px;border-radius:12px;cursor:pointer}.u:hover,.u.on{background:#f1efff}
+.av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.u .n{font-weight:700;font-size:14px}.u .m{font-size:12px;color:var(--muted)}.u .x{margin-inline-start:auto;text-align:left}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:8px;padding:2px 7px;margin:2px 0 0 3px}
+.t-red{background:#ffe4e9;color:var(--red)}.t-or{background:#fff3d6;color:#a16207}.t-gr{background:#dcfce7;color:var(--green)}
+.kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}@media(max-width:600px){.kpi{grid-template-columns:repeat(2,1fr)}}
+.kpi div{background:#f7f8fc;border-radius:14px;padding:12px;text-align:center}.kpi b{display:block;font-size:22px;color:var(--g1)}.kpi span{font-size:12px;color:var(--muted)}
+.al{padding:10px 12px;border-radius:12px;margin-bottom:8px;font-size:13.5px}
+table{width:100%;border-collapse:collapse;font-size:13px}th{color:var(--muted);font-weight:700;text-align:right;padding:8px 6px;border-bottom:1px solid var(--line);white-space:nowrap}td{padding:8px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.sv{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:8px;font-weight:800;font-size:12px;color:#fff}
+.tw{overflow-x:auto}.note{max-width:260px;line-height:1.6}
+.rp{border:0;background:#eef5ff;color:var(--g2);border-radius:8px;padding:4px 8px;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+.reply{margin-top:6px;background:#f1efff;border-radius:8px;padding:6px 8px;font-size:12px;color:var(--g1)}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--muted)}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:4px}
+dialog{border:0;border-radius:18px;padding:18px;width:min(420px,92vw)}dialog::backdrop{background:rgba(0,0,0,.4)}
+dialog textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}
+.btn{border:0;border-radius:10px;padding:9px 18px;font:inherit;font-weight:800;color:#fff;background:var(--g1);cursor:pointer}
+.demo{background:#fff3d6;color:#7a4b00;border-radius:10px;padding:8px 12px;font-size:12.5px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>🧠 الأكل الحدسي – متابعة المشتركين</h1>
+<div class="sub">نتائج تمارين الـ 30 يوم مربوطة بالوزن والقياسات</div>
+<div class="demo" id="demo" hidden>وضع العرض: بيانات تجريبية. لربطها بالبيانات الحقيقية افتح الصفحة بـ <code>?api=...&token=...</code></div>
+<div class="grid">
+ <div><div class="card"><h2>المشتركين <span id="cnt" class="tag t-gr"></span></h2>
+  <div class="flt" id="flt"></div><div id="list"></div></div></div>
+ <div id="detail"></div>
+</div>
+</div>
+<dialog id="dlg"><b>رد على ملاحظة اليوم <span id="dd"></span></b><p id="dn" style="color:var(--muted);font-size:13px"></p><textarea id="dt" placeholder="رسالتك تظهر للمشترك في التطبيق"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn" id="ds">إرسال</button><button class="btn" style="background:#aab" onclick="dlg.close()">إلغاء</button></div></dialog>
+<script>
+const TITLES=["الاستماع إلى الجوع الحقيقي", "أكل بوعي (Mindful Eating)", "عدم الحكم على الطعام", "التوقف عند 70–80% شبع", "اكتشاف الرضا من الطعام", "التعامل مع المشاعر بلا طعام", "المصالحة مع الجسد", "وقفة 5 أنفاس قبل الأكل العاطفي", "المشي بدل الأكل", "خريطة المحفزات العاطفية", "التواصل وقت التوتر", "وسائل تهدئة خاصة بك", "مراجعة آخر أكل عاطفي", "الطعام مسكّن وليس حلاً", "أكل واعٍ لطعام كان ممنوعاً", "قائمة الأطعمة المخيفة", "كل الأطعمة لها مكان", "الأكل بلا قضاء ولا تصنيف", "إن أكلت أكثر: تعلّم لا توبّخ", "إيقاف مقارنة الجسد", "رؤية الجسد بلطف", "اختيار صحي ولذيذ دون إجبار", "تأمل 5 دقائق للجسد", "تحضير وجبة مُرضية ومغذية", "التوقف عند الشبع الحقيقي", "يوم بلا أحكام غذائية", "القهوة والمشروبات بوعي", "تسجيل التغييرات الإيجابية", "الامتنان لمرونة الجسد", "الاحتفال بالتقدم"];
+const TR={rashaqa:"رشاقة",sukari:"سكري",dhaght:"ضغط",qolon:"قولون",takayos:"تكيس",haml:"حمل ورضاعة"};
+const EMO=/إفراط|ذنب|تعويض|ما قدرت|أكلت كثير|انهرت|خربت/;
+const CLR=v=>["#ef4444","#f97316","#f59e0b","#eab308","#84cc16","#22c55e","#14b8a6","#0ea5e9","#6366f1","#a855f7"][v-1];
+const P=new URLSearchParams(location.search),API=P.get("api"),H={Accept:"application/json","Content-Type":"application/json",Authorization:"Bearer "+(P.get("token")||"")};
+const dayOf=u=>Math.min(30,Math.floor((Date.now()-new Date(u.start_date))/864e5)+1);
+// ===== بيانات تجريبية =====
+function demo(){const names=[["نورة العتيبي","rashaqa",0.9],["فهد الشمري","sukari",0.6],["مريم الكعبي","takayos",0.8],["عبدالله الحربي","dhaght",0.3],["شيخة المري","qolon",0.95],["سارة البلوشي","haml",0.7]];let seed=7;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+ const notes=["حسيت بفرق لما أكلت ببطء","العزيمة كانت صعبة بس وقفت عند الشبع","أكلت كثير بالليل وحسيت بذنب","ما قدرت أطبق اليوم بسبب الدوام","المشي بدل الأكل نفع معي","",""];
+ return names.map(([name,track,c],i)=>{const start=Date.now()-(8+i*4)*864e5,cur=Math.min(30,9+i*4),days=[];let w=88-i*4,weights=[];
+  for(let d=1;d<=cur;d++){const done=rnd()<c&&!(i===3&&d>cur-4);if(d%7===1)weights.push({date:new Date(start+(d-1)*864e5).toISOString().slice(0,10),day:d,weight:+(w-=0.3+rnd()*0.6*c).toFixed(1)});
+   if(!done)continue;const t=TITLES[d-1];days.push({day:d,done:true,commitment:Math.max(1,Math.min(10,Math.round(4+c*5+rnd()*2-1+d/10))),
+   hunger:[1,4,25].includes(d)?(track==="sukari"&&d===4?2:Math.round(2+d/10+rnd())):null,fullness:[1,4,25,5,15,23,24,29].includes(d)?Math.round(9-d/10-rnd()):null,
+   satisfaction:[5,15,23,24,29].includes(d)?Math.round(6+rnd()*3):null,note:notes[Math.floor(rnd()*notes.length)],reply:d===5&&i===0?"ممتاز يا نورة، استمري 💙":null})}
+  return {id:i+1,name,track,start_date:new Date(start).toISOString(),days,weights}})}
+let USERS=[],SEL=null,FLT="all";
+function stats(u){const cur=dayOf(u),done=u.days.filter(d=>d.done),last=done.length?Math.max(...done.map(d=>d.day)):0,c=done.map(d=>d.commitment).filter(Boolean);
+ const al=[];if(cur-last>=3&&cur<30)al.push(["red","🔴 متوقف "+(cur-last)+" أيام"]);
+ if(u.track==="sukari"&&u.days.some(d=>d.hunger&&d.hunger<=2))al.push(["or","🟠 جوع شديد – تأكد من هبوط السكر"]);
+ const emo=u.days.filter(d=>EMO.test(d.note||""));if(emo.length)al.push(["or","🟠 أكل عاطفي ("+emo.length+")"]);
+ if(u.days.some(d=>d.day===30&&d.done))al.push(["gr","🟢 أكمل البرنامج – اقترح المستوى 2"]);
+ return {cur,n:done.length,rate:Math.round(done.length/cur*100),avg:c.length?(c.reduce((a,b)=>a+b,0)/c.length).toFixed(1):"—",last,al,
+  wl:u.weights.length>1?(u.weights[u.weights.length-1].weight-u.weights[0].weight).toFixed(1):"—"}}
+function list(){const F={all:"الكل",alert:"تنبيهات",stop:"متوقفين",done:"مكمّلين"};flt.innerHTML=Object.entries(F).map(([k,v])=>`<button data-f="${k}" class="${FLT===k?"on":""}">${v}</button>`).join("");
+ const L=USERS.map(u=>[u,stats(u)]).filter(([u,s])=>FLT==="all"||FLT==="alert"&&s.al.some(a=>a[0]!=="gr")||FLT==="stop"&&s.al.some(a=>a[0]==="red")||FLT==="done"&&s.al.some(a=>a[0]==="gr"))
+  .sort((a,b)=>b[1].al.filter(x=>x[0]==="red").length-a[1].al.filter(x=>x[0]==="red").length);
+ cnt.textContent=L.length;list_.innerHTML=L.map(([u,s])=>`<div class="u ${SEL===u.id?"on":""}" data-u="${u.id}"><div class="av">${u.name[0]}</div><div><div class="n">${u.name}</div><div class="m">${TR[u.track]} • يوم ${s.cur}/30</div>${s.al.map(a=>`<span class="tag t-${a[0]}">${a[1].split(" ")[0]}</span>`).join("")}</div><div class="x"><b style="color:var(--g1)">${s.rate}%</b><div class="m">التزام</div></div></div>`).join("")||'<div class="m">لا يوجد</div>'}
+function chart(u,s){const W=700,Hh=220,pl=36,pr=36,pt=14,pb=26,x=d=>pl+(d-1)*(W-pl-pr)/29,bw=(W-pl-pr)/30*.6;
+ const ws=u.weights.map(w=>w.weight),mn=Math.min(...ws)-1,mx=Math.max(...ws)+1,y=v=>pt+(mx-v)/(mx-mn)*(Hh-pt-pb),yc=v=>Hh-pb-v/10*(Hh-pt-pb);
+ let g="";for(let i=0;i<=10;i+=5)g+=`<line x1="${pl}" x2="${W-pr}" y1="${yc(i)}" y2="${yc(i)}" stroke="#eef0f5"/><text x="${W-pr+6}" y="${yc(i)+4}" font-size="11" fill="#8a93a3">${i}</text>`;
+ const bars=u.days.filter(d=>d.commitment).map(d=>`<rect x="${x(d.day)-bw/2}" y="${yc(d.commitment)}" width="${bw}" height="${Hh-pb-yc(d.commitment)}" rx="3" fill="#c9bff5"><title>يوم ${d.day}: تطبيق ${d.commitment}/10</title></rect>`).join("");
+ const pts=u.weights.map(w=>`${x(w.day)},${y(w.weight)}`).join(" ");
+ const dots=u.weights.map(w=>`<circle cx="${x(w.day)}" cy="${y(w.weight)}" r="4.5" fill="#fff" stroke="#3b8cf0" stroke-width="2.5"><title>${w.date}: ${w.weight} كغ</title></circle><text x="${x(w.day)}" y="${y(w.weight)-10}" font-size="11" text-anchor="middle" fill="#3b8cf0" font-weight="700">${w.weight}</text>`).join("");
+ const xl=[1,7,14,21,30].map(d=>`<text x="${x(d)}" y="${Hh-6}" font-size="11" text-anchor="middle" fill="#8a93a3">يوم ${d}</text>`).join("");
+ return `<svg viewBox="0 0 ${W} ${Hh}" style="width:100%;direction:ltr"><g transform="translate(${W},0) scale(-1,1)">${g.replace(/<text[^>]*>[^<]*<\/text>/g,"")}${bars}<polyline points="${pts}" fill="none" stroke="#3b8cf0" stroke-width="2.5"/></g>${u.weights.map(w=>`<circle cx="${W-x(w.day)}" cy="${y(w.weight)}" r="4.5" fill="#fff" stroke="#3b8cf0" stroke-width="2.5"><title>${w.date}: ${w.weight} كغ</title></circle><text x="${W-x(w.day)}" y="${y(w.weight)-10}" font-size="11" text-anchor="middle" fill="#3b8cf0" font-weight="700">${w.weight}</text>`).join("")}${[1,7,14,21,30].map(d=>`<text x="${W-x(d)}" y="${Hh-6}" font-size="11" text-anchor="middle" fill="#8a93a3">يوم ${d}</text>`).join("")}${[0,5,10].map(i=>`<text x="${pr-10}" y="${yc(i)+4}" font-size="11" fill="#8a93a3" text-anchor="end">${i}</text>`).join("")}</svg>`}
+const sv=v=>v?`<span class="sv" style="background:${CLR(v)}">${v}</span>`:"—";
+function detail(){const u=USERS.find(x=>x.id===SEL);if(!u){detail_.innerHTML='<div class="card" style="text-align:center;color:var(--muted);padding:60px">اختر مشترك من القائمة</div>';return}
+ const s=stats(u),rows=[...Array(s.cur)].map((_,i)=>{const d=i+1,r=u.days.find(x=>x.day===d)||{};return `<tr style="${r.done?"":"opacity:.45"}"><td><b>${d}</b></td><td>${TITLES[i]}</td><td>${r.done?"✅":"—"}</td><td>${sv(r.commitment)}</td><td>${sv(r.hunger)}</td><td>${sv(r.fullness)}</td><td>${sv(r.satisfaction)}</td><td class="note">${r.note?(EMO.test(r.note)?"⚠️ ":"")+r.note:""}${r.reply?`<div class="reply">↩ ${r.reply}</div>`:""}</td><td>${r.note?`<button class="rp" data-r="${d}">رد</button>`:""}</td></tr>`}).reverse().join("");
+ detail_.innerHTML=`<div class="card"><h2><span>${u.name} <span class="tag t-gr">${TR[u.track]}</span></span><span class="m" style="font-size:12px;color:var(--muted)">بدأ ${new Date(u.start_date).toLocaleDateString("ar")}</span></h2>
+ <div class="kpi"><div><b>${s.cur}/30</b><span>اليوم الحالي</span></div><div><b>${s.n}</b><span>أيام منجزة</span></div><div><b>${s.rate}%</b><span>الالتزام</span></div><div><b>${s.avg}</b><span>متوسط التطبيق</span></div><div><b style="color:var(--green)">${s.wl}</b><span>تغيّر الوزن (كغ)</span></div></div></div>
+ ${s.al.length?`<div class="card"><h2>التنبيهات</h2>${s.al.map(a=>`<div class="al t-${a[0]}">${a[1]}</div>`).join("")}</div>`:""}
+ <div class="card"><h2>الالتزام بالأكل الحدسي مقابل الوزن<span class="leg"><span><i style="background:#c9bff5"></i>التطبيق اليومي (1–10)</span><span><i style="background:#3b8cf0"></i>الوزن</span></span></h2>${chart(u,s)}</div>
+ <div class="card"><h2>سجل الأيام</h2><div class="tw"><table><tr><th>اليوم</th><th>التمرين</th><th>منجز</th><th>التطبيق</th><th>الجوع</th><th>الشبع</th><th>الرضا</th><th>الملاحظة</th><th></th></tr>${rows}</table></div></div>`}
+const list_=document.getElementById("list"),detail_=document.getElementById("detail");
+function render(){list();detail()}
+let RD;document.addEventListener("click",e=>{const u=e.target.closest("[data-u]"),f=e.target.closest("[data-f]"),r=e.target.closest("[data-r]");
+ if(u){SEL=+u.dataset.u;render()}if(f){FLT=f.dataset.f;render()}
+ if(r){RD=+r.dataset.r;const x=USERS.find(x=>x.id===SEL).days.find(x=>x.day===RD);dd.textContent=RD;dn.textContent=x.note;dt.value=x.reply||"";dlg.showModal()}});
+ds.onclick=async()=>{const u=USERS.find(x=>x.id===SEL),x=u.days.find(x=>x.day===RD);x.reply=dt.value.trim();
+ if(API)await fetch(`${API}/admin/users/${u.id}/intuitive/${RD}/reply`,{method:"POST",headers:H,body:JSON.stringify({reply:x.reply})}).catch(()=>alert("تعذر الإرسال"));dlg.close();render()};
+(async()=>{if(API){try{USERS=await (await fetch(API+"/admin/intuitive/users",{headers:H})).json()}catch(e){alert("تعذر تحميل البيانات")}}else{USERS=demo();document.getElementById("demo").hidden=false}
+ SEL=+P.get("user")||USERS[0]?.id;render()})();
+</script>
+</body>
+</html>
