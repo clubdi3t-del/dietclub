@@ -32,6 +32,12 @@ dialog{border:0;border-radius:18px;padding:18px;width:min(420px,92vw)}dialog::ba
 dialog textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}
 .btn{border:0;border-radius:10px;padding:9px 18px;font:inherit;font-weight:800;color:#fff;background:var(--g1);cursor:pointer}
 .demo{background:#fff3d6;color:#7a4b00;border-radius:10px;padding:8px 12px;font-size:12.5px;margin-bottom:12px}
+.embed{padding:0}.bx .kpi div{padding:10px}.bx .al{padding:6px 10px;font-size:12.5px}
+.barw{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border-radius:18px;padding:10px;box-shadow:0 4px 16px rgba(40,50,90,.06)}
+@media(max-width:700px){.barw{grid-template-columns:repeat(2,1fr)}}
+.bt{display:flex;gap:10px;align-items:center;border:2px solid transparent;background:#f7f8fc;border-radius:14px;padding:10px 12px;font:inherit;cursor:pointer;text-align:right;color:var(--text)}
+.bt .be{font-size:22px}.bt b{display:block;font-size:20px;line-height:1}.bt .bl{font-weight:800;font-size:13.5px}.bt small{display:block;color:var(--muted);font-size:11px}
+.bt.on{background:#f1efff;border-color:var(--g1)}.b-alert.on{background:#fff6e5;border-color:var(--orange)}.b-stop.on{background:#ffeef1;border-color:var(--red)}.b-done.on{background:#e9fbef;border-color:var(--green)}
 </style>
 </head>
 <body>
@@ -86,18 +92,44 @@ const sv=v=>v?`<span class="sv" style="background:${CLR(v)}">${v}</span>`:"—";
 function detail(){const u=USERS.find(x=>x.id===SEL);if(!u){detail_.innerHTML='<div class="card" style="text-align:center;color:var(--muted);padding:60px">اختر مشترك من القائمة</div>';return}
  const s=stats(u),rows=[...Array(s.cur)].map((_,i)=>{const d=i+1,r=u.days.find(x=>x.day===d)||{};return `<tr style="${r.done?"":"opacity:.45"}"><td><b>${d}</b></td><td>${TITLES[i]}</td><td>${r.done?"✅":"—"}</td><td>${sv(r.commitment)}</td><td>${sv(r.hunger)}</td><td>${sv(r.fullness)}</td><td>${sv(r.satisfaction)}</td><td class="note">${r.note?(EMO.test(r.note)?"⚠️ ":"")+r.note:""}${r.reply?`<div class="reply">↩ ${r.reply}</div>`:""}</td><td>${r.note?`<button class="rp" data-r="${d}">رد</button>`:""}</td></tr>`}).reverse().join("");
  detail_.innerHTML=`<div class="card"><h2><span>${u.name} <span class="tag t-gr">${TR[u.track]}</span></span><span class="m" style="font-size:12px;color:var(--muted)">بدأ ${new Date(u.start_date).toLocaleDateString("ar")}</span></h2>
- <div class="kpi"><div><b>${s.cur}/30</b><span>اليوم الحالي</span></div><div><b>${s.n}</b><span>أيام منجزة</span></div><div><b>${s.rate}%</b><span>الالتزام</span></div><div><b>${s.avg}</b><span>متوسط التطبيق</span></div><div><b style="color:var(--green)">${s.wl}</b><span>تغيّر الوزن (كغ)</span></div></div></div>
+ <div class="kpi"><div><b>${s.cur}/30</b><span>اليوم الحالي</span></div><div><b>${s.n}</b><span>أيام منجزة</span></div><div><b>${s.rate}%</b><span>الالتزام</span></div><div><b>${s.avg}</b><span>متوسط التطبيق</span></div><div><b style="color:var(--green)" dir="ltr">${s.wl}</b><span>تغيّر الوزن (كغ)</span></div></div></div>
  ${s.al.length?`<div class="card"><h2>التنبيهات</h2>${s.al.map(a=>`<div class="al t-${a[0]}">${a[1]}</div>`).join("")}</div>`:""}
  <div class="card"><h2>الالتزام بالأكل الحدسي مقابل الوزن<span class="leg"><span><i style="background:#c9bff5"></i>التطبيق اليومي (1–10)</span><span><i style="background:#3b8cf0"></i>الوزن</span></span></h2>${chart(u,s)}</div>
  <div class="card"><h2>سجل الأيام</h2><div class="tw"><table><tr><th>اليوم</th><th>التمرين</th><th>منجز</th><th>التطبيق</th><th>الجوع</th><th>الشبع</th><th>الرضا</th><th>الملاحظة</th><th></th></tr>${rows}</table></div></div>`}
-const list_=document.getElementById("list"),detail_=document.getElementById("detail");
-function render(){list();detail()}
+let list_=document.getElementById("list"),detail_=document.getElementById("detail");
+let render=function(){list();detail()};
 let RD;document.addEventListener("click",e=>{const u=e.target.closest("[data-u]"),f=e.target.closest("[data-f]"),r=e.target.closest("[data-r]");
  if(u){SEL=+u.dataset.u;render()}if(f){FLT=f.dataset.f;render()}
  if(r){RD=+r.dataset.r;const x=USERS.find(x=>x.id===SEL).days.find(x=>x.day===RD);dd.textContent=RD;dn.textContent=x.note;dt.value=x.reply||"";dlg.showModal()}});
 ds.onclick=async()=>{const u=USERS.find(x=>x.id===SEL),x=u.days.find(x=>x.day===RD);x.reply=dt.value.trim();
  if(API)await fetch(`${API}/admin/users/${u.id}/intuitive/${RD}/reply`,{method:"POST",headers:H,body:JSON.stringify({reply:x.reply})}).catch(()=>alert("تعذر الإرسال"));dlg.close();render()};
-(async()=>{if(API){try{USERS=await (await fetch(API+"/admin/intuitive/users",{headers:H})).json()}catch(e){alert("تعذر تحميل البيانات")}}else{USERS=demo();document.getElementById("demo").hidden=false}
+const VIEW=P.get("view")||"full";
+// ===== 1) بوكس داخل بروفايل المشترك =====
+function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById("box");
+ if(!u){B.innerHTML='<div class="card bx"><h2>🧠 الأكل الحدسي</h2><div class="m">المشترك لم يبدأ البرنامج بعد</div></div>';return}
+ const s=stats(u),all=B.dataset.all==="1",n=all?s.cur:Math.min(5,s.cur);
+ const rows=[...Array(n)].map((_,i)=>{const d=s.cur-i,r=u.days.find(x=>x.day===d)||{};return `<tr style="${r.done?"":"opacity:.45"}"><td><b>${d}</b></td><td>${TITLES[d-1]}</td><td>${r.done?"✅":"—"}</td><td>${sv(r.commitment)}</td><td>${sv(r.hunger)}</td><td>${sv(r.fullness)}</td><td>${sv(r.satisfaction)}</td><td class="note">${r.note?(EMO.test(r.note)?"⚠️ ":"")+r.note:""}${r.reply?`<div class="reply">↩ ${r.reply}</div>`:""}</td><td>${r.note?`<button class="rp" data-r="${d}">رد</button>`:""}</td></tr>`}).join("");
+ B.innerHTML=`<div class="card bx"><h2><span>🧠 الأكل الحدسي <span class="tag t-gr">${TR[u.track]}</span></span><span style="font-size:12px;color:var(--muted)">بدأ ${new Date(u.start_date).toLocaleDateString("ar")}</span></h2>
+ <div class="kpi"><div><b>${s.cur}/30</b><span>اليوم الحالي</span></div><div><b>${s.n}</b><span>أيام منجزة</span></div><div><b>${s.rate}%</b><span>الالتزام</span></div><div><b>${s.avg}</b><span>متوسط التطبيق</span></div><div><b style="color:var(--green)" dir="ltr">${s.wl}</b><span>تغيّر الوزن (كغ)</span></div></div>
+ ${s.al.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${s.al.map(a=>`<span class="al t-${a[0]}" style="margin:0">${a[1]}</span>`).join("")}</div>`:""}
+ <div style="margin-top:14px"><div class="leg" style="margin-bottom:4px"><span><i style="background:#c9bff5"></i>التطبيق اليومي</span><span><i style="background:#3b8cf0"></i>الوزن</span></div>${chart(u,s)}</div>
+ <div class="tw"><table><tr><th>اليوم</th><th>التمرين</th><th>منجز</th><th>التطبيق</th><th>الجوع</th><th>الشبع</th><th>الرضا</th><th>الملاحظة</th><th></th></tr>${rows}</table></div>
+ ${s.cur>5?`<button class="rp" id="more" style="margin-top:10px">${all?"عرض آخر 5 أيام":"عرض كل الأيام ("+s.cur+")"}</button>`:""}</div>`;
+ const m=document.getElementById("more");if(m)m.onclick=()=>{B.dataset.all=all?"0":"1";box()}}
+// ===== 2) شريط فوق قائمة المشتركين =====
+let BF=P.get("filter")||"all";
+function bar(){const S=USERS.map(u=>[u,stats(u)]),grp={
+  alert:S.filter(([u,s])=>s.al.some(a=>a[0]==="or")),all:S,stop:S.filter(([u,s])=>s.al.some(a=>a[0]==="red")),done:S.filter(([u,s])=>s.al.some(a=>a[0]==="gr"))};
+ const T=[["alert","🟠","تنبيهات","تحتاج متابعة"],["all","🧠","الكل","مشتركين في البرنامج"],["stop","🔴","متوقفين","3 أيام بدون تمرين"],["done","🟢","مكمّلين","أنهوا 30 يوم"]];
+ document.getElementById("bar").innerHTML=T.map(([k,e,t,h])=>`<button class="bt ${BF===k?"on":""} b-${k}" data-b="${k}"><span class="be">${e}</span><span><b>${grp[k].length}</b><span class="bl">${t}</span><small>${h}</small></span></button>`).join("");
+ const ids=grp[BF].map(([u])=>u.id);
+ // يُرسل للبنل الأب ليفلتر القائمة: {type:"intuitive-filter",filter,user_ids}
+ if(parent!==window)parent.postMessage({type:"intuitive-filter",filter:BF,user_ids:ids},"*");
+ window.dispatchEvent(new CustomEvent("intuitive-filter",{detail:{filter:BF,user_ids:ids}}))}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-b]");if(b){BF=b.dataset.b;bar()}});
+const _render=render;render=()=>VIEW==="box"?box():VIEW==="bar"?bar():_render();
+(async()=>{if(VIEW!=="full"){document.querySelector(".wrap").outerHTML=VIEW==="box"?'<div id="box" class="embed"></div>':'<div id="bar" class="embed barw"></div>';document.body.style.background="transparent"}
+ if(API){try{USERS=await (await fetch(API+"/admin/intuitive/users"+(VIEW==="box"&&P.get("user")?"?user_id="+P.get("user"):""),{headers:H})).json()}catch(e){alert("تعذر تحميل البيانات")}}else{USERS=demo();const d=document.getElementById("demo");if(d)d.hidden=false}
  SEL=+P.get("user")||USERS[0]?.id;render()})();
 </script>
 </body>

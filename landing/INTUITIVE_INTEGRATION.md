@@ -110,3 +110,28 @@ admin-intuitive.html?api=https://di3t-club.com/api&token={ADMIN_TOKEN}&user={USE
 {"reply":"ممتاز، استمري 💙"}
 ```
 يحفظ في عمود `reply TEXT NULL` بجدول `intuitive_progress`، ويُرجع ضمن `GET /api/intuitive/progress` ليظهر للمشترك.
+
+## 7) التضمين داخل البنل الحالي (بدون تغيير الصفحات)
+
+### بوكس في بروفايل المشترك
+```html
+<iframe src="/admin-intuitive.html?view=box&user={USER_ID}&api=/api&token={ADMIN_TOKEN}"
+        style="width:100%;border:0;height:760px"></iframe>
+```
+`GET /api/admin/intuitive/users?user_id={ID}` يرجع مصفوفة فيها المشترك فقط.
+
+### شريط فوق قائمة المشتركين
+```html
+<iframe src="/admin-intuitive.html?view=bar&api=/api&token={ADMIN_TOKEN}"
+        style="width:100%;border:0;height:110px"></iframe>
+<script>
+window.addEventListener("message", e => {
+  if (e.data?.type !== "intuitive-filter") return;
+  // e.data.filter = alert | all | stop | done
+  // e.data.user_ids = أرقام المشتركين → أخفِ/أظهر صفوف القائمة الحالية
+  document.querySelectorAll("[data-user-id]").forEach(r =>
+    r.style.display = e.data.filter === "all" || e.data.user_ids.includes(+r.dataset.userId) ? "" : "none");
+});
+</script>
+```
+(أو بدل الفلترة بالجافاسكربت: أعد تحميل القائمة بـ `?intuitive=alert` وفلتر من السيرفر بنفس الشروط في القسم 4.)
