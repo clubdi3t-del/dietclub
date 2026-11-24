@@ -12,11 +12,11 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;font-family:"Tajawal",system-ui,sans-serif;background:var(--bg);color:var(--text)}
 .app{max-width:480px;margin:0 auto;min-height:100dvh;padding-bottom:110px}
-.top{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;padding:18px 18px 70px;border-radius:0 0 30px 30px;position:relative;overflow:hidden}
+.top{background:linear-gradient(135deg,var(--g1),var(--g2));color:#fff;padding:14px 18px 60px;border-radius:0 0 30px 30px;position:relative;overflow:hidden}
 .top:after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08);top:-80px;left:-60px}
 .bar1{display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1}
 .pill{background:rgba(255,255,255,.18);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:700;display:flex;gap:6px;align-items:center}
-.top h1{margin:18px 0 4px;font-size:22px;position:relative;z-index:1}
+.top h1{margin:10px 0 2px;font-size:22px;position:relative;z-index:1}
 .top p{margin:0;opacity:.85;font-size:13px;position:relative;z-index:1}
 .dots{display:flex;gap:4px;margin-top:16px;position:relative;z-index:1}
 .dots i{flex:1;height:6px;border-radius:9px;background:rgba(255,255,255,.25)}
@@ -59,6 +59,9 @@ textarea:focus{border-color:var(--blue)}
 .chipx{display:flex;align-items:center;gap:6px;background:#f6f5ff;border-radius:12px;padding:8px 10px;font-size:15px}.chipx b{font-size:17px;color:#2a2f3a}.chipx span{color:var(--muted);font-size:12px}
 .calg{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}.calg i{aspect-ratio:1;border-radius:7px;display:grid;place-items:center;color:#e11d48;font-style:normal;font-weight:800}
 .legx{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px}.legx i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:4px;vertical-align:-1px}
+.mini{margin:12px 0 0;padding-right:20px;font-size:14px;line-height:1.7;color:#4b5563}.mini li{margin-bottom:2px}
+.qcard{border:2px solid #d9d2ff;box-shadow:0 10px 30px rgba(109,79,216,.15)}.qh{font-weight:800;font-size:17px;color:var(--g1);margin-bottom:10px}
+.tips{background:#fff;border-radius:18px;padding:12px 16px;margin-bottom:14px;font-size:14px;line-height:1.7}.tips summary{font-weight:800;cursor:pointer;color:#7a4b00}.tips p{margin:8px 0 0}
 .tracks{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
 .tracks button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--muted)}
 .tracks button.on{border-color:var(--blue);color:var(--blue);background:#eef5ff}
@@ -147,15 +150,12 @@ function render(){
  rec=scale(k+"a","كم طبّقت تمرين اليوم؟","1 ما طبقت • 10 طبقته تماماً")+rec;
  const ph={list:"1)\n2)\n3)",hs:"السبب: جوع / ملل / توتر / عادة…",sat:"وش لاحظت؟",note:"وش لاحظت اليوم؟"}[t];
  main.innerHTML=`
- <div class="card"><div class="hero"><div class="ico">${ICONS[DAY-1]}</div><div>
-   <span class="chip">تمرين اليوم</span><h2>${x[0]}</h2>
-   <div class="meta"><span>⏱ 5–10 دقائق</span><span>🎯 ${TRACKS[S.track]}</span></div></div></div></div>
- <div class="card"><div class="sec">كيف أنفّذ؟</div>${steps(x[1]).map((s,i)=>`<div class="step"><b>${i+1}</b><div>${s}</div></div>`).join("")}</div>
- ${x[2]?`<div class="tip gulf"><span class="e">🌴</span><div><b>من واقعنا</b><br>${x[2]}</div></div>`:""}
- <div class="tip trk"><span class="e">🩺</span><div><b>لنظامك (${TRACKS[S.track]})</b><br>${TT[S.track][w]}</div></div>
- <div class="card"><div class="sec">سجّل تجربتك</div>${rec}<textarea data-k="${k}" placeholder="${ph}">${S.notes[k]||""}</textarea></div>
+ <div class="card"><div class="hero"><div class="ico">${ICONS[DAY-1]}</div><div><span class="chip">تمرين اليوم • ⏱ 5 دقائق</span><h2>${x[0]}</h2></div></div>
+  <ol class="mini">${steps(x[1]).map(s=>`<li>${s}</li>`).join("")}</ol></div>
+ <div class="card qcard"><div class="qh">✍️ سؤال اليوم</div>${rec}<textarea data-k="${k}" placeholder="${ph}">${S.notes[k]||""}</textarea></div>
+ <details class="tips"><summary>💡 نصائح لك اليوم</summary>${x[2]?`<p>🌴 ${x[2]}</p>`:""}<p>🩺 <b>${TRACKS[S.track]}:</b> ${TT[S.track][w]}</p></details>
  ${DAY===30?`<div class="card"><div class="sec">تقييم الشهر</div>${["وش تغيّر في علاقتك مع الأكل؟","صرت أوعى بإشارات الجوع والشبع؟","تحسّنت قراءاتك أو قياساتك؟","أكبر تحدي واجهته؟"].map((q,i)=>`<div class="lbl">${q}</div><textarea data-k="f${i}">${S.notes["f"+i]||""}</textarea>`).join("")}</div>`:""}
- <div class="card"><div class="lbl">نوع نظامك</div><div class="tracks">${Object.entries(TRACKS).map(([a,b])=>`<button data-t="${a}" class="${S.track===a?"on":""}">${b}</button>`).join("")}</div></div>`;
+ <div class="card" style="${P.get("goal")?"display:none":""}"><div class="lbl">نوع نظامك</div><div class="tracks">${Object.entries(TRACKS).map(([a,b])=>`<button data-t="${a}" class="${S.track===a?"on":""}">${b}</button>`).join("")}</div></div>`;
  btn.className=done?"done":"";btn.textContent=done?"✓ أنجزت تمرين اليوم":"أنجزت تمرين اليوم";
  lock.textContent=done?(DAY<30?"🔒 تمرين بكرة يفتح الساعة 12 بالليل":"🏆 خلصت البرنامج كامل!"):"";
 }
