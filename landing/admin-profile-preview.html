@@ -47,7 +47,10 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
 .pinfo{flex-basis:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,.12);border-radius:12px;overflow:hidden;margin-top:6px}
 .pinfo div{background:rgba(4,32,63,.55);padding:10px 14px}.pinfo small{display:block;color:#93b4dc;font-size:12px}.pinfo b{font-size:14px;color:#fff;word-break:break-all}
 @media(max-width:1000px){.pinfo{grid-template-columns:repeat(2,1fr)}}
-.tabs2{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid #f0f0f0;overflow-x:auto}.tabs2 button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:14px 14px;color:#6b7280;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}.tabs2 button.on{color:#1a73f5;border-color:#1a73f5}
+.pbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#f8fafc;border:1px solid #eef0f3;border-radius:12px;padding:12px 14px;margin-bottom:14px}.pbar b{font-size:15px}.pbar small{display:block;color:#6b7280;font-size:12.5px;margin-top:2px}
+.ab{display:flex;gap:6px}.ab button{border:1px solid #e5e7eb;background:#fff;border-radius:9px;padding:7px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.ab .b-add{background:#1a73f5;color:#fff;border-color:#1a73f5}.ab .b-ed{color:#0a2647}.ab .b-dl{color:#16a34a}.ab .b-del{color:#e11d48;border-color:#fecdd3}.ab .b-del:hover{background:#fff1f2}
+.tabs2{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid #f0f0f0;overflow-x:auto}.tabs2 button{border:0;background:none;font:inherit;font-weight:800;font-size:15px;padding:16px 18px;color:#6b7280;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}.tabs2 button.on{color:#1a73f5;border-color:#1a73f5}
 .pane{display:none;padding:18px 20px}.pane.on{display:block}
 .days{display:flex;gap:6px;margin-bottom:12px}.days span{padding:6px 12px;border-radius:8px;background:#f3f4f6;font-size:13px;cursor:pointer}.days span.on{background:#1a73f5;color:#fff}
 .meals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.meal{border:1px solid #eef0f3;border-radius:12px;padding:12px}.meal b{display:block;font-size:13px;color:#1a73f5;margin-bottom:4px}.meal{font-size:13.5px;line-height:1.7}
@@ -95,11 +98,16 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
 </div></div>
 
 <div class="pc"><div class="tabs2" id="tabs">
- <button data-p="w" class="on">📅 الخطة الأسبوعية <small style="color:#9ca3af">(4 يوم متبقي)</small></button><button data-p="m">🍽 آخر خطة غذائية</button><button data-p="e">🏋️ الخطة الرياضية</button><button data-p="h">🧠 الأكل الحدسي</button></div>
- <div class="pane on" id="p-w"><div class="days"><span class="on">يوم 1</span><span>يوم 2</span><span>يوم 3</span><span>يوم 4</span><span>يوم 5</span><span>يوم 6</span><span>يوم 7</span></div>
+ <button data-p="w" class="on">🍽 البرنامج الغذائي</button><button data-p="e">🏋️ البرنامج الرياضي</button><button data-p="h">🧠 برنامج الأكل الحدسي</button></div>
+ <div class="pane on" id="p-w">
+  <div class="pbar"><div><b>قائمة سكري 3</b><small>16 – 23 نوفمبر 2026 • 1500 سعرة • باقي 4 يوم و 10 ساعات</small></div>
+   <div class="ab"><button class="b-add">＋ إضافة</button><button class="b-ed">✎ تعديل</button><button class="b-dl">⬇ تحميل</button><button class="b-del">🗑 حذف</button></div></div>
+  <div class="days"><span class="on">يوم 1</span><span>يوم 2</span><span>يوم 3</span><span>يوم 4</span><span>يوم 5</span><span>يوم 6</span><span>يوم 7</span></div>
   <div class="meals"><div class="meal"><b>الفطور</b>بيض مسلوق ×2<br>خبز أسمر 60 غ</div><div class="meal"><b>سناك صباحي</b>قهوة بدون سكر</div><div class="meal"><b>الغداء</b>صدر دجاج مشوي 120 غ<br>أرز بني 5 ملاعق</div><div class="meal"><b>سناك العصر</b>تفاحة</div><div class="meal"><b>العشاء</b>لبن قليل الدسم + خيار</div><div class="meal"><b>الحصص</b>سكريات: تمر ×2 • ألبان: كوب • دهون: زيتون ×5</div></div></div>
- <div class="pane" id="p-m"><div class="info"><div><small>عنوان الخطة</small><b>قائمة سكري 3</b></div><div><small>التاريخ</small><b>16 – 23 نوفمبر 2026</b></div><div><small>السعرات</small><b>1500</b></div><div><small>آخر وزن</small><b>83.2 كغ</b></div></div></div>
- <div class="pane" id="p-e"><div class="ex"><div>قرفصاء مبتدئ<small>4 مجموعات • 13 تكرار</small></div><div>تمرين المسند الإسفنجي<small>3 مجموعات • 14 تكرار</small></div><div>رفع قدم ويد<small>4 مجموعات • 12 تكرار</small></div></div></div>
+ <div class="pane" id="p-e">
+  <div class="pbar"><div><b>برنامج المبتدئ – المرحلة 2</b><small>من 16 نوفمبر 2026 • 3 أيام بالأسبوع</small></div>
+   <div class="ab"><button class="b-add">＋ إضافة</button><button class="b-dl">⬇ تحميل</button><button class="b-del">🗑 حذف</button></div></div>
+  <div class="ex"><div>قرفصاء مبتدئ<small>4 مجموعات • 13 تكرار</small></div><div>تمرين المسند الإسفنجي<small>3 مجموعات • 14 تكرار</small></div><div>رفع قدم ويد<small>4 مجموعات • 12 تكرار</small></div></div></div>
  <div class="pane" id="p-h" style="padding:0"><iframe id="ibox" data-src="admin-intuitive.html?view=box&user=2&open=1" style="height:700px" title="الأكل الحدسي"></iframe></div>
 </div>
 <div class="pc"><h3>📝 ملاحظات الأداء <small>تظهر دائماً</small></h3><div class="bd">
