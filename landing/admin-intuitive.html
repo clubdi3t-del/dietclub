@@ -32,7 +32,20 @@ dialog{border:0;border-radius:18px;padding:18px;width:min(420px,92vw)}dialog::ba
 dialog textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}
 .btn{border:0;border-radius:10px;padding:9px 18px;font:inherit;font-weight:800;color:#fff;background:var(--g1);cursor:pointer}
 .demo{background:#fff3d6;color:#7a4b00;border-radius:10px;padding:8px 12px;font-size:12.5px;margin-bottom:12px}
-.embed{padding:0}.sub2{font-weight:800;font-size:14px;margin:16px 0 6px;color:#374151}.bx .kpi b{font-size:19px}.bx .kpi div{padding:10px}.bx .al{padding:6px 10px;font-size:12.5px}
+.embed{padding:0}
+.bh{display:flex;justify-content:space-between;align-items:center;gap:12px}.bh small{color:var(--muted);font-size:12px}
+.prg{min-width:150px;text-align:left}.prg b{font-size:22px;color:var(--g1)}.prg b small{font-size:13px;color:var(--muted)}.pb{height:8px;background:#eef0f7;border-radius:9px;margin-top:4px;overflow:hidden}.pb i{display:block;height:100%;background:linear-gradient(90deg,var(--g1),var(--g2))}
+.kp2{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}.kp2 div{background:#f7f8fc;border-radius:12px;padding:8px 10px;font-size:12px;color:var(--muted)}.kp2 b{display:block;font-size:18px;color:var(--text)}
+.als{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.als .al{margin:0;padding:5px 10px;font-size:12.5px}
+.tb{display:flex;gap:4px;border-bottom:2px solid var(--line);margin:16px 0 10px}.tb button{border:0;background:none;font:inherit;font-weight:800;font-size:14px;padding:8px 14px;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px}.tb button.on{color:var(--g1);border-color:var(--g1)}
+.fl2{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.fl2 button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font:inherit;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer}.fl2 button span{background:#f1f3f8;border-radius:9px;padding:0 6px;margin-right:4px}.fl2 button.on{background:var(--g1);color:#fff;border-color:var(--g1)}.fl2 button.on span{background:rgba(255,255,255,.25)}
+.lst{max-height:460px;overflow:auto}
+.it{display:flex;gap:12px;align-items:flex-start;padding:12px 4px;border-bottom:1px solid var(--line)}.it.ms{opacity:.55}
+.dn{width:34px;height:34px;flex:none;border-radius:10px;background:#f1efff;color:var(--g1);font-weight:800;display:grid;place-items:center}
+.ib{flex:1;min-width:0}.ttl2{font-weight:700;font-size:14px}.ok2{color:var(--green);font-size:11.5px;margin-right:6px}.no2{color:var(--red);font-size:11.5px;margin-right:6px}
+.scs{display:flex;gap:10px;margin-top:5px;flex-wrap:wrap}.sc2{font-size:12px;color:var(--muted);display:inline-flex;align-items:center;gap:4px}.sc2 i{font-style:normal;color:#fff;font-weight:800;border-radius:6px;min-width:20px;height:20px;display:inline-grid;place-items:center;font-size:11px}
+.q{margin-top:6px;background:#f7f8fc;border-right:3px solid #c9bff5;border-radius:8px;padding:6px 10px;font-size:13.5px}.q.emo{background:#fff7e6;border-color:var(--orange)}
+.it .rp{flex:none}.sub2{font-weight:800;font-size:14px;margin:16px 0 6px;color:#374151}.bx .kpi b{font-size:19px}.bx .kpi div{padding:10px}.bx .al{padding:6px 10px;font-size:12.5px}
 .barw{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border-radius:18px;padding:10px;box-shadow:0 4px 16px rgba(40,50,90,.06)}
 @media(max-width:700px){.barw{grid-template-columns:repeat(2,1fr)}}
 .wrow{grid-column:1/-1;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -112,17 +125,31 @@ const VIEW=P.get("view")||"full";
 // ===== 1) بوكس داخل بروفايل المشترك =====
 function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById("box");
  if(!u){B.innerHTML='<div class="card bx"><h2>🧠 الأكل الحدسي</h2><div class="m">المشترك لم يبدأ البرنامج بعد</div></div>';return}
- const s=stats(u),all=B.dataset.all==="1",n=all?s.cur:Math.min(5,s.cur);
- const rows=[...Array(n)].map((_,i)=>{const d=s.cur-i,r=u.days.find(x=>x.day===d)||{};return `<tr style="${r.done?"":"opacity:.45"}"><td><b>${d}</b></td><td>${TITLES[d-1]}</td><td>${r.done?"✅":"—"}</td><td>${sv(r.commitment)}</td><td>${sv(r.hunger)}</td><td>${sv(r.fullness)}</td><td>${sv(r.satisfaction)}</td><td class="note">${r.note?(EMO.test(r.note)?"⚠️ ":"")+r.note:""}${r.reply?`<div class="reply">↩ ${r.reply}</div>`:""}</td><td>${r.note?`<button class="rp" data-r="${d}">رد</button>`:""}</td></tr>`}).join("");
- B.innerHTML=`<div class="card bx"><h2><span>🧠 الأكل الحدسي <span class="tag t-gr">${TR[u.track]}</span></span><span style="font-size:12px;color:var(--muted)">بدأ ${new Date(u.start_date).toLocaleDateString("ar")}</span></h2>
- <div class="kpi"><div><b>${s.cur}/30</b><span>اليوم الحالي</span></div><div><b>${s.n}</b><span>أيام منجزة</span></div><div><b>${s.rate}%</b><span>الالتزام</span></div><div><b>${s.avg}</b><span>متوسط التطبيق</span></div><div><b style="color:var(--green)" dir="ltr">${s.wl}</b><span>تغيّر الوزن (كغ)</span></div></div>
- ${s.al.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${s.al.map(a=>`<span class="al t-${a[0]}" style="margin:0">${a[1]}</span>`).join("")}</div>`:""}
- <div class="sub2">✍️ إجابات المشترك</div>
- <div class="tw"><table><tr><th>اليوم</th><th>التمرين</th><th>منجز</th><th>التطبيق</th><th>الجوع</th><th>الشبع</th><th>الرضا</th><th>الملاحظة</th><th></th></tr>${rows}</table></div>
- ${s.cur>5?`<button class="rp" id="more" style="margin-top:8px">${all?"عرض آخر 5 أيام":"عرض كل الأيام ("+s.cur+")"}</button>`:""}
- <div class="sub2" style="display:flex;justify-content:space-between">📈 الالتزام مقابل الوزن<span class="leg"><span><i style="background:#c9bff5"></i>التطبيق</span><span><i style="background:#3b8cf0"></i>الوزن</span></span></div>${chart(u,s,120)}</div>`;
- const m=document.getElementById("more");if(m)m.onclick=()=>{B.dataset.all=all?"0":"1";box()};
- // يرسل الارتفاع للبنل حتى يتكيف الـ iframe تلقائياً
+ const s=stats(u),tab=B.dataset.tab||"ans",flt=B.dataset.f||"all";
+ const R=r=>r.done?(r.note?"note":"ok"):"miss";
+ let ds=[...Array(s.cur)].map((_,i)=>{const d=s.cur-i;return {d,...(u.days.find(x=>x.day===d)||{})}});
+ const cnt={all:ds.length,note:ds.filter(r=>r.note).length,emo:ds.filter(r=>EMO.test(r.note||"")).length,miss:ds.filter(r=>!r.done).length};
+ if(flt==="note")ds=ds.filter(r=>r.note);if(flt==="emo")ds=ds.filter(r=>EMO.test(r.note||""));if(flt==="miss")ds=ds.filter(r=>!r.done);
+ const ch=(l,v)=>v?`<span class="sc2"><i style="background:${CLR(v)}">${v}</i>${l}</span>`:"";
+ const item=r=>`<div class="it ${r.done?"":"ms"}"><div class="dn">${r.d}</div><div class="ib">
+   <div class="ttl2">${TITLES[r.d-1]} ${r.done?'<span class="ok2">✓ منجز</span>':'<span class="no2">فاته</span>'}</div>
+   ${r.done?`<div class="scs">${ch("تطبيق",r.commitment)}${ch("جوع",r.hunger)}${ch("شبع",r.fullness)}${ch("رضا",r.satisfaction)}</div>`:""}
+   ${r.note?`<div class="q ${EMO.test(r.note)?"emo":""}">“${r.note}”</div>`:""}
+   ${r.reply?`<div class="reply">↩ ردّك: ${r.reply}</div>`:""}</div>
+   ${r.note?`<button class="rp" data-r="${r.d}">${r.reply?"تعديل الرد":"رد"}</button>`:""}</div>`;
+ const tabs=[["ans","✍️ الإجابات"],["chart","📈 الوزن والالتزام"]];
+ B.innerHTML=`<div class="card bx">
+ <div class="bh"><div><h2 style="margin:0">🧠 الأكل الحدسي <span class="tag t-gr">${TR[u.track]}</span></h2><small>بدأ ${new Date(u.start_date).toLocaleDateString("ar")}</small></div>
+  <div class="prg"><b>${s.cur}<small>/30</small></b><div class="pb"><i style="width:${s.cur/30*100}%"></i></div></div></div>
+ <div class="kp2"><div><b>${s.n}</b>أيام منجزة</div><div><b>${s.rate}%</b>الالتزام</div><div><b>${s.avg}</b>متوسط التطبيق</div><div><b dir="ltr" style="color:var(--green)">${s.wl}</b>كغ تغيّر الوزن</div></div>
+ ${s.al.length?`<div class="als">${s.al.map(a=>`<span class="al t-${a[0]}">${a[1]}</span>`).join("")}</div>`:""}
+ <div class="tb">${tabs.map(([k,l])=>`<button data-tab="${k}" class="${tab===k?"on":""}">${l}</button>`).join("")}</div>
+ ${tab==="ans"?`<div class="fl2">${[["all","الكل"],["note","فيها ملاحظة"],["emo","⚠️ أكل عاطفي"],["miss","الأيام الفائتة"]].map(([k,l])=>`<button data-f2="${k}" class="${flt===k?"on":""}">${l} <span>${cnt[k]}</span></button>`).join("")}</div>
+   <div class="lst">${ds.map(item).join("")||'<div class="m" style="padding:16px;text-align:center">لا يوجد</div>'}</div>`
+  :`<div class="leg" style="margin:8px 0"><span><i style="background:#c9bff5"></i>التطبيق اليومي</span><span><i style="background:#3b8cf0"></i>الوزن</span></div>${chart(u,s,200)}`}
+ </div>`;
+ B.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{B.dataset.tab=b.dataset.tab;box()});
+ B.querySelectorAll("[data-f2]").forEach(b=>b.onclick=()=>{B.dataset.f=b.dataset.f2;box()});
  setTimeout(()=>parent!==window&&parent.postMessage({type:"intuitive-height",height:document.body.scrollHeight},"*"),50)}
 // ===== 2) شريط فوق قائمة المشتركين =====
 let BF=P.get("filter")||"all";
