@@ -32,7 +32,7 @@ dialog{border:0;border-radius:18px;padding:18px;width:min(420px,92vw)}dialog::ba
 dialog textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}
 .btn{border:0;border-radius:10px;padding:9px 18px;font:inherit;font-weight:800;color:#fff;background:var(--g1);cursor:pointer}
 .demo{background:#fff3d6;color:#7a4b00;border-radius:10px;padding:8px 12px;font-size:12.5px;margin-bottom:12px}
-.embed{padding:0}
+.embed{padding:0}.mini2{display:flex;align-items:center;gap:14px;padding:12px 16px;margin:0;flex-wrap:wrap}.mt{font-weight:800}.mm{font-size:13px;color:var(--muted)}.mm b{color:var(--text)}
 .bh{display:flex;justify-content:space-between;align-items:center;gap:12px}.bh small{color:var(--muted);font-size:12px}
 .prg{min-width:150px;text-align:left}.prg b{font-size:22px;color:var(--g1)}.prg b small{font-size:13px;color:var(--muted)}.pb{height:8px;background:#eef0f7;border-radius:9px;margin-top:4px;overflow:hidden}.pb i{display:block;height:100%;background:linear-gradient(90deg,var(--g1),var(--g2))}
 .kp2{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:14px}.kp2 div{background:#f7f8fc;border-radius:12px;padding:8px 10px;font-size:12px;color:var(--muted)}.kp2 b{display:block;font-size:18px;color:var(--text)}
@@ -126,6 +126,10 @@ const VIEW=P.get("view")||"full";
 function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById("box");
  if(!u){B.innerHTML='<div class="card bx"><h2>🧠 الأكل الحدسي</h2><div class="m">المشترك لم يبدأ البرنامج بعد</div></div>';return}
  const s=stats(u),tab=B.dataset.tab||"ans",flt=B.dataset.f||"all";
+ if(B.dataset.open!=="1"){const crit=s.al.filter(x=>x[0]!=="gr");
+  B.innerHTML=`<div class="card bx mini2"><span class="mt">🧠 الأكل الحدسي</span><span class="prg" style="min-width:110px"><b style="font-size:15px">${s.cur}<small>/30</small></b><div class="pb"><i style="width:${s.cur/30*100}%"></i></div></span><span class="mm">التزام <b>${s.rate}%</b></span>${crit.length?`<span class="al t-${crit[0][0]}" style="margin:0;padding:3px 9px;font-size:12px">${crit.map(x=>x[1].split(" ")[0]).join(" ")} ${crit.length} تنبيه</span>`:""}<button class="rp" id="opn" style="margin-right:auto">عرض التفاصيل ▾</button></div>`;
+  document.getElementById("opn").onclick=()=>{B.dataset.open="1";box()};
+  setTimeout(()=>parent!==window&&parent.postMessage({type:"intuitive-height",height:document.body.scrollHeight},"*"),50);return}
  const R=r=>r.done?(r.note?"note":"ok"):"miss";
  let ds=[...Array(s.cur)].map((_,i)=>{const d=s.cur-i;return {d,...(u.days.find(x=>x.day===d)||{})}});
  const cnt={all:ds.length,note:ds.filter(r=>r.note).length,emo:ds.filter(r=>EMO.test(r.note||"")).length,miss:ds.filter(r=>!r.done).length};
@@ -140,7 +144,7 @@ function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById
  const tabs=[["ans","✍️ الإجابات"],["chart","📈 الوزن والالتزام"]];
  B.innerHTML=`<div class="card bx">
  <div class="bh"><div><h2 style="margin:0">🧠 الأكل الحدسي <span class="tag t-gr">${TR[u.track]}</span></h2><small>بدأ ${new Date(u.start_date).toLocaleDateString("ar")}</small></div>
-  <div class="prg"><b>${s.cur}<small>/30</small></b><div class="pb"><i style="width:${s.cur/30*100}%"></i></div></div></div>
+  <div style="display:flex;gap:10px;align-items:center"><div class="prg"><b>${s.cur}<small>/30</small></b><div class="pb"><i style="width:${s.cur/30*100}%"></i></div></div><button class="rp" id="cls">إخفاء ▴</button></div></div>
  <div class="kp2"><div><b>${s.n}</b>أيام منجزة</div><div><b>${s.rate}%</b>الالتزام</div><div><b>${s.avg}</b>متوسط التطبيق</div><div><b dir="ltr" style="color:var(--green)">${s.wl}</b>كغ تغيّر الوزن</div></div>
  ${s.al.length?`<div class="als">${s.al.map(a=>`<span class="al t-${a[0]}">${a[1]}</span>`).join("")}</div>`:""}
  <div class="tb">${tabs.map(([k,l])=>`<button data-tab="${k}" class="${tab===k?"on":""}">${l}</button>`).join("")}</div>
@@ -148,6 +152,7 @@ function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById
    <div class="lst">${ds.map(item).join("")||'<div class="m" style="padding:16px;text-align:center">لا يوجد</div>'}</div>`
   :`<div class="leg" style="margin:8px 0"><span><i style="background:#c9bff5"></i>التطبيق اليومي</span><span><i style="background:#3b8cf0"></i>الوزن</span></div>${chart(u,s,200)}`}
  </div>`;
+ document.getElementById("cls").onclick=()=>{B.dataset.open="0";box()};
  B.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{B.dataset.tab=b.dataset.tab;box()});
  B.querySelectorAll("[data-f2]").forEach(b=>b.onclick=()=>{B.dataset.f=b.dataset.f2;box()});
  setTimeout(()=>parent!==window&&parent.postMessage({type:"intuitive-height",height:document.body.scrollHeight},"*"),50)}
