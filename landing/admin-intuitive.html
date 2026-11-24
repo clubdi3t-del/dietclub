@@ -126,7 +126,7 @@ const VIEW=P.get("view")||"full";
 function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById("box");
  if(!u){B.innerHTML='<div class="card bx"><h2>🧠 الأكل الحدسي</h2><div class="m">المشترك لم يبدأ البرنامج بعد</div></div>';return}
  const s=stats(u),tab=B.dataset.tab||"ans",flt=B.dataset.f||"all";
- if(B.dataset.open!=="1"){const crit=s.al.filter(x=>x[0]!=="gr");
+ if(B.dataset.open!=="1"&&!(P.get("open")&&!B.dataset.open)){const crit=s.al.filter(x=>x[0]!=="gr");
   B.innerHTML=`<div class="card bx mini2"><span class="mt">🧠 الأكل الحدسي</span><span class="prg" style="min-width:110px"><b style="font-size:15px">${s.cur}<small>/30</small></b><div class="pb"><i style="width:${s.cur/30*100}%"></i></div></span><span class="mm">التزام <b>${s.rate}%</b></span>${crit.length?`<span class="al t-${crit[0][0]}" style="margin:0;padding:3px 9px;font-size:12px">${crit.map(x=>x[1].split(" ")[0]).join(" ")} ${crit.length} تنبيه</span>`:""}<button class="rp" id="opn" style="margin-right:auto">عرض التفاصيل ▾</button></div>`;
   document.getElementById("opn").onclick=()=>{B.dataset.open="1";box()};
   setTimeout(()=>parent!==window&&parent.postMessage({type:"intuitive-height",height:document.body.scrollHeight},"*"),50);return}
