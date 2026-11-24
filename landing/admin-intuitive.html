@@ -32,7 +32,7 @@ dialog{border:0;border-radius:18px;padding:18px;width:min(420px,92vw)}dialog::ba
 dialog textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}
 .btn{border:0;border-radius:10px;padding:9px 18px;font:inherit;font-weight:800;color:#fff;background:var(--g1);cursor:pointer}
 .demo{background:#fff3d6;color:#7a4b00;border-radius:10px;padding:8px 12px;font-size:12.5px;margin-bottom:12px}
-.embed{padding:0}.bx .kpi div{padding:10px}.bx .al{padding:6px 10px;font-size:12.5px}
+.embed{padding:0}.sub2{font-weight:800;font-size:14px;margin:16px 0 6px;color:#374151}.bx .kpi b{font-size:19px}.bx .kpi div{padding:10px}.bx .al{padding:6px 10px;font-size:12.5px}
 .barw{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border-radius:18px;padding:10px;box-shadow:0 4px 16px rgba(40,50,90,.06)}
 @media(max-width:700px){.barw{grid-template-columns:repeat(2,1fr)}}
 .wrow{grid-column:1/-1;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
@@ -85,7 +85,7 @@ function list(){const F={all:"الكل",alert:"تنبيهات",stop:"متوقف�
  const L=USERS.map(u=>[u,stats(u)]).filter(([u,s])=>FLT==="all"||FLT==="alert"&&s.al.some(a=>a[0]!=="gr")||FLT==="stop"&&s.al.some(a=>a[0]==="red")||FLT==="done"&&s.al.some(a=>a[0]==="gr"))
   .sort((a,b)=>b[1].al.filter(x=>x[0]==="red").length-a[1].al.filter(x=>x[0]==="red").length);
  cnt.textContent=L.length;list_.innerHTML=L.map(([u,s])=>`<div class="u ${SEL===u.id?"on":""}" data-u="${u.id}"><div class="av">${u.name[0]}</div><div><div class="n">${u.name}</div><div class="m">${TR[u.track]} • يوم ${s.cur}/30</div>${s.al.map(a=>`<span class="tag t-${a[0]}">${a[1].split(" ")[0]}</span>`).join("")}</div><div class="x"><b style="color:var(--g1)">${s.rate}%</b><div class="m">التزام</div></div></div>`).join("")||'<div class="m">لا يوجد</div>'}
-function chart(u0,s){const u={...u0,weights:u0.weights.filter(w=>w.day>=1)};if(!u.weights.length)u.weights=u0.weights.slice(-1).map(w=>({...w,day:1}));const W=700,Hh=220,pl=36,pr=36,pt=14,pb=26,x=d=>pl+(d-1)*(W-pl-pr)/29,bw=(W-pl-pr)/30*.6;
+function chart(u0,s,HH){const u={...u0,weights:u0.weights.filter(w=>w.day>=1)};if(!u.weights.length)u.weights=u0.weights.slice(-1).map(w=>({...w,day:1}));const W=700,Hh=HH||220,pl=36,pr=36,pt=14,pb=26,x=d=>pl+(d-1)*(W-pl-pr)/29,bw=(W-pl-pr)/30*.6;
  const ws=u.weights.map(w=>w.weight),mn=Math.min(...ws)-1,mx=Math.max(...ws)+1,y=v=>pt+(mx-v)/(mx-mn)*(Hh-pt-pb),yc=v=>Hh-pb-v/10*(Hh-pt-pb);
  let g="";for(let i=0;i<=10;i+=5)g+=`<line x1="${pl}" x2="${W-pr}" y1="${yc(i)}" y2="${yc(i)}" stroke="#eef0f5"/><text x="${W-pr+6}" y="${yc(i)+4}" font-size="11" fill="#8a93a3">${i}</text>`;
  const bars=u.days.filter(d=>d.commitment).map(d=>`<rect x="${x(d.day)-bw/2}" y="${yc(d.commitment)}" width="${bw}" height="${Hh-pb-yc(d.commitment)}" rx="3" fill="#c9bff5"><title>يوم ${d.day}: تطبيق ${d.commitment}/10</title></rect>`).join("");
@@ -117,10 +117,13 @@ function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById
  B.innerHTML=`<div class="card bx"><h2><span>🧠 الأكل الحدسي <span class="tag t-gr">${TR[u.track]}</span></span><span style="font-size:12px;color:var(--muted)">بدأ ${new Date(u.start_date).toLocaleDateString("ar")}</span></h2>
  <div class="kpi"><div><b>${s.cur}/30</b><span>اليوم الحالي</span></div><div><b>${s.n}</b><span>أيام منجزة</span></div><div><b>${s.rate}%</b><span>الالتزام</span></div><div><b>${s.avg}</b><span>متوسط التطبيق</span></div><div><b style="color:var(--green)" dir="ltr">${s.wl}</b><span>تغيّر الوزن (كغ)</span></div></div>
  ${s.al.length?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">${s.al.map(a=>`<span class="al t-${a[0]}" style="margin:0">${a[1]}</span>`).join("")}</div>`:""}
- <div style="margin-top:14px"><div class="leg" style="margin-bottom:4px"><span><i style="background:#c9bff5"></i>التطبيق اليومي</span><span><i style="background:#3b8cf0"></i>الوزن</span></div>${chart(u,s)}</div>
+ <div class="sub2">✍️ إجابات المشترك</div>
  <div class="tw"><table><tr><th>اليوم</th><th>التمرين</th><th>منجز</th><th>التطبيق</th><th>الجوع</th><th>الشبع</th><th>الرضا</th><th>الملاحظة</th><th></th></tr>${rows}</table></div>
- ${s.cur>5?`<button class="rp" id="more" style="margin-top:10px">${all?"عرض آخر 5 أيام":"عرض كل الأيام ("+s.cur+")"}</button>`:""}</div>`;
- const m=document.getElementById("more");if(m)m.onclick=()=>{B.dataset.all=all?"0":"1";box()}}
+ ${s.cur>5?`<button class="rp" id="more" style="margin-top:8px">${all?"عرض آخر 5 أيام":"عرض كل الأيام ("+s.cur+")"}</button>`:""}
+ <div class="sub2" style="display:flex;justify-content:space-between">📈 الالتزام مقابل الوزن<span class="leg"><span><i style="background:#c9bff5"></i>التطبيق</span><span><i style="background:#3b8cf0"></i>الوزن</span></span></div>${chart(u,s,120)}</div>`;
+ const m=document.getElementById("more");if(m)m.onclick=()=>{B.dataset.all=all?"0":"1";box()};
+ // يرسل الارتفاع للبنل حتى يتكيف الـ iframe تلقائياً
+ setTimeout(()=>parent!==window&&parent.postMessage({type:"intuitive-height",height:document.body.scrollHeight},"*"),50)}
 // ===== 2) شريط فوق قائمة المشتركين =====
 let BF=P.get("filter")||"all";
 function loss(u,days){const w=[...u.weights].sort((a,b)=>new Date(a.date)-new Date(b.date));if(w.length<2)return null;const last=w[w.length-1];
