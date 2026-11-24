@@ -27,17 +27,23 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
 .note{background:#fff7e6;border:1px solid #fde3a7;color:#7a4b00;border-radius:10px;padding:10px 14px;font-size:13px;margin-bottom:16px}
 
 .pc{background:#fff;border-radius:14px;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:18px}
-.hdr{display:flex;gap:16px;align-items:center;padding:18px 22px;flex-wrap:wrap}
-.av{width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg,#1a73f5,#0a2647);color:#fff;font-size:26px;font-weight:800;display:grid;place-items:center}
+.hdr{display:flex;gap:16px;align-items:center;padding:22px 24px;flex-wrap:wrap;background:linear-gradient(120deg,#04203f 0%,#0a2647 55%,#0b3a72 100%);color:#fff;border-radius:14px 14px 0 0;position:relative;overflow:hidden}.hdr:after{content:"";position:absolute;left:-60px;top:-80px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(26,115,245,.35),transparent 70%)}.hdr>*{position:relative;z-index:1}
+.av{width:66px;height:66px;border-radius:50%;background:linear-gradient(135deg,#1a73f5,#5aa2ff);box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 0 6px rgba(26,115,245,.45);color:#fff;font-size:26px;font-weight:800;display:grid;place-items:center}
 .hdr h1{margin:0;font-size:22px}.tg{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;margin:6px 0 0 4px}
-.tb1{background:#e8f1ff;color:#1a73f5}.tg2{background:#e8faf0;color:#16a34a}.tr{background:#fff1f2;color:#e11d48}
-.acts{margin-right:auto;display:flex;gap:8px;flex-wrap:wrap}.acts a{display:inline-flex;align-items:center;gap:6px;border:1px solid #e5e7eb;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;color:#1f2937;text-decoration:none;background:#fff}.acts a.pr{background:#1a73f5;color:#fff;border-color:#1a73f5}.acts a.wa{background:#25d366;color:#fff;border-color:#25d366}
-.kpis{display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid #f0f0f0}.kpis div{padding:14px 18px;border-left:1px solid #f0f0f0}.kpis div:last-child{border-left:0}.kpis small{display:block;color:#6b7280;font-size:12.5px}.kpis b{font-size:20px}.kpis .dn2{color:#16a34a}
+.tb1{background:rgba(26,115,245,.25);color:#cfe3ff;border:1px solid rgba(90,162,255,.5)}.tg2{background:rgba(34,197,94,.18);color:#86efac;border:1px solid rgba(34,197,94,.4)}.tr{background:rgba(244,63,94,.18);color:#fecdd3;border:1px solid rgba(244,63,94,.4)}.hdr small.id{display:block;color:#93b4dc;font-size:12.5px;margin-top:2px}
+.acts{margin-right:auto;display:flex;gap:8px;flex-wrap:wrap}.acts a{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.22);border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;color:#fff;text-decoration:none;background:rgba(255,255,255,.08);backdrop-filter:blur(4px)}.acts a:hover{background:rgba(255,255,255,.16)}.acts a.pr{background:#1a73f5;color:#fff;border-color:#1a73f5}.acts a.wa{background:#25d366;color:#fff;border-color:#25d366}
+.kpis{display:grid;grid-template-columns:repeat(6,1fr)}.kpis div{padding:14px 18px;border-left:1px solid #f0f0f0}.kpis div:last-child{border-left:0}.kpis small{display:block;color:#6b7280;font-size:12.5px}.kpis b{font-size:20px}.kpis .dn2{color:#16a34a}
 .g2{display:grid;grid-template-columns:1.6fr 1fr;gap:18px}
 .pc h3{margin:0;font-size:16px;padding:16px 20px;border-bottom:1px solid #f0f0f0;display:flex;justify-content:space-between;align-items:center}.pc h3 small{font-weight:500;color:#6b7280;font-size:12.5px}
 .bd{padding:16px 20px}
 .goal .big{font-size:30px;font-weight:800;color:#1a73f5}.goal .bar{height:12px;background:#eef2f7;border-radius:9px;overflow:hidden;margin:12px 0 6px}.goal .bar i{display:block;height:100%;background:linear-gradient(90deg,#16a34a,#4ade80)}
 .goal .row{display:flex;justify-content:space-between;font-size:13px;color:#6b7280}.goal ul{list-style:none;padding:0;margin:14px 0 0;font-size:14px}.goal li{display:flex;justify-content:space-between;padding:7px 0;border-top:1px dashed #eee}
+.hist{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:16px 20px}.hh{font-weight:800;font-size:14px;margin-bottom:8px}.hh span{background:#eef2f7;border-radius:9px;padding:0 8px;font-size:12px;color:#6b7280;margin-right:4px}
+.hi{position:relative;border-right:3px solid #e5e7eb;padding:6px 14px 8px 0;margin-right:5px}.hi:before{content:"";position:absolute;right:-7px;top:11px;width:11px;height:11px;border-radius:50%;background:#fff;border:2px solid #cbd5e1}
+.hi b{font-size:14px;display:block}.hi small{color:#6b7280;font-size:12.5px}.hi em{position:absolute;left:0;top:6px;font-style:normal;font-size:11px;font-weight:800;background:#e8f1ff;color:#1a73f5;border-radius:8px;padding:2px 8px}
+.hi.cur{border-color:#1a73f5}.hi.cur:before{background:#1a73f5;border-color:#1a73f5}
+@media(max-width:1000px){.hist{grid-template-columns:1fr}}
+.nt{display:grid;gap:10px}.nn{background:#f8fafc;border-right:3px solid #1a73f5;border-radius:10px;padding:10px 14px}.nn b{font-size:13.5px}.nn small{color:#9ca3af;font-size:12px;margin-right:8px}.nn p{margin:4px 0 0;font-size:14px;line-height:1.7}
 .tabs2{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid #f0f0f0;overflow-x:auto}.tabs2 button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:14px 14px;color:#6b7280;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}.tabs2 button.on{color:#1a73f5;border-color:#1a73f5}
 .pane{display:none;padding:18px 20px}.pane.on{display:block}
 .days{display:flex;gap:6px;margin-bottom:12px}.days span{padding:6px 12px;border-radius:8px;background:#f3f4f6;font-size:13px;cursor:pointer}.days span.on{background:#1a73f5;color:#fff}
@@ -53,7 +59,7 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
 <main>
 <div class="note">معاينة ببيانات وهمية – إعادة ترتيب بروفايل المشترك كامل.</div>
 
-<div class="pc"><div class="hdr"><div class="av">ف</div><div><h1>فهد الشمري</h1>
+<div class="pc"><div class="hdr"><div class="av">ف</div><div><h1>فهد الشمري</h1><small class="id">رقم المشترك #805 • مسجل منذ 2026-11-11</small>
   <span class="tg tb1">سكري</span><span class="tg tg2">● مشترك – 62 يوم متبقي</span><span class="tg tr">سكري نوع 2</span></div>
   <div class="acts"><a class="wa" href="#">واتساب</a><a href="#">☏ اتصال</a><a href="#">🔗 رابط التطبيق</a><a href="#">💳 رابط التجديد</a><a class="pr" href="#">✎ تعديل</a></div></div>
  <div class="kpis"><div><small>الوزن الحالي</small><b>83.2 كغ</b></div><div><small>الوزن الأولي</small><b>84 كغ</b></div><div><small>النزول</small><b class="dn2" dir="ltr">-0.8 كغ</b></div><div><small>الوزن المستهدف</small><b>76 كغ</b></div><div><small>BMI</small><b>26.9</b></div><div><small>السعرات</small><b>1500</b></div></div></div>
@@ -71,16 +77,32 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
   <ul><li><span>نوع النظام</span><b>سكري – إنقاص وزن</b></li><li><span>الاشتراك</span><b>تغذية + تمارين</b></li><li><span>المعدل الأسبوعي</span><b style="color:#16a34a" dir="ltr">-0.4 كغ</b></li><li><span>الوقت المتوقع للهدف</span><b>~18 أسبوع</b></li></ul></div></div>
 </div>
 
+<div class="pc"><h3>سجل الخطط <small>كل الخطط السابقة والحالية</small></h3><div class="hist">
+ <div><div class="hh">🍽 الخطط الغذائية <span>5</span></div>
+  <div class="hi cur"><b>قائمة سكري 3</b><small>16 – 23 نوفمبر 2026 • 1500 سعرة</small><em>الحالية</em></div>
+  <div class="hi"><b>قائمة سكري 2</b><small>9 – 16 نوفمبر 2026 • 1500 سعرة</small></div>
+  <div class="hi"><b>قائمة سكري 1</b><small>2 – 9 نوفمبر 2026 • 1600 سعرة</small></div>
+  <div class="hi"><b>قائمة تمهيدية – إنقاص وزن</b><small>26 أكتوبر – 2 نوفمبر 2026 • 1700 سعرة</small></div>
+  <div class="hi"><b>قائمة تجريبية 3 أيام</b><small>23 – 26 أكتوبر 2026 • 1800 سعرة</small></div></div>
+ <div><div class="hh">🏋️ الخطط الرياضية <span>3</span></div>
+  <div class="hi cur"><b>برنامج المبتدئ – المرحلة 2</b><small>من 16 نوفمبر 2026 • 3 أيام بالأسبوع</small><em>الحالية</em></div>
+  <div class="hi"><b>برنامج المبتدئ – المرحلة 1</b><small>2 – 16 نوفمبر 2026 • 3 أيام بالأسبوع</small></div>
+  <div class="hi"><b>مشي يومي 30 دقيقة</b><small>23 أكتوبر – 2 نوفمبر 2026</small></div></div>
+</div></div>
+
 <div class="pc"><div class="tabs2" id="tabs">
- <button data-p="w" class="on">📅 الخطة الأسبوعية <small style="color:#9ca3af">(4 يوم متبقي)</small></button><button data-p="m">🍽 آخر خطة غذائية</button><button data-p="e">🏋️ الخطة الرياضية</button><button data-p="i">👤 المعلومات الشخصية</button><button data-p="n">📝 ملاحظات الأداء</button><button data-p="h">🧠 الأكل الحدسي</button></div>
+ <button data-p="w" class="on">📅 الخطة الأسبوعية <small style="color:#9ca3af">(4 يوم متبقي)</small></button><button data-p="m">🍽 آخر خطة غذائية</button><button data-p="e">🏋️ الخطة الرياضية</button><button data-p="i">👤 المعلومات الشخصية</button><button data-p="h">🧠 الأكل الحدسي</button></div>
  <div class="pane on" id="p-w"><div class="days"><span class="on">يوم 1</span><span>يوم 2</span><span>يوم 3</span><span>يوم 4</span><span>يوم 5</span><span>يوم 6</span><span>يوم 7</span></div>
   <div class="meals"><div class="meal"><b>الفطور</b>بيض مسلوق ×2<br>خبز أسمر 60 غ</div><div class="meal"><b>سناك صباحي</b>قهوة بدون سكر</div><div class="meal"><b>الغداء</b>صدر دجاج مشوي 120 غ<br>أرز بني 5 ملاعق</div><div class="meal"><b>سناك العصر</b>تفاحة</div><div class="meal"><b>العشاء</b>لبن قليل الدسم + خيار</div><div class="meal"><b>الحصص</b>سكريات: تمر ×2 • ألبان: كوب • دهون: زيتون ×5</div></div></div>
  <div class="pane" id="p-m"><div class="info"><div><small>عنوان الخطة</small><b>قائمة سكري 3</b></div><div><small>التاريخ</small><b>16 – 23 نوفمبر 2026</b></div><div><small>السعرات</small><b>1500</b></div><div><small>آخر وزن</small><b>83.2 كغ</b></div></div></div>
  <div class="pane" id="p-e"><div class="ex"><div>قرفصاء مبتدئ<small>4 مجموعات • 13 تكرار</small></div><div>تمرين المسند الإسفنجي<small>3 مجموعات • 14 تكرار</small></div><div>رفع قدم ويد<small>4 مجموعات • 12 تكرار</small></div></div></div>
  <div class="pane" id="p-i"><div class="info"><div><small>الجنس</small><b>رجل</b></div><div><small>العمر</small><b>38</b></div><div><small>الطول</small><b>176 سم</b></div><div><small>محيط المعصم</small><b>17 سم</b></div><div><small>رقم الجوال</small><b>+965 5000 0000</b></div><div><small>البريد</small><b>user@example.com</b></div><div><small>الحالة الصحية</small><b>سكري نوع 2</b></div><div><small>نوع الاشتراك</small><b>تغذية + تمارين</b></div></div></div>
- <div class="pane" id="p-n"><textarea style="width:100%;min-height:80px;border:1px solid #d1d5db;border-radius:10px;padding:10px;font:inherit" placeholder="أضف ملاحظة جديدة..."></textarea><button style="margin-top:8px;border:0;background:#1a73f5;color:#fff;border-radius:8px;padding:8px 16px;font:inherit;font-weight:700">إضافة ملاحظة</button><p style="color:#9ca3af;font-size:13px">لا توجد ملاحظات بعد</p></div>
  <div class="pane" id="p-h" style="padding:0"><iframe id="ibox" data-src="admin-intuitive.html?view=box&user=2&open=1" style="height:700px" title="الأكل الحدسي"></iframe></div>
 </div>
+<div class="pc"><h3>📝 ملاحظات الأداء <small>تظهر دائماً</small></h3><div class="bd">
+ <div class="nt"><div class="nn"><b>د. الأخصائية</b><small>2026-11-18</small><p>التزام ممتاز بالقائمة، نزّل السكريات في العشاء. متابعة القراءات الأسبوع الجاي.</p></div>
+ <div class="nn"><b>د. الأخصائية</b><small>2026-11-11</small><p>بداية الاشتراك – قراءة السكر الصائم 140، الهدف 76 كغ.</p></div></div>
+ <div style="display:flex;gap:8px;margin-top:12px"><input placeholder="أضف ملاحظة جديدة..." style="flex:1;border:1px solid #d1d5db;border-radius:10px;padding:10px;font:inherit"><button style="border:0;background:#1a73f5;color:#fff;border-radius:10px;padding:0 18px;font:inherit;font-weight:700">إضافة</button></div></div></div>
 </main>
 <script>
 tabs.onclick=e=>{const b=e.target.closest("[data-p]");if(!b)return;document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x===b));document.querySelectorAll(".pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.p));
