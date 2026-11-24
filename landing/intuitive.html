@@ -56,6 +56,9 @@ textarea:focus{border-color:var(--blue)}
 @keyframes pop{from{transform:scale(.7);opacity:0}}
 .kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.kp div{background:#f4f6fb;border-radius:14px;padding:10px 4px;text-align:center}.kp b{display:block;font-size:20px;color:var(--g1)}.kp span{font-size:11px;color:var(--muted)}
 .cmp{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}.cmp b{color:var(--green)}
+.chipx{display:flex;align-items:center;gap:6px;background:#f6f5ff;border-radius:12px;padding:8px 10px;font-size:15px}.chipx b{font-size:17px;color:#2a2f3a}.chipx span{color:var(--muted);font-size:12px}
+.calg{display:grid;grid-template-columns:repeat(10,1fr);gap:5px}.calg i{aspect-ratio:1;border-radius:7px;display:grid;place-items:center;color:#e11d48;font-style:normal;font-weight:800}
+.legx{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:6px}.legx i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:4px;vertical-align:-1px}
 .tracks{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
 .tracks button{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;color:var(--muted)}
 .tracks button.on{border-color:var(--blue);color:var(--blue);background:#eef5ff}
@@ -171,17 +174,27 @@ async function pull(){if(!API)return;try{(S.pending||[]).forEach(sync);S.pending
 // ===== شاشة النتيجة للمشترك =====
 function avg(a){a=a.filter(Boolean);return a.length?(a.reduce((x,y)=>x+y,0)/a.length):null}
 function results(){const n=S.notes,days=[...Array(30)].map((_,i)=>i+1),done=days.filter(d=>S.done[d]).length;
- const wk=w=>days.slice(w*7,w===3?30:w*7+7),com=w=>avg(wk(w).map(d=>n["d"+d+"a"]));
- const ful=days.map(d=>n["d"+d+"s"]||n["d"+d+"f"]).filter(Boolean),hun=days.map(d=>n["d"+d+"h"]).filter(Boolean),sat=days.map(d=>n["d"+d+"r"]).filter(Boolean);
- const f=v=>v==null?"—":v.toFixed(1);const cur=Math.min(3,Math.floor((DAY-1)/7));
- const bars=days.map(d=>{const v=n["d"+d+"a"]||0;return `<rect x="${(30-d)*10+1}" y="${60-v*6}" width="8" height="${v*6}" rx="2" fill="${S.done[d]?"#6d4fd8":"#d9dceb"}"/>`}).join("");
- resB.innerHTML=`<div class="kp"><div><b>${done}/30</b><span>يوم منجز</span></div><div><b>${Math.round(done/Math.max(1,DAY)*100)}%</b><span>نسبة الالتزام</span></div><div><b>${f(avg(days.map(d=>n["d"+d+"a"])))}</b><span>متوسط التطبيق</span></div></div>
- <div class="lbl">التطبيق اليومي</div><svg viewBox="0 0 300 62" style="width:100%;background:#fafbfd;border-radius:12px">${bars}</svg>
- <div class="cmp"><span>التطبيق: الأسبوع 1 ← الأسبوع ${cur+1}</span><span>${f(com(0))} ← <b>${f(com(cur))}</b></span></div>
- <div class="cmp"><span>الشبع عند التوقف (الهدف 6–7)</span><span>${ful.length?f(ful[0])+" ← <b>"+f(ful[ful.length-1])+"</b>":"—"}</span></div>
- <div class="cmp"><span>الجوع قبل الأكل (الهدف 3–4)</span><span>${hun.length?f(hun[0])+" ← <b>"+f(hun[hun.length-1])+"</b>":"—"}</span></div>
- <div class="cmp"><span>متوسط الرضا من الأكل</span><span><b>${f(avg(sat))}</b></span></div>
- <p style="font-size:12.5px;margin-top:10px">💙 نتائجك تُرسل لأخصائيتك وتنعرض مع وزنك وقياساتك في ملفك.</p>`;res.classList.add("show")}
+ const f=v=>v==null?"—":v.toFixed(1),A=d=>n["d"+d+"a"]||0;
+ let st=0;for(let d=DAY;d>=1&&S.done[d];d--)st++;
+ const r=52,Lc=2*Math.PI*r,pc=Math.min(DAY,30)/30,rate=Math.round(done/Math.max(1,DAY)*100);
+ const ring=`<svg viewBox="0 0 130 130" width="130" height="130"><defs><linearGradient id="rg" x1="0" x2="1"><stop offset="0" stop-color="#6d4fd8"/><stop offset="1" stop-color="#3b8cf0"/></linearGradient></defs>
+  <circle cx="65" cy="65" r="${r}" fill="none" stroke="#eef0f7" stroke-width="12"/><circle cx="65" cy="65" r="${r}" fill="none" stroke="url(#rg)" stroke-width="12" stroke-linecap="round" stroke-dasharray="${Lc*pc} ${Lc}" transform="rotate(-90 65 65)"/>
+  <text x="65" y="66" text-anchor="middle" font-size="30" font-weight="800" fill="#2a2f3a">${DAY}</text><text x="65" y="86" text-anchor="middle" font-size="12" fill="#8a93a3">من 30 يوم</text></svg>`;
+ const col=v=>v>=8?"#6d4fd8":v>=5?"#9d8cf0":"#cfc6fa";
+ const cal=days.map(d=>{const fut=d>DAY,v=A(d),ok=S.done[d];return `<i title="يوم ${d}" style="background:${fut?"#f3f4f8":ok?col(v||7):"#fde2e4"};${d===DAY?"outline:2px solid #f5a524;outline-offset:1px;":""}">${ok?"":fut?"":"·"}</i>`}).join("");
+ const wk=[0,1,2,3].map(w=>{const ds=days.slice(w*7,w===3?30:w*7+7).filter(d=>d<=DAY),v=ds.map(A).filter(Boolean);return {v:v.length?v.reduce((a,b)=>a+b,0)/v.length:0,on:ds.length>0}});
+ const wb=wk.map((w,j)=>{const i=3-j;return `<g><rect x="${i*62+14}" y="${8+(10-w.v)*7}" width="34" height="${w.v*7}" rx="8" fill="${w.on?"url(#rg)":"#eef0f7"}"/><rect x="${i*62+14}" y="8" width="34" height="70" rx="8" fill="none" stroke="#eef0f7"/><text x="${i*62+31}" y="96" text-anchor="middle" font-size="11" fill="#8a93a3">أسبوع ${j+1}</text>${w.v?`<text x="${i*62+31}" y="${2+(10-w.v)*7}" text-anchor="middle" font-size="11" font-weight="800" fill="#6d4fd8">${w.v.toFixed(1)}</text>`:""}</g>`}).join("");
+ const gauge=(lbl,arr,lo,hi)=>{const v=arr.filter(Boolean);if(!v.length)return"";const x=k=>(10-k)*27+8;
+  return `<div class="lbl" style="margin-top:12px">${lbl}</div><svg viewBox="0 0 260 40" width="100%"><rect x="8" y="14" width="243" height="10" rx="5" fill="#f1f3f8"/><rect x="${x(hi)-13}" y="14" width="${(hi-lo+1)*27-1}" height="10" rx="5" fill="#bbf7d0"/>
+   ${[1,5,10].map(k=>`<text x="${x(k)}" y="38" text-anchor="middle" font-size="9" fill="#8a93a3">${k}</text>`).join("")}
+   ${v.length>1?`<circle cx="${x(v[0])}" cy="19" r="7" fill="#fff" stroke="#c4bdf0" stroke-width="3"/>`:""}<circle cx="${x(v[v.length-1])}" cy="19" r="8" fill="#6d4fd8" stroke="#fff" stroke-width="2"/></svg>`};
+ resB.innerHTML=`<div style="display:flex;align-items:center;gap:12px">${ring}<div style="flex:1;display:grid;gap:8px">
+   <div class="chipx">🔥 <b>${st}</b><span>أيام متتالية</span></div><div class="chipx">✅ <b>${rate}%</b><span>التزام</span></div><div class="chipx">⭐ <b>${f(avg(days.map(A)))}</b><span>تطبيق</span></div></div></div>
+  <div class="lbl" style="margin-top:14px">رحلتك في 30 يوم</div><div class="calg">${cal}</div>
+  <div class="legx"><span><i style="background:#6d4fd8"></i>ممتاز</span><span><i style="background:#cfc6fa"></i>خفيف</span><span><i style="background:#fde2e4"></i>فاتك</span><span><i style="background:#f3f4f8"></i>قادم</span></div>
+  <div class="lbl" style="margin-top:14px">تطبيقك كل أسبوع</div><svg viewBox="0 0 260 100" width="100%">${wb}</svg>
+  ${gauge("الشبع لما توقف الأكل",days.map(d=>n["d"+d+"s"]||n["d"+d+"f"]),6,7)}${gauge("الجوع لما تبدأ الأكل",days.map(d=>n["d"+d+"h"]),3,4)}
+  <div class="legx"><span><i style="background:#bbf7d0"></i>المنطقة المثالية</span><span><i style="background:#fff;border:2px solid #c4bdf0"></i>البداية</span><span><i style="background:#6d4fd8"></i>الحين</span></div>`;res.classList.add("show")}
 resBtn.onclick=results;
 pull();
 btn.onclick=()=>{if(S.done[DAY])return;S.done[DAY]=true;save();render();confetti();sync(DAY);if(DAY===30)return setTimeout(results,1500);
