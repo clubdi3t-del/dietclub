@@ -44,6 +44,9 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
 .hi.cur{border-color:#1a73f5}.hi.cur:before{background:#1a73f5;border-color:#1a73f5}
 @media(max-width:1000px){.hist{grid-template-columns:1fr}}
 .nt{display:grid;gap:10px}.nn{background:#f8fafc;border-right:3px solid #1a73f5;border-radius:10px;padding:10px 14px}.nn b{font-size:13.5px}.nn small{color:#9ca3af;font-size:12px;margin-right:8px}.nn p{margin:4px 0 0;font-size:14px;line-height:1.7}
+.pinfo{flex-basis:100%;display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,.12);border-radius:12px;overflow:hidden;margin-top:6px}
+.pinfo div{background:rgba(4,32,63,.55);padding:10px 14px}.pinfo small{display:block;color:#93b4dc;font-size:12px}.pinfo b{font-size:14px;color:#fff;word-break:break-all}
+@media(max-width:1000px){.pinfo{grid-template-columns:repeat(2,1fr)}}
 .tabs2{display:flex;gap:2px;padding:0 12px;border-bottom:1px solid #f0f0f0;overflow-x:auto}.tabs2 button{border:0;background:none;font:inherit;font-weight:700;font-size:14px;padding:14px 14px;color:#6b7280;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}.tabs2 button.on{color:#1a73f5;border-color:#1a73f5}
 .pane{display:none;padding:18px 20px}.pane.on{display:block}
 .days{display:flex;gap:6px;margin-bottom:12px}.days span{padding:6px 12px;border-radius:8px;background:#f3f4f6;font-size:13px;cursor:pointer}.days span.on{background:#1a73f5;color:#fff}
@@ -61,7 +64,8 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
 
 <div class="pc"><div class="hdr"><div class="av">ف</div><div><h1>فهد الشمري</h1><small class="id">رقم المشترك #805 • مسجل منذ 2026-11-11</small>
   <span class="tg tb1">سكري</span><span class="tg tg2">● مشترك – 62 يوم متبقي</span><span class="tg tr">سكري نوع 2</span></div>
-  <div class="acts"><a class="wa" href="#">واتساب</a><a href="#">☏ اتصال</a><a href="#">🔗 رابط التطبيق</a><a href="#">💳 رابط التجديد</a><a class="pr" href="#">✎ تعديل</a></div></div>
+  <div class="acts"><a class="wa" href="#">واتساب</a><a href="#">☏ اتصال</a><a href="#">🔗 رابط التطبيق</a><a href="#">💳 رابط التجديد</a><a class="pr" href="#">✎ تعديل</a></div>
+ <div class="pinfo"><div><small>الجنس</small><b>رجل</b></div><div><small>العمر</small><b>38 سنة</b></div><div><small>الطول</small><b>176 سم</b></div><div><small>محيط المعصم</small><b>17 سم</b></div><div><small>رقم الجوال</small><b dir="ltr">+965 5000 0000</b></div><div><small>البريد الإلكتروني</small><b>user@example.com</b></div><div><small>الدولة</small><b>الكويت</b></div><div><small>الحالة الصحية</small><b>سكري نوع 2</b></div><div><small>نوع الاشتراك</small><b>تغذية + تمارين</b></div><div><small>الاشتراك</small><b>62 يوم متبقي</b></div></div></div>
  <div class="kpis"><div><small>الوزن الحالي</small><b>83.2 كغ</b></div><div><small>الوزن الأولي</small><b>84 كغ</b></div><div><small>النزول</small><b class="dn2" dir="ltr">-0.8 كغ</b></div><div><small>الوزن المستهدف</small><b>76 كغ</b></div><div><small>BMI</small><b>26.9</b></div><div><small>السعرات</small><b>1500</b></div></div></div>
 
 <div class="g2">
@@ -91,12 +95,11 @@ iframe{width:100%;border:0;display:block;border-radius:14px}
 </div></div>
 
 <div class="pc"><div class="tabs2" id="tabs">
- <button data-p="w" class="on">📅 الخطة الأسبوعية <small style="color:#9ca3af">(4 يوم متبقي)</small></button><button data-p="m">🍽 آخر خطة غذائية</button><button data-p="e">🏋️ الخطة الرياضية</button><button data-p="i">👤 المعلومات الشخصية</button><button data-p="h">🧠 الأكل الحدسي</button></div>
+ <button data-p="w" class="on">📅 الخطة الأسبوعية <small style="color:#9ca3af">(4 يوم متبقي)</small></button><button data-p="m">🍽 آخر خطة غذائية</button><button data-p="e">🏋️ الخطة الرياضية</button><button data-p="h">🧠 الأكل الحدسي</button></div>
  <div class="pane on" id="p-w"><div class="days"><span class="on">يوم 1</span><span>يوم 2</span><span>يوم 3</span><span>يوم 4</span><span>يوم 5</span><span>يوم 6</span><span>يوم 7</span></div>
   <div class="meals"><div class="meal"><b>الفطور</b>بيض مسلوق ×2<br>خبز أسمر 60 غ</div><div class="meal"><b>سناك صباحي</b>قهوة بدون سكر</div><div class="meal"><b>الغداء</b>صدر دجاج مشوي 120 غ<br>أرز بني 5 ملاعق</div><div class="meal"><b>سناك العصر</b>تفاحة</div><div class="meal"><b>العشاء</b>لبن قليل الدسم + خيار</div><div class="meal"><b>الحصص</b>سكريات: تمر ×2 • ألبان: كوب • دهون: زيتون ×5</div></div></div>
  <div class="pane" id="p-m"><div class="info"><div><small>عنوان الخطة</small><b>قائمة سكري 3</b></div><div><small>التاريخ</small><b>16 – 23 نوفمبر 2026</b></div><div><small>السعرات</small><b>1500</b></div><div><small>آخر وزن</small><b>83.2 كغ</b></div></div></div>
  <div class="pane" id="p-e"><div class="ex"><div>قرفصاء مبتدئ<small>4 مجموعات • 13 تكرار</small></div><div>تمرين المسند الإسفنجي<small>3 مجموعات • 14 تكرار</small></div><div>رفع قدم ويد<small>4 مجموعات • 12 تكرار</small></div></div></div>
- <div class="pane" id="p-i"><div class="info"><div><small>الجنس</small><b>رجل</b></div><div><small>العمر</small><b>38</b></div><div><small>الطول</small><b>176 سم</b></div><div><small>محيط المعصم</small><b>17 سم</b></div><div><small>رقم الجوال</small><b>+965 5000 0000</b></div><div><small>البريد</small><b>user@example.com</b></div><div><small>الحالة الصحية</small><b>سكري نوع 2</b></div><div><small>نوع الاشتراك</small><b>تغذية + تمارين</b></div></div></div>
  <div class="pane" id="p-h" style="padding:0"><iframe id="ibox" data-src="admin-intuitive.html?view=box&user=2&open=1" style="height:700px" title="الأكل الحدسي"></iframe></div>
 </div>
 <div class="pc"><h3>📝 ملاحظات الأداء <small>تظهر دائماً</small></h3><div class="bd">
