@@ -35,6 +35,10 @@ dialog textarea{width:100%;min-height:90px;border:1px solid var(--line);border-r
 .embed{padding:0}.bx .kpi div{padding:10px}.bx .al{padding:6px 10px;font-size:12.5px}
 .barw{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border-radius:18px;padding:10px;box-shadow:0 4px 16px rgba(40,50,90,.06)}
 @media(max-width:700px){.barw{grid-template-columns:repeat(2,1fr)}}
+.wrow{grid-column:1/-1;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+@media(max-width:700px){.wrow{grid-template-columns:1fr 1fr}}
+.wt{display:flex;gap:10px;align-items:center;background:#f2f8ff;border-radius:14px;padding:10px 12px}.wt.main{background:linear-gradient(135deg,#ecfdf3,#f2f8ff)}
+.wt b{display:block;font-size:20px;color:var(--green);line-height:1.1}.wt b small{font-size:12px;color:var(--muted)}.wt .bl{font-weight:800;font-size:13px}.wt>span>small{display:block;color:var(--muted);font-size:11px}.wt .be{font-size:24px}
 .bt{display:flex;gap:10px;align-items:center;border:2px solid transparent;background:#f7f8fc;border-radius:14px;padding:10px 12px;font:inherit;cursor:pointer;text-align:right;color:var(--text)}
 .bt .be{font-size:22px}.bt b{display:block;font-size:20px;line-height:1}.bt .bl{font-weight:800;font-size:13.5px}.bt small{display:block;color:var(--muted);font-size:11px}
 .bt.on{background:#f1efff;border-color:var(--g1)}.b-alert.on{background:#fff6e5;border-color:var(--orange)}.b-stop.on{background:#ffeef1;border-color:var(--red)}.b-done.on{background:#e9fbef;border-color:var(--green)}
@@ -67,7 +71,8 @@ function demo(){const names=[["نورة العتيبي","rashaqa",0.9],["فهد 
    if(!done)continue;const t=TITLES[d-1];days.push({day:d,done:true,commitment:Math.max(1,Math.min(10,Math.round(4+c*5+rnd()*2-1+d/10))),
    hunger:[1,4,25].includes(d)?(track==="sukari"&&d===4?2:Math.round(2+d/10+rnd())):null,fullness:[1,4,25,5,15,23,24,29].includes(d)?Math.round(9-d/10-rnd()):null,
    satisfaction:[5,15,23,24,29].includes(d)?Math.round(6+rnd()*3):null,note:notes[Math.floor(rnd()*notes.length)],reply:d===5&&i===0?"ممتاز يا نورة، استمري 💙":null})}
-  return {id:i+1,name,track,start_date:new Date(start).toISOString(),days,weights}})}
+  const pre=[];let pw=weights[0]?weights[0].weight:85;for(let k=1;k<=12-i;k++){pw+=0.4+rnd()*0.5;pre.unshift({date:new Date(start-k*7*864e5).toISOString().slice(0,10),day:1-k*7,weight:+pw.toFixed(1)})}
+  return {id:i+1,name,track,start_date:new Date(start).toISOString(),days,weights:[...pre,...weights]}})}
 let USERS=[],SEL=null,FLT="all";
 function stats(u){const cur=dayOf(u),done=u.days.filter(d=>d.done),last=done.length?Math.max(...done.map(d=>d.day)):0,c=done.map(d=>d.commitment).filter(Boolean);
  const al=[];if(cur-last>=3&&cur<30)al.push(["red","🔴 متوقف "+(cur-last)+" أيام"]);
@@ -75,12 +80,12 @@ function stats(u){const cur=dayOf(u),done=u.days.filter(d=>d.done),last=done.len
  const emo=u.days.filter(d=>EMO.test(d.note||""));if(emo.length)al.push(["or","🟠 أكل عاطفي ("+emo.length+")"]);
  if(u.days.some(d=>d.day===30&&d.done))al.push(["gr","🟢 أكمل البرنامج – اقترح المستوى 2"]);
  return {cur,n:done.length,rate:Math.round(done.length/cur*100),avg:c.length?(c.reduce((a,b)=>a+b,0)/c.length).toFixed(1):"—",last,al,
-  wl:u.weights.length>1?(u.weights[u.weights.length-1].weight-u.weights[0].weight).toFixed(1):"—"}}
+  wl:(()=>{const w=u.weights.filter(x=>x.day>=1);return w.length>1?(w[w.length-1].weight-w[0].weight).toFixed(1):"—"})()}}
 function list(){const F={all:"الكل",alert:"تنبيهات",stop:"متوقفين",done:"مكمّلين"};flt.innerHTML=Object.entries(F).map(([k,v])=>`<button data-f="${k}" class="${FLT===k?"on":""}">${v}</button>`).join("");
  const L=USERS.map(u=>[u,stats(u)]).filter(([u,s])=>FLT==="all"||FLT==="alert"&&s.al.some(a=>a[0]!=="gr")||FLT==="stop"&&s.al.some(a=>a[0]==="red")||FLT==="done"&&s.al.some(a=>a[0]==="gr"))
   .sort((a,b)=>b[1].al.filter(x=>x[0]==="red").length-a[1].al.filter(x=>x[0]==="red").length);
  cnt.textContent=L.length;list_.innerHTML=L.map(([u,s])=>`<div class="u ${SEL===u.id?"on":""}" data-u="${u.id}"><div class="av">${u.name[0]}</div><div><div class="n">${u.name}</div><div class="m">${TR[u.track]} • يوم ${s.cur}/30</div>${s.al.map(a=>`<span class="tag t-${a[0]}">${a[1].split(" ")[0]}</span>`).join("")}</div><div class="x"><b style="color:var(--g1)">${s.rate}%</b><div class="m">التزام</div></div></div>`).join("")||'<div class="m">لا يوجد</div>'}
-function chart(u,s){const W=700,Hh=220,pl=36,pr=36,pt=14,pb=26,x=d=>pl+(d-1)*(W-pl-pr)/29,bw=(W-pl-pr)/30*.6;
+function chart(u0,s){const u={...u0,weights:u0.weights.filter(w=>w.day>=1)};if(!u.weights.length)u.weights=u0.weights.slice(-1).map(w=>({...w,day:1}));const W=700,Hh=220,pl=36,pr=36,pt=14,pb=26,x=d=>pl+(d-1)*(W-pl-pr)/29,bw=(W-pl-pr)/30*.6;
  const ws=u.weights.map(w=>w.weight),mn=Math.min(...ws)-1,mx=Math.max(...ws)+1,y=v=>pt+(mx-v)/(mx-mn)*(Hh-pt-pb),yc=v=>Hh-pb-v/10*(Hh-pt-pb);
  let g="";for(let i=0;i<=10;i+=5)g+=`<line x1="${pl}" x2="${W-pr}" y1="${yc(i)}" y2="${yc(i)}" stroke="#eef0f5"/><text x="${W-pr+6}" y="${yc(i)+4}" font-size="11" fill="#8a93a3">${i}</text>`;
  const bars=u.days.filter(d=>d.commitment).map(d=>`<rect x="${x(d.day)-bw/2}" y="${yc(d.commitment)}" width="${bw}" height="${Hh-pb-yc(d.commitment)}" rx="3" fill="#c9bff5"><title>يوم ${d.day}: تطبيق ${d.commitment}/10</title></rect>`).join("");
@@ -118,10 +123,15 @@ function box(){const u=USERS.find(x=>x.id===SEL);const B=document.getElementById
  const m=document.getElementById("more");if(m)m.onclick=()=>{B.dataset.all=all?"0":"1";box()}}
 // ===== 2) شريط فوق قائمة المشتركين =====
 let BF=P.get("filter")||"all";
+function loss(u,days){const w=[...u.weights].sort((a,b)=>new Date(a.date)-new Date(b.date));if(w.length<2)return null;const last=w[w.length-1];
+ if(!days)return w[0].weight-last.weight;const from=new Date(last.date)-days*864e5,base=w.find(x=>new Date(x.date)>=from);return base&&base!==last?base.weight-last.weight:null}
+function wstat(days){const v=USERS.map(u=>loss(u,days)).filter(x=>x!=null);return v.length?{sum:v.reduce((a,b)=>a+b,0),avg:v.reduce((a,b)=>a+b,0)/v.length,n:v.length}:null}
 function bar(){const S=USERS.map(u=>[u,stats(u)]),grp={
   alert:S.filter(([u,s])=>s.al.some(a=>a[0]==="or")),all:S,stop:S.filter(([u,s])=>s.al.some(a=>a[0]==="red")),done:S.filter(([u,s])=>s.al.some(a=>a[0]==="gr"))};
  const T=[["alert","🟠","تنبيهات","تحتاج متابعة"],["all","🧠","الكل","مشتركين في البرنامج"],["stop","🔴","متوقفين","3 أيام بدون تمرين"],["done","🟢","مكمّلين","أنهوا 30 يوم"]];
- document.getElementById("bar").innerHTML=T.map(([k,e,t,h])=>`<button class="bt ${BF===k?"on":""} b-${k}" data-b="${k}"><span class="be">${e}</span><span><b>${grp[k].length}</b><span class="bl">${t}</span><small>${h}</small></span></button>`).join("");
+ const tot=wstat(0),W=[[14,"آخر أسبوعين"],[30,"آخر شهر"],[90,"آخر 3 أشهر"]].map(([d,l])=>[l,wstat(d)]),fx=v=>v==null?"—":v.toFixed(1);
+ const wrow=`<div class="wrow"><div class="wt main"><span class="be">⚖️</span><span><b dir="ltr">${fx(tot&&tot.sum)} <small>كغ</small></b><span class="bl">مجموع نزول الوزن</span><small>لكل المشتركين في البرنامج (${tot?tot.n:0})</small></span></div>${W.map(([l,x])=>`<div class="wt"><span><b dir="ltr">${fx(x&&x.avg)} <small>كغ</small></b><span class="bl">معدل النزول – ${l}</span><small>للمشترك الواحد</small></span></div>`).join("")}</div>`;
+ document.getElementById("bar").innerHTML=wrow+T.map(([k,e,t,h])=>`<button class="bt ${BF===k?"on":""} b-${k}" data-b="${k}"><span class="be">${e}</span><span><b>${grp[k].length}</b><span class="bl">${t}</span><small>${h}</small></span></button>`).join("");
  const ids=grp[BF].map(([u])=>u.id);
  // يُرسل للبنل الأب ليفلتر القائمة: {type:"intuitive-filter",filter,user_ids}
  if(parent!==window)parent.postMessage({type:"intuitive-filter",filter:BF,user_ids:ids},"*");
