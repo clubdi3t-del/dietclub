@@ -76,6 +76,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .pn{font-weight:700;font-size:13px;color:#374151;margin-bottom:6px}.st{color:#374151;font-size:12.5px}.pr{font-weight:800;color:#15803d;margin-top:8px}
 .ok2{font-weight:800;color:#15803d}.no{font-weight:700;color:#b91c1c;margin-bottom:4px}
 .wal{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}.wal span{font-size:12px;font-weight:800;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:3px 9px}
+.trust{padding:16px}.sp{display:flex;gap:12px;align-items:center}.spa{width:52px;height:52px;flex:none;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--navy));color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center;box-shadow:0 0 0 3px #fff,0 0 0 5px #cfe0ff}
+.sp b{font-size:16px}.sp small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.tn{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 10px}.tn div{text-align:center;background:#f6f8fc;border-radius:12px;padding:8px 2px}.tn b{display:block;font-size:17px;color:var(--navy)}.tn small{color:var(--muted);font-size:11.5px}
+.lic{font-size:12.5px;color:#374151;background:#f0f7ff;border-radius:10px;padding:8px 10px;line-height:1.7}.rl{display:block;text-align:center;margin-top:10px;font-weight:800;color:var(--blue);text-decoration:none;font-size:14px}
+.agent{margin-top:10px;font-size:12.5px;color:#475569;background:#f8fafc;border-radius:10px;padding:8px 10px;line-height:1.7}
+.steps{display:grid;gap:8px}.steps div{display:flex;gap:10px;align-items:center}.steps>div>b{flex:none;width:28px;height:28px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:13px}.steps p{margin:0;font-size:14px}
+.fri{display:block;color:var(--muted);font-size:12px;margin-top:8px}
+.gua{display:flex;gap:10px;margin-top:12px;background:#ecfdf3;border:1.5px solid #86efac;border-radius:14px;padding:10px 12px;font-size:13.5px;line-height:1.6;color:#14532d}.gua b{display:block;font-size:14.5px}
+.msum{list-style:none;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-weight:800;font-size:16px}.msum::-webkit-details-marker{display:none}.msum i{font-style:normal;margin-left:6px}.msum small{font-weight:500;color:var(--muted);font-size:12px}.msum em{font-style:normal;color:var(--muted)}
+.faq details{border-top:1px solid var(--line);padding:10px 0}.faq summary{cursor:pointer;font-weight:700;font-size:14.5px}.faq p{margin:6px 0 0;color:#4b5563;font-size:14px;line-height:1.7}
+.stick{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;gap:10px;max-width:520px;margin:0 auto;background:rgba(255,255,255,.96);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));font-size:12.5px;color:var(--muted);transform:translateY(110%);transition:.3s;z-index:5}
+.stick.on{transform:none}.stick a{flex:none;background:var(--navy);color:#fff;border-radius:12px;padding:9px 16px;font-weight:800;font-size:14px;text-decoration:none}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
 </style>
 </head>
@@ -84,9 +96,10 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
  <div class="top"><div class="brand"><b>di3t.club</b><span>تقرير خاص • <span id="dt"></span></span></div>
   <h1 id="hi"></h1><p id="intro"></p></div>
  <div class="wrap" id="main"></div>
- <footer>di3t.club • فريق تغذية علاجية • هذا التقرير خاص بك</footer>
+ <footer>di3t.club • مركز تغذية علاجية منذ 11 سنة • ترخيص وزارة الصحة 3441/13021<br>هذا التقرير خاص بك ولا يغني عن مراجعة الطبيب</footer>
 </div>
 <div class="toast" id="toast"></div>
+<div class="stick" id="stick"><span>جاهز تبدأ؟ برنامجك يوصلك خلال 24 ساعة</span><a href="#pay">ابدأ برنامجي</a></div>
 <script src="config.js"></script>
 <script>
 const CFG=window.CRM_CONFIG||{methods:[],currency:{}};
@@ -97,6 +110,9 @@ function load(){const d=new URLSearchParams(location.search).get("d");
   complaint:"انتفاخ بعد الأكل",symptoms:["انتفاخ بعد الأكل","وزن زائد بسيط"],causes:["أكل سريع","وجبات كبيرة"],
   program:"نظام صحي لطيف على المعدة",how:["وجبات صغيرة ومنتظمة","تقليل المقليات"],result:["معدة أريح","نزول بسيط بالوزن"]}}
 const C=load();
+const CEN=Object.assign({license:"3441/13021",authority:"وزارة الصحة",issued:"11 أكتوبر 2020",years:11,subscribers:"45,000",clients:"200,000",results:"https://di3t-club.com/results",
+ specialists:{"شيرين محمد":"أخصائية تغذية علاجية","لميس":"أخصائية تغذية علاجية","ميعاد":"أخصائية تغذية علاجية"}},CFG.center||{});
+const PR=Object.assign({"3":95,"6":171,"12":304},CFG.prices||{},C.prices||{});
 const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const arr=v=>Array.isArray(v)?v:String(v||"").split(/\n|،|,|\./).map(x=>x.trim()).filter(x=>x.length>1);
 const toast=t=>{toast_.textContent=t;toast_.classList.add("on");setTimeout(()=>toast_.classList.remove("on"),1800)};const toast_=$("#toast");
@@ -112,7 +128,7 @@ function render(){
  const cur=CFG.currency[C.country];
  const PL={"3":{t:"3 أشهر",d:""},"6":{t:"6 أشهر",d:"أو مدة العلاج الكاملة"},"12":{t:"12 شهر",d:"سنوية"}};
  const plans=(C.plans&&C.plans.length?C.plans:["3","6"]).filter(k=>PL[k]);if(!plans.includes(SEL))SEL=plans.includes("6")?"6":plans[0];
- const pr=(C.prices||{})[SEL],usd=pr?+pr:null;
+ const pr=PR[SEL],usd=pr?+pr:null;
  const FT=[["🍽 غذائي بأكل بيتك + بدائل","3"],["🏋️ رياضي (نادي/بيت/علاجي)","3"],["🩺 بروتوكول لحالتك","3"],["🧠 الأكل الحدسي","3"],["⚖️ برنامج التثبيت","6"],["⭐ متابعة يومية VIP","12"]];
  const has=(k,min)=>+k>=+min;
  let methods=CFG.methods.filter(m=>m.countries.includes(C.country));if(!methods.length)methods=CFG.methods.filter(m=>m.countries.includes("*"));
@@ -121,6 +137,12 @@ function render(){
    ${m.fields.map(([k,v])=>`<div class="row"><small>${esc(k)}</small><b>${esc(v)}</b><button class="cp" data-c="${esc(v)}">نسخ</button></div>`).join("")}
    ${m.note?`<div class="warn">${esc(m.note)}</div>`:""}</div></details>`).join("");
  $("#main").innerHTML=`
+ <div class="card trust">
+  <div class="sp"><div class="spa">${esc(((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"د")[0])}</div><div><b>أخصائية ${esc((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"أخصائية التغذية")}</b><small>${esc(CEN.specialists[(C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")]||"أخصائية تغذية علاجية")} • تحت إشراف فريق طبي استشاري</small></div></div>
+  <div class="tn"><div><b>+${CEN.subscribers}</b><small>مشترك</small></div><div><b>+${CEN.clients}</b><small>عميل</small></div><div><b>${CEN.years}</b><small>سنة خبرة</small></div></div>
+  <div class="lic">🏛️ مرخّص من ${esc(CEN.authority)} • رقم التصريح <b dir="ltr">${esc(CEN.license)}</b> • منذ ${esc(CEN.issued)}</div>
+  <a class="rl" href="${esc(CEN.results)}" target="_blank" rel="noopener">شوف نتائج عملائنا الحقيقية ←</a></div>
+
  <div class="card"><h2><i>📋</i>بياناتك</h2>
   <div class="stats"><div><b>${esc(C.age||"—")}</b><small>العمر</small></div><div><b>${esc(C.height||"—")}</b><small>الطول سم</small></div><div><b>${esc(C.weight||"—")}</b><small>الوزن كغ</small></div><div><b>${target||"—"}</b><small>الوزن المناسب</small></div></div>
   ${bmi?`<div class="bmi"><div class="t"><span>مؤشر كتلة الجسم</span><b>${bmi.toFixed(1)} • ${bmiTxt}</b></div><div class="sc"><span class="pin" style="right:${100-bmiPos}%"></span></div><div class="lb" style="direction:ltr"><span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div></div>`:""}</div>
@@ -134,7 +156,7 @@ function render(){
     ${arr(C.how).map(s=>`<div class="st">➜ ${esc(s)}</div>`).join("")}
     <div class="pr">النتيجة:</div>${arr(C.result).map(s=>`<div class="ok2">✓ ${esc(s)}</div>`).join("")}</div>
    <div class="pa bad"><div class="ph">⚠️ بدون بداية</div><div class="pn">الأعراض تقوى مع الوقت</div>
-    ${(arr(C.risks).length?arr(C.risks):["المشكلة تصير مزمنة وأصعب علاجها",diff>0?"الوزن يزيد تدريجياً":"","تأثير أكبر على النوم والطاقة"].filter(Boolean)).map(s=>`<div class="no">✕ ${esc(s)}</div>`).join("")}</div></div>
+    ${(arr(C.risks).length?arr(C.risks):["الأعراض غالباً تستمر أو تزيد",diff>0?"الوزن يميل للزيادة مع الوقت":"","تأثير على النوم والطاقة اليومية"].filter(Boolean)).map(s=>`<div class="no">✕ ${esc(s)}</div>`).join("")}</div></div>
   ${C.doctor!==false&&/حرق|ألم|سكر|ضغط|مستمر/.test((C.complaint||"")+arr(C.symptoms).join(""))?`<div class="warn">⚕️ الأعراض المستمرة تحتاج مراجعة الطبيب، وأي دواء يكون منه.</div>`:""}</div>
 
  ${diff>0?`<div class="card res"><h2><i>🎯</i>رحلة وزنك</h2>
@@ -145,7 +167,19 @@ function render(){
    <div><b>بعد 3 أشهر</b><p>حوالي <b>-${step(13)} كغ</b> • عادة ثابتة تكمل معك</p></div></div>
   <small style="color:#93b4dc;display:block;margin-top:10px">* أرقام تقريبية وتختلف حسب الالتزام والحالة الصحية.</small></div>`:""}
 
- <div class="card" id="more"><h2><i>✍️</i>كمّل بياناتك</h2><div style="color:var(--muted);font-size:13.5px">حتى نفصّل برنامجك عليك بالضبط:</div>
+ <div class="card" id="pay"><h2><i>💳</i>اشترك وابدأ برنامجك</h2>
+  <div class="plans">${plans.map(k=>`<button class="pl ${SEL===k?"on":""}" data-pl="${k}">${k==="6"?'<em>الأنسب لحالتك</em>':""}<b>${PL[k].t}</b><small>${PL[k].d||"&nbsp;"}</small>${PR[k]?`<span>${PR[k]}$${cur?` ≈ ${(PR[k]*cur[1]).toLocaleString("en",{maximumFractionDigits:cur[1]<1?2:0})} ${esc(cur[0])}`:""}</span>`:""}</button>`).join("")}</div>
+  <table class="ft"><tr><th></th>${plans.map(k=>`<th class="${SEL===k?"on":""}">${PL[k].t}</th>`).join("")}</tr>
+   ${FT.map(([f,min])=>`<tr><td>${f}</td>${plans.map(k=>`<td class="${SEL===k?"on":""}">${has(k,min)?'<i class="y">✓</i>':'<i class="n">✕</i>'}</td>`).join("")}</tr>`).join("")}</table>
+  ${arr(C.gifts).length?`<div class="gift">🎁 <b>هدايا خاصة لك:</b> ${arr(C.gifts).map(esc).join(" • ")}</div>`:""}
+  <div class="sub">اختر طريقة الدفع</div>${ms||'<div class="warn">تواصل معنا لطريقة الدفع المناسبة لبلدك</div>'}
+  <div class="agent">🔒 الحسابات المحلية تابعة لوكلائنا المعتمدين لتسهيل الدفع في بلدك، ويصلك <b>إيصال رسمي باسم di3t.club</b> بعد الدفع.</div>
+  ${CFG.whatsapp?`<a class="btn g" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent("السلام عليكم، أنا "+C.name+" حوّلت مبلغ اشتراك "+PL[SEL].t+"، وهذا الإيصال 👇")}" target="_blank">📎 أرسل إيصال الدفع على واتساب</a>`:""}</div>
+ <div class="card"><h2><i>🗓️</i>وش يصير بعد الدفع؟</h2>
+  <div class="steps"><div><b>1</b><p>أخصائية التغذية تراجع معلوماتك كاملة</p></div><div><b>2</b><p>الدكتور الاستشاري يعتمد برنامجك</p></div><div><b>3</b><p>أخصائية المتابعة تتواصل معك بنفس الوقت</p></div><div><b>4</b><p>برنامجك يوصلك خلال <b>24 ساعة</b></p></div></div>
+  <small class="fri">* الطلبات يوم الجمعة نتواصل معك فيها يوم السبت.</small>
+  <div class="gua">🛡️ <div><b>ضمان النتيجة</b>إذا التزمت بالبرنامج أكثر من 80% وما شفت نتيجة، نرجع لك مبلغ الاشتراك.</div></div></div>
+ <details class="card" id="more"><summary class="msum"><span><i>✍️</i>كمّل بياناتك <small>(اختياري – يسرّع تجهيز برنامجك)</small></span><em>⌄</em></summary>
   <label>هدفك الأساسي</label><div class="opts" data-q="goal">${["نزول وزن","راحة المعدة","تنظيم السكر","زيادة وزن","صحة عامة"].map(o=>`<button>${o}</button>`).join("")}</div>
   <label>أمراض أو أدوية حالية</label><input id="q_med" placeholder="مثلاً: لا يوجد / ضغط / أدوية المعدة">
   <label>حساسية أو أكلات ما تحبها</label><input id="q_all" placeholder="مثلاً: السمك، الحليب">
@@ -153,22 +187,23 @@ function render(){
   <label>نشاطك اليومي</label><div class="opts" data-q="act">${["قليل","متوسط","عالي"].map(o=>`<button>${o}</button>`).join("")}</div>
   <label>وقت النوم والاستيقاظ</label><input id="q_sleep" placeholder="مثلاً: أنام 1 بالليل وأصحى 8">
   <label>شي تحب تضيفه</label><textarea id="q_note" rows="2"></textarea>
-  <button class="btn o" id="send">إرسال البيانات للأخصائية</button><div class="ok" id="sent">✓ وصلت بياناتك، شكراً لك</div></div>
+  <button class="btn o" id="send">إرسال البيانات للأخصائية</button><div class="ok" id="sent">✓ وصلت بياناتك، شكراً لك</div></details>
 
- <div class="card" id="pay"><h2><i>💳</i>اشترك وابدأ برنامجك</h2>
-  <div class="plans">${plans.map(k=>`<button class="pl ${SEL===k?"on":""}" data-pl="${k}">${k==="6"?'<em>الأنسب لحالتك</em>':""}<b>${PL[k].t}</b><small>${PL[k].d||"&nbsp;"}</small>${(C.prices||{})[k]?`<span>${C.prices[k]}$${cur?` ≈ ${(C.prices[k]*cur[1]).toLocaleString("en",{maximumFractionDigits:cur[1]<1?2:0})} ${esc(cur[0])}`:""}</span>`:""}</button>`).join("")}</div>
-  <table class="ft"><tr><th></th>${plans.map(k=>`<th class="${SEL===k?"on":""}">${PL[k].t}</th>`).join("")}</tr>
-   ${FT.map(([f,min])=>`<tr><td>${f}</td>${plans.map(k=>`<td class="${SEL===k?"on":""}">${has(k,min)?'<i class="y">✓</i>':'<i class="n">✕</i>'}</td>`).join("")}</tr>`).join("")}</table>
-  ${arr(C.gifts).length?`<div class="gift">🎁 <b>هدايا خاصة لك:</b> ${arr(C.gifts).map(esc).join(" • ")}</div>`:""}
-  <div class="sub">اختر طريقة الدفع</div>${ms||'<div class="warn">تواصل معنا لطريقة الدفع المناسبة لبلدك</div>'}
-  ${CFG.whatsapp?`<a class="btn g" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent("السلام عليكم، أنا "+C.name+" حوّلت مبلغ اشتراك "+PL[SEL].t+"، وهذا الإيصال 👇")}" target="_blank">📎 أرسل إيصال الدفع على واتساب</a>`:""}</div>`;
+
+ <div class="card faq"><h2><i>❓</i>أسئلة شائعة</h2>
+  <details><summary>هل البرنامج من أكلنا وأكل البيت؟</summary><p>نعم، يُبنى على أكلك المعتاد وثقافة بلدك، مع إمكانية استبدال الوجبات.</p></details>
+  <details><summary>مين يجهز البرنامج؟</summary><p>أخصائية تغذية علاجية، ويعتمده دكتور استشاري بعد مراجعة معلوماتك كاملة.</p></details>
+  <details><summary>عندي حالة صحية أو آخذ أدوية، يناسبني؟</summary><p>نعم، البروتوكول يُعدّ حسب حالتك. وأي دواء يبقى حسب طبيبك المعالج.</p></details>
+  <details><summary>وش لو ما ناسبني شي في البرنامج؟</summary><p>تتواصل مع أخصائيتك ويتعدل البرنامج خلال المتابعة.</p></details></div>`;
 }
 let SEL=null;render();
+// شريط هادئ يظهر بعد ما يقرأ العميل حالته، ويختفي عند قسم الاشتراك
+addEventListener("scroll",()=>{const pay=$("#pay"),fk=document.querySelector(".fork");if(!pay||!fk)return;const show=fk.getBoundingClientRect().bottom<0&&pay.getBoundingClientRect().top>innerHeight*0.6&&pay.getBoundingClientRect().bottom>0;$("#stick").classList.toggle("on",show&&pay.getBoundingClientRect().top>0)},{passive:true});
 // ===== تتبع: يوصل للأخصائية ثم يحول على رابط الدفع =====
 function track(ev,extra){const body=JSON.stringify({event:ev,lead:C.id||null,name:C.name,phone:C.phone,country:C.country,plan:SEL,at:new Date().toISOString(),...extra});
  if(!CFG.track)return;try{navigator.sendBeacon?navigator.sendBeacon(CFG.track,new Blob([body],{type:"text/plain"})):fetch(CFG.track,{method:"POST",body,keepalive:true})}catch(e){}}
 track("report_opened");
-function goPay(k){const pr=(C.prices||{})[SEL],base=(CFG.links||{})[k];if(!base){toast("رابط الدفع غير متوفر حالياً، تواصل معنا");return}
+function goPay(k){const pr=PR[SEL],base=(CFG.links||{})[k];if(!base){toast("رابط الدفع غير متوفر حالياً، تواصل معنا");return}
  const url=pr?base.replace("{usd}",pr):base.replace(/[?&][^=]+=\{usd\}/,"");track("pay_clicked",{method:k,url});toast("جاري تحويلك لصفحة الدفع…");setTimeout(()=>location.href=url,400)}
 document.addEventListener("click",e=>{const py=e.target.closest("[data-pay]");if(py){goPay(py.dataset.pay);return}const pl=e.target.closest("[data-pl]");if(pl){SEL=pl.dataset.pl;const y=scrollY;render();scrollTo(0,y);return}const c=e.target.closest("[data-c]");if(c){navigator.clipboard?.writeText(c.dataset.c);toast("تم النسخ ✓")}
  const o=e.target.closest(".opts button");if(o){o.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===o))}});
