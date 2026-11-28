@@ -77,7 +77,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .ok2{font-weight:800;color:#15803d}.no{font-weight:700;color:#b91c1c;margin-bottom:4px}
 .wal{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}.wal span{font-size:12px;font-weight:800;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:3px 9px}
 .trust{padding:16px}.sp{display:flex;gap:12px;align-items:center}.spa{width:52px;height:52px;flex:none;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--navy));color:#fff;font-weight:800;font-size:22px;display:grid;place-items:center;box-shadow:0 0 0 3px #fff,0 0 0 5px #cfe0ff}
-.sp b{font-size:16px}.sp small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
+.sp b{font-size:16px}.sp .slic{color:#0f4c8a;font-size:12px;margin-top:3px}.sp small{display:block;color:var(--muted);font-size:12.5px;margin-top:2px}
 .tn{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 10px}.tn div{text-align:center;background:#f6f8fc;border-radius:12px;padding:8px 2px}.tn b{display:block;font-size:17px;color:var(--navy)}.tn small{color:var(--muted);font-size:11.5px}
 .lic{font-size:12.5px;color:#374151;background:#f0f7ff;border-radius:10px;padding:8px 10px;line-height:1.7}.rl{display:block;text-align:center;margin-top:10px;font-weight:800;color:var(--blue);text-decoration:none;font-size:14px}
 .agent{margin-top:10px;font-size:12.5px;color:#475569;background:#f8fafc;border-radius:10px;padding:8px 10px;line-height:1.7}
@@ -111,7 +111,7 @@ function load(){const d=new URLSearchParams(location.search).get("d");
   program:"نظام صحي لطيف على المعدة",how:["وجبات صغيرة ومنتظمة","تقليل المقليات"],result:["معدة أريح","نزول بسيط بالوزن"]}}
 const C=load();
 const CEN=Object.assign({license:"3441/13021",authority:"وزارة الصحة",issued:"11 أكتوبر 2020",years:11,subscribers:"45,000",clients:"200,000",results:"https://di3t-club.com/results",
- specialists:{"شيرين محمد":"أخصائية تغذية علاجية","لميس":"أخصائية تغذية علاجية","ميعاد":"أخصائية تغذية علاجية"}},CFG.center||{});
+ specialists:{"شيرين محمد":{lic:"4416887.01",since:"14/11/2018"},"لميس":{},"ميعاد":{}}},CFG.center||{});
 const PR=Object.assign({"3":95,"6":171,"12":304},CFG.prices||{},C.prices||{});
 const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const arr=v=>Array.isArray(v)?v:String(v||"").split(/\n|،|,|\./).map(x=>x.trim()).filter(x=>x.length>1);
@@ -123,7 +123,7 @@ const step=w=>Math.min(diff,+(w*0.6).toFixed(1));
 function render(){
  $("#dt").textContent=new Date().toLocaleDateString("ar");
  $("#hi").textContent=`أهلاً ${C.name.split(" ")[0]} 👋`;
- $("#intro").textContent=`هذا تقريرك الشخصي من ${C.specialist||"أخصائية التغذية"}، جهزناه بناءً على بياناتك${C.complaint?" وملاحظاتك: "+C.complaint:""}.`;
+ $("#intro").textContent=`هذا تقريرك الشخصي من دايت كلوب | مركز التغذية العلاجية، جهزناه بناءً على بياناتك${C.complaint?" وملاحظاتك: "+C.complaint:""}.`;
  const bmiPos=bmi?Math.max(2,Math.min(98,(bmi-15)/(40-15)*100)):50,bmiTxt=!bmi?"":bmi<18.5?"أقل من الطبيعي":bmi<25?"طبيعي":bmi<30?"وزن زائد":"سمنة";
  const cur=CFG.currency[C.country];
  const PL={"3":{t:"3 أشهر",d:""},"6":{t:"6 أشهر",d:"أو مدة العلاج الكاملة"},"12":{t:"12 شهر",d:"سنوية"}};
@@ -138,9 +138,9 @@ function render(){
    ${m.note?`<div class="warn">${esc(m.note)}</div>`:""}</div></details>`).join("");
  $("#main").innerHTML=`
  <div class="card trust">
-  <div class="sp"><div class="spa">${esc(((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"د")[0])}</div><div><b>أخصائية ${esc((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"أخصائية التغذية")}</b><small>${esc(CEN.specialists[(C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")]||"أخصائية تغذية علاجية")} • تحت إشراف فريق طبي استشاري</small></div></div>
+  <div class="sp"><div class="spa">${esc(((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"د")[0])}</div><div><b>أخصائية ${esc((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"أخصائية التغذية")}</b><small>أخصائية تغذية علاجية • تحت إشراف فريق طبي استشاري</small>${(()=>{const L=CEN.specialists[(C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")]||{};return L.lic?`<small class="slic">🪪 رخصة مزاولة <b dir="ltr">${esc(L.lic)}</b> • منذ ${esc(L.since)}</small>`:""})()}</div></div>
   <div class="tn"><div><b>+${CEN.subscribers}</b><small>مشترك</small></div><div><b>+${CEN.clients}</b><small>عميل</small></div><div><b>${CEN.years}</b><small>سنة خبرة</small></div></div>
-  <div class="lic">🏛️ مرخّص برقم التصريح <b dir="ltr">${esc(CEN.license)}</b> • منذ ${esc(CEN.issued)}</div>
+  <div class="lic">🏛️ المركز مرخّص برقم التصريح <b dir="ltr">${esc(CEN.license)}</b> • منذ ${esc(CEN.issued)}</div>
   <a class="rl" href="${esc(CEN.results)}" target="_blank" rel="noopener">شوف نتائج عملائنا الحقيقية ←</a></div>
 
  <div class="card"><h2><i>📋</i>بياناتك</h2>
@@ -178,7 +178,7 @@ function render(){
  <div class="card"><h2><i>🗓️</i>وش يصير بعد الدفع؟</h2>
   <div class="steps"><div><b>1</b><p>أخصائية التغذية تراجع معلوماتك كاملة</p></div><div><b>2</b><p>الدكتور الاستشاري يعتمد برنامجك</p></div><div><b>3</b><p>أخصائية المتابعة تتواصل معك بنفس الوقت</p></div><div><b>4</b><p>برنامجك يوصلك خلال <b>24 ساعة</b></p></div></div>
   <small class="fri">* الطلبات يوم الجمعة نتواصل معك فيها يوم السبت.</small>
-  <div class="gua">🛡️ <div><b>ضمان النتيجة</b>إذا التزمت بالبرنامج أكثر من 80% وما شفت نتيجة، نرجع لك مبلغ الاشتراك.</div></div></div>
+  <div class="gua">🛡️ <div><b>ضمان النتيجة</b>إذا التزمت بالبرنامج بشكل كامل وما شفت نتيجة، نرجع لك مبلغ الاشتراك.</div></div></div>
  <details class="card" id="more"><summary class="msum"><span><i>✍️</i>كمّل بياناتك <small>(اختياري – يسرّع تجهيز برنامجك)</small></span><em>⌄</em></summary>
   <label>هدفك الأساسي</label><div class="opts" data-q="goal">${["نزول وزن","راحة المعدة","تنظيم السكر","زيادة وزن","صحة عامة"].map(o=>`<button>${o}</button>`).join("")}</div>
   <label>أمراض أو أدوية حالية</label><input id="q_med" placeholder="مثلاً: لا يوجد / ضغط / أدوية المعدة">
