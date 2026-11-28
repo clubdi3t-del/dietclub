@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a2647">
+<title>تقريرك الغذائي - di3t.club</title>
+<link rel="icon" href="https://di3t-club.com/images/lead/logo.ico">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0a2647;--navy2:#0b3a72;--blue:#1a73f5;--green:#16a34a;--gold:#f5a524;--text:#1f2937;--muted:#6b7280;--line:#eef0f3;--bg:#f3f5f9}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:Tajawal,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+.app{max-width:520px;margin:0 auto;padding-bottom:30px}
+.top{background:linear-gradient(135deg,#04203f,var(--navy) 55%,var(--navy2));color:#fff;padding:22px 20px 70px;border-radius:0 0 32px 32px;position:relative;overflow:hidden}
+.top:after{content:"";position:absolute;width:260px;height:260px;left:-80px;top:-90px;border-radius:50%;background:radial-gradient(circle,rgba(26,115,245,.45),transparent 70%)}
+.top>*{position:relative;z-index:1}
+.brand{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#93b4dc}
+.brand b{color:#fff;font-size:18px;font-style:italic}
+.top h1{margin:18px 0 6px;font-size:24px}.top p{margin:0;color:#c7d7ee;font-size:14.5px;line-height:1.7}
+.wrap{padding:0 14px;margin-top:-50px;position:relative;z-index:2}
+.card{background:#fff;border-radius:22px;padding:18px;margin-bottom:14px;box-shadow:0 8px 24px rgba(10,38,71,.07)}
+.card h2{margin:0 0 14px;font-size:17px;display:flex;align-items:center;gap:8px}
+.card h2 i{font-style:normal;width:32px;height:32px;border-radius:10px;background:#eef5ff;display:grid;place-items:center;font-size:17px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stats div{background:#f6f8fc;border-radius:14px;padding:10px 4px;text-align:center}.stats b{display:block;font-size:19px}.stats small{color:var(--muted);font-size:11.5px}
+.bmi{margin-top:16px}.bmi .sc{height:12px;border-radius:9px;background:linear-gradient(90deg,#60a5fa 0 18%,#22c55e 18% 50%,#f59e0b 50% 75%,#ef4444 75%);position:relative}
+.bmi .pin{position:absolute;top:-7px;width:26px;height:26px;margin-right:-13px;border-radius:50%;background:#fff;border:4px solid var(--navy);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.bmi .lb{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:8px}
+.bmi .t{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:14px}.bmi .t b{font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.chips span{background:#fff1f2;color:#be123c;border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:700}
+.chips.c2 span{background:#fff7e6;color:#92400e}
+.sub{font-weight:800;font-size:13.5px;color:var(--muted);margin:14px 0 8px}
+.plan{background:linear-gradient(135deg,#eef5ff,#f5f3ff);border-radius:16px;padding:14px;font-weight:800;font-size:16px;color:var(--navy)}
+.ul{list-style:none;padding:0;margin:12px 0 0}.ul li{display:flex;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:14.5px;line-height:1.6}.ul li:last-child{border:0}
+.ul li span{flex:none;width:26px;height:26px;border-radius:8px;background:#e8faf0;color:var(--green);display:grid;place-items:center;font-weight:800;font-size:13px}
+.warn{background:#fff7e6;border-radius:12px;padding:10px 12px;font-size:13px;color:#7a4b00;margin-top:10px;line-height:1.6}
+.res{background:linear-gradient(135deg,#04203f,var(--navy2));color:#fff}
+.res h2 i{background:rgba(255,255,255,.12)}
+.wg{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 16px}
+.wg div{text-align:center}.wg b{display:block;font-size:30px}.wg small{color:#93b4dc;font-size:12px}
+.wg .ar{flex:1;height:6px;border-radius:9px;background:linear-gradient(90deg,#4ade80,rgba(255,255,255,.2));position:relative}
+.wg .ar:after{content:"";position:absolute;left:-4px;top:-5px;border:8px solid transparent;border-right-color:#4ade80;transform:rotate(180deg)}
+.tl{position:relative;padding-right:22px}.tl:before{content:"";position:absolute;right:7px;top:6px;bottom:6px;width:2px;background:rgba(255,255,255,.2)}
+.tl div{position:relative;padding:0 0 14px}.tl div:before{content:"";position:absolute;right:-21px;top:4px;width:12px;height:12px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 4px rgba(74,222,128,.25)}
+.tl b{color:#4ade80;font-size:13px}.tl p{margin:2px 0 0;font-size:14.5px;line-height:1.6;color:#e6eefa}
+.gain{display:grid;gap:8px;margin-top:6px}.gain span{background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;font-size:14.5px}
+label{display:block;font-size:13.5px;font-weight:700;margin:12px 0 6px}
+input,select,textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:11px;font:inherit;font-size:14.5px;background:#fafbfd;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue)}
+.opts{display:flex;flex-wrap:wrap;gap:6px}.opts button{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px;font:inherit;font-size:13.5px;font-weight:700;color:var(--muted);cursor:pointer}.opts button.on{border-color:var(--blue);color:var(--blue);background:#eef5ff}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:15px;font:inherit;font-size:16px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--blue),#4f46e5);cursor:pointer;text-align:center;text-decoration:none;margin-top:14px}
+.btn.g{background:linear-gradient(135deg,#16a34a,#22c55e)}.btn.o{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.price{text-align:center;padding:6px 0 14px}.price b{font-size:40px;color:var(--navy)}.price b small{font-size:18px}.price .loc{color:var(--muted);font-size:15px;margin-top:2px}.price .loc b{font-size:17px;color:var(--green)}
+.price .inc{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:10px}.price .inc span{font-size:12.5px;background:#e8faf0;color:var(--green);border-radius:999px;padding:4px 10px;font-weight:700}
+.pm{border:1.5px solid var(--line);border-radius:16px;margin-bottom:8px;overflow:hidden}
+.pm summary{list-style:none;display:flex;align-items:center;gap:10px;padding:12px 14px;cursor:pointer;font-weight:800;font-size:15px}.pm summary::-webkit-details-marker{display:none}
+.pm summary em{margin-right:auto;font-style:normal;color:var(--muted);font-size:18px}.pm[open]{border-color:var(--blue)}.pm[open] summary em{transform:rotate(180deg)}
+.pm .f{padding:0 14px 12px}.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-top:1px dashed var(--line);font-size:13.5px}
+.row small{color:var(--muted)}.row b{direction:ltr;text-align:left;word-break:break-all;font-size:14px}
+.cp{flex:none;border:0;background:#eef5ff;color:var(--blue);border-radius:8px;padding:5px 9px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.tag{font-size:11px;background:#e8faf0;color:var(--green);border-radius:8px;padding:2px 8px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;border-radius:12px;padding:10px 18px;font-size:14px;opacity:0;transition:.3s;pointer-events:none}.toast.on{opacity:1}
+.ok{text-align:center;padding:10px;color:var(--green);font-weight:800;display:none}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
+</style>
+</head>
+<body>
+<div class="app">
+ <div class="top"><div class="brand"><b>di3t.club</b><span>تقرير خاص • <span id="dt"></span></span></div>
+  <h1 id="hi"></h1><p id="intro"></p></div>
+ <div class="wrap" id="main"></div>
+ <footer>di3t.club • فريق تغذية علاجية • هذا التقرير خاص بك</footer>
+</div>
+<div class="toast" id="toast"></div>
+<script src="config.js"></script>
+<script>
+const CFG=window.CRM_CONFIG||{methods:[],currency:{}};
+// ===== بيانات العميل: من الرابط ?d=... (يولّدها builder.html) =====
+function load(){const d=new URLSearchParams(location.search).get("d");
+ if(d){try{return JSON.parse(decodeURIComponent(escape(atob(d.replace(/-/g,"+").replace(/_/g,"/")))))}catch(e){}}
+ return {name:"أحمد",gender:"ذكر",country:"الكويت",age:30,weight:85,height:175,price:80,specialist:"أخصائية التغذية",
+  complaint:"انتفاخ بعد الأكل",symptoms:["انتفاخ بعد الأكل","وزن زائد بسيط"],causes:["أكل سريع","وجبات كبيرة"],
+  program:"نظام صحي لطيف على المعدة",how:["وجبات صغيرة ومنتظمة","تقليل المقليات"],result:["معدة أريح","نزول بسيط بالوزن"]}}
+const C=load();
+const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const arr=v=>Array.isArray(v)?v:String(v||"").split(/\n|،|,|\./).map(x=>x.trim()).filter(x=>x.length>1);
+const toast=t=>{toast_.textContent=t;toast_.classList.add("on");setTimeout(()=>toast_.classList.remove("on"),1800)};const toast_=$("#toast");
+const H=C.height/100,bmi=C.weight&&C.height?C.weight/(H*H):null,target=C.target||(C.height?Math.round(22.5*H*H):null),diff=bmi&&target?Math.max(0,+(C.weight-target).toFixed(1)):0;
+const male=/ذكر|رجل/.test(C.gender||"");
+// ===== التوقعات (تقريبية: ~0.5–0.75 كغ أسبوعياً) =====
+const step=w=>Math.min(diff,+(w*0.6).toFixed(1));
+function render(){
+ $("#dt").textContent=new Date().toLocaleDateString("ar");
+ $("#hi").textContent=`أهلاً ${C.name.split(" ")[0]} 👋`;
+ $("#intro").textContent=`هذا تقريرك الشخصي من ${C.specialist||"أخصائية التغذية"}، جهزناه بناءً على بياناتك${C.complaint?" وشكواك: "+C.complaint:""}.`;
+ const bmiPos=bmi?Math.max(2,Math.min(98,(bmi-15)/(40-15)*100)):50,bmiTxt=!bmi?"":bmi<18.5?"أقل من الطبيعي":bmi<25?"طبيعي":bmi<30?"وزن زائد":"سمنة";
+ const cur=CFG.currency[C.country],usd=+C.price||80;
+ const methods=CFG.methods.filter(m=>m.countries.includes(C.country)).concat(CFG.methods.filter(m=>m.countries.includes("*")&&!m.countries.includes(C.country)));
+ const ms=methods.map((m,i)=>`<details class="pm" ${i===0?"open":""}><summary>${m.icon} ${esc(m.name)} ${m.countries.includes(C.country)?'<span class="tag">متوفر في '+esc(C.country)+'</span>':""}<em>⌄</em></summary><div class="f">
+   ${m.link?`<a class="btn" href="${esc(CFG.payLink.replace("{usd}",usd))}" target="_blank" rel="noopener">ادفع ${usd}$ الآن ←</a>`:""}
+   ${m.fields.map(([k,v])=>`<div class="row"><small>${esc(k)}</small><b>${esc(v)}</b><button class="cp" data-c="${esc(v)}">نسخ</button></div>`).join("")}
+   ${m.note?`<div class="warn">${esc(m.note)}</div>`:""}</div></details>`).join("");
+ $("#main").innerHTML=`
+ <div class="card"><h2><i>📋</i>بياناتك</h2>
+  <div class="stats"><div><b>${esc(C.age||"—")}</b><small>العمر</small></div><div><b>${esc(C.height||"—")}</b><small>الطول سم</small></div><div><b>${esc(C.weight||"—")}</b><small>الوزن كغ</small></div><div><b>${target||"—"}</b><small>الوزن المناسب</small></div></div>
+  ${bmi?`<div class="bmi"><div class="t"><span>مؤشر كتلة الجسم</span><b>${bmi.toFixed(1)} • ${bmiTxt}</b></div><div class="sc"><span class="pin" style="right:${100-bmiPos}%"></span></div><div class="lb" style="direction:ltr"><span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div></div>`:""}</div>
+
+ <div class="card"><h2><i>🩺</i>اللي لاحظناه عندك</h2>
+  <div class="chips">${arr(C.symptoms).map(s=>`<span>${esc(s)}</span>`).join("")}</div>
+  ${arr(C.causes).length?`<div class="sub">الأسباب المحتملة</div><div class="chips c2">${arr(C.causes).map(s=>`<span>${esc(s)}</span>`).join("")}</div>`:""}</div>
+
+ <div class="card"><h2><i>🥗</i>برنامجك المناسب</h2><div class="plan">${esc(C.program)}</div>
+  <ul class="ul">${arr(C.how).map((s,i)=>`<li><span>${i+1}</span>${esc(s)}</li>`).join("")}</ul>
+  ${C.doctor!==false&&/حرق|ألم|سكر|ضغط|مستمر/.test((C.complaint||"")+arr(C.symptoms).join(""))?`<div class="warn">⚕️ البرنامج الغذائي يساعد، لكن الأعراض المستمرة تحتاج مراجعة الطبيب، وأي دواء يكون منه.</div>`:""}</div>
+
+ <div class="card res"><h2><i>🎯</i>النتيجة اللي راح توصل لها</h2>
+  ${diff>0?`<div class="wg"><div><b>${C.weight}</b><small>وزنك الحين</small></div><div class="ar"></div><div><b style="color:#4ade80">${target}</b><small>هدفك</small></div></div>`:""}
+  <div class="tl">
+   <div><b>بعد أسبوعين</b><p>${diff>0?`حوالي <b>-${step(2)} كغ</b> • `:""}${esc(arr(C.result)[0]||"تحسن واضح في الأعراض")}</p></div>
+   <div><b>بعد شهر</b><p>${diff>0?`حوالي <b>-${step(4.3)} كغ</b> • `:""}نظام أكل ثابت ومريح، وطاقة أعلى</p></div>
+   <div><b>بعد 3 أشهر</b><p>${diff>0?`حوالي <b>-${step(13)} كغ</b> • `:""}${esc(arr(C.result).slice(1).join(" • ")||"نتيجة ثابتة ومستمرة")}</p></div></div>
+  <div class="gain">${arr(C.result).map(s=>`<span>✅ ${esc(s)}</span>`).join("")}</div>
+  <small style="color:#93b4dc;display:block;margin-top:10px">* التوقعات تقريبية وتختلف حسب الالتزام والحالة الصحية.</small></div>
+
+ <div class="card" id="more"><h2><i>✍️</i>كمّل بياناتك</h2><div style="color:var(--muted);font-size:13.5px">حتى نفصّل برنامجك عليك بالضبط:</div>
+  <label>هدفك الأساسي</label><div class="opts" data-q="goal">${["نزول وزن","راحة المعدة","تنظيم السكر","زيادة وزن","صحة عامة"].map(o=>`<button>${o}</button>`).join("")}</div>
+  <label>أمراض أو أدوية حالية</label><input id="q_med" placeholder="مثلاً: لا يوجد / ضغط / أدوية المعدة">
+  <label>حساسية أو أكلات ما تحبها</label><input id="q_all" placeholder="مثلاً: السمك، الحليب">
+  <label>كم وجبة تاكل باليوم؟</label><div class="opts" data-q="meals">${["1 أو 2","3","4 أو أكثر"].map(o=>`<button>${o}</button>`).join("")}</div>
+  <label>نشاطك اليومي</label><div class="opts" data-q="act">${["قليل","متوسط","عالي"].map(o=>`<button>${o}</button>`).join("")}</div>
+  <label>وقت النوم والاستيقاظ</label><input id="q_sleep" placeholder="مثلاً: أنام 1 بالليل وأصحى 8">
+  <label>شي تحب تضيفه</label><textarea id="q_note" rows="2"></textarea>
+  <button class="btn o" id="send">إرسال البيانات للأخصائية</button><div class="ok" id="sent">✓ وصلت بياناتك، شكراً لك</div></div>
+
+ <div class="card" id="pay"><h2><i>💳</i>اشترك وابدأ برنامجك</h2>
+  <div class="price"><b>${usd}<small>$</small></b>${cur?`<div class="loc">≈ <b>${(usd*cur[1]).toLocaleString("en",{maximumFractionDigits:cur[1]<1?2:0})} ${esc(cur[0])}</b> <small>(سعر تقريبي)</small></div>`:""}
+   <div class="inc"><span>✓ برنامج غذائي مخصص</span><span>✓ متابعة مع الأخصائية</span><span>✓ تعديل أسبوعي</span></div></div>
+  <div class="sub">اختر طريقة الدفع</div>${ms||'<div class="warn">تواصل معنا لطريقة الدفع المناسبة لبلدك</div>'}
+  ${CFG.whatsapp?`<a class="btn g" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent("السلام عليكم، أنا "+C.name+" حوّلت مبلغ الاشتراك "+usd+"$، وهذا الإيصال 👇")}" target="_blank">📎 أرسل إيصال الدفع على واتساب</a>`:""}</div>`;
+}
+render();
+document.addEventListener("click",e=>{const c=e.target.closest("[data-c]");if(c){navigator.clipboard?.writeText(c.dataset.c);toast("تم النسخ ✓")}
+ const o=e.target.closest(".opts button");if(o){o.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===o))}});
+$("#send").onclick=()=>{const v=q=>document.querySelector(`[data-q="${q}"] .on`)?.textContent||"—",g=id=>$("#"+id).value||"—";
+ const msg=`بيانات إضافية من ${C.name} (${C.phone||""}):\n• الهدف: ${v("goal")}\n• أمراض/أدوية: ${g("q_med")}\n• حساسية: ${g("q_all")}\n• الوجبات: ${v("meals")}\n• النشاط: ${v("act")}\n• النوم: ${g("q_sleep")}\n• ملاحظة: ${g("q_note")}`;
+ if(CFG.api)fetch(CFG.api,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({lead:C.id,phone:C.phone,answers:msg})}).catch(()=>{});
+ if(CFG.whatsapp)open(`https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank");
+ $("#sent").style.display="block";toast("تم ✓")};
+</script>
+</body>
+</html>

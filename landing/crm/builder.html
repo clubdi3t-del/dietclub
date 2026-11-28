@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منشئ تقرير العميل - CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:Tajawal,system-ui,sans-serif;background:#f3f5f9;color:#1f2937}
+.w{max-width:920px;margin:0 auto;padding:20px}
+h1{margin:0 0 4px;font-size:22px;color:#0a2647}.s{color:#6b7280;font-size:14px;margin-bottom:16px}
+.card{background:#fff;border-radius:16px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.g{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:700px){.g{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:4px}
+input,select,textarea{width:100%;box-sizing:border-box;border:1.5px solid #e5e7eb;border-radius:10px;padding:9px;font:inherit;font-size:14px}
+textarea{min-height:80px}small.h{color:#9ca3af;font-size:12px}
+.btn{border:0;border-radius:12px;padding:12px 20px;font:inherit;font-weight:800;font-size:15px;color:#fff;background:#1a73f5;cursor:pointer}
+.out{display:none}.out input{direction:ltr;background:#f8fafc}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.acts a,.acts button{border:1.5px solid #e5e7eb;background:#fff;border-radius:10px;padding:9px 14px;font:inherit;font-weight:700;font-size:14px;color:#0a2647;text-decoration:none;cursor:pointer}
+.acts .wa{background:#25d366;color:#fff;border-color:#25d366}
+</style>
+</head>
+<body><div class="w">
+<h1>📨 منشئ تقرير العميل</h1><div class="s">عبّي بيانات العميل من الـ CRM ← يطلع رابط تقرير خاص له ترسله على الواتساب</div>
+<div class="card"><div class="g">
+ <div><label>الاسم</label><input id="name"></div><div><label>رقم الجوال</label><input id="phone"></div>
+ <div><label>الدولة</label><select id="country"></select></div><div><label>الجنس</label><select id="gender"><option>ذكر</option><option>أنثى</option></select></div>
+ <div><label>العمر</label><input id="age" type="number"></div><div><label>الوزن (كغ)</label><input id="weight" type="number"></div>
+ <div><label>الطول (سم)</label><input id="height" type="number"></div><div><label>الوزن المناسب</label><input id="target" type="number" placeholder="تلقائي"></div>
+ <div><label>المبلغ ($)</label><input id="price" type="number" value="80"></div><div><label>اسم الأخصائية</label><input id="specialist" value="أخصائية التغذية"></div>
+ <div style="grid-column:span 2"><label>ملاحظات العميل (الشكوى)</label><input id="complaint"></div></div></div>
+<div class="card"><div class="g2">
+ <div><label>الأعراض</label><textarea id="symptoms" placeholder="كل عرض بسطر"></textarea></div>
+ <div><label>الأسباب</label><textarea id="causes" placeholder="كل سبب بسطر"></textarea></div>
+ <div><label>البرنامج الغذائي المناسب</label><input id="program"></div><div></div>
+ <div><label>كيف ننشئ البرنامج له</label><textarea id="how" placeholder="كل نقطة بسطر"></textarea></div>
+ <div><label>شنو راح يوصله (النتيجة)</label><textarea id="result" placeholder="كل نتيجة بسطر"></textarea></div>
+ <div style="grid-column:1/-1"><label>رسالة الواتساب الأولى</label><textarea id="msg" placeholder="(اختياري) الرابط ينضاف تحتها تلقائياً"></textarea></div></div>
+ <button class="btn" id="go" style="margin-top:12px">إنشاء رابط التقرير</button></div>
+<div class="card out" id="out"><label>رابط التقرير</label><input id="link" readonly>
+ <div class="acts"><button id="copy">📋 نسخ الرابط</button><a id="open" target="_blank">👁 معاينة</a><a id="wa" class="wa" target="_blank">إرسال على واتساب</a></div></div>
+</div>
+<script src="config.js"></script>
+<script>
+const CFG=window.CRM_CONFIG||{currency:{}},$=id=>document.getElementById(id);
+$("country").innerHTML=Object.keys(CFG.currency).concat("أخرى").map(c=>`<option>${c}</option>`).join("");
+const lines=v=>v.split("\n").map(s=>s.replace(/^[-•*\d.)\s]+/,"").trim()).filter(Boolean);
+$("go").onclick=()=>{const v=id=>$(id).value.trim(),n=id=>+$(id).value||undefined;
+ const d={name:v("name")||"عميلنا",phone:v("phone"),country:v("country"),gender:v("gender"),age:n("age"),weight:n("weight"),height:n("height"),target:n("target"),
+  price:n("price")||80,specialist:v("specialist"),complaint:v("complaint"),symptoms:lines(v("symptoms")),causes:lines(v("causes")),program:v("program"),how:lines(v("how")),result:lines(v("result"))};
+ const b64=btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+ const url=new URL("report.html?d="+b64,location.href).href;
+ $("link").value=url;$("open").href=url;$("out").style.display="block";
+ const msg=(v("msg")?v("msg")+"\n\n":`أهلاً ${d.name.split(" ")[0]} 🌷\nجهزت لك تقريرك الشخصي، فيه حالتك والبرنامج المناسب والنتيجة اللي راح توصل لها:\n`)+url;
+ const ph=d.phone.replace(/\D/g,"");$("wa").href=`https://wa.me/${ph}?text=${encodeURIComponent(msg)}`};
+$("copy").onclick=()=>{navigator.clipboard?.writeText($("link").value);$("copy").textContent="✓ تم النسخ"};
+</script></body></html>
