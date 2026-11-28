@@ -48,7 +48,7 @@ const CFG=window.CRM_CONFIG||{currency:{}},$=id=>document.getElementById(id);
 $("country").innerHTML=Object.keys(CFG.currency).concat("أخرى").map(c=>`<option>${c}</option>`).join("");
 const lines=v=>v.split("\n").map(s=>s.replace(/^[-•*\d.)\s]+/,"").trim()).filter(Boolean);
 $("go").onclick=()=>{const v=id=>$(id).value.trim(),n=id=>+$(id).value||undefined;
- const d={name:v("name")||"عميلنا",phone:v("phone"),country:v("country"),gender:v("gender"),age:n("age"),weight:n("weight"),height:n("height"),target:n("target"),
+ const d={id:Date.now().toString(36),name:v("name")||"عميلنا",phone:v("phone"),country:v("country"),gender:v("gender"),age:n("age"),weight:n("weight"),height:n("height"),target:n("target"),
   plans:["3","6","12"].filter(k=>$("p"+k).checked),prices:Object.fromEntries(["3","6","12"].filter(k=>+$("pr"+k).value).map(k=>[k,+$("pr"+k).value])),gifts:[...document.querySelectorAll(".gf:checked")].map(x=>x.value),specialist:v("specialist"),complaint:v("complaint"),symptoms:lines(v("symptoms")),causes:lines(v("causes")),program:v("program"),how:lines(v("how")),result:lines(v("result")),risks:lines(v("risks"))};
  const b64=btoa(unescape(encodeURIComponent(JSON.stringify(d)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
  const url=new URL("report.html?d="+b64,location.href).href;

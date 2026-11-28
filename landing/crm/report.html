@@ -75,6 +75,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .ph{font-weight:800;font-size:14.5px;margin-bottom:4px}.good .ph{color:#15803d}.bad .ph{color:#b91c1c}
 .pn{font-weight:700;font-size:13px;color:#374151;margin-bottom:6px}.st{color:#374151;font-size:12.5px}.pr{font-weight:800;color:#15803d;margin-top:8px}
 .ok2{font-weight:800;color:#15803d}.no{font-weight:700;color:#b91c1c;margin-bottom:4px}
+.wal{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}.wal span{font-size:12px;font-weight:800;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:3px 9px}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
 </style>
 </head>
@@ -114,9 +115,9 @@ function render(){
  const pr=(C.prices||{})[SEL],usd=pr?+pr:null;
  const FT=[["🍽 غذائي بأكل بيتك + بدائل","3"],["🏋️ رياضي (نادي/بيت/علاجي)","3"],["🩺 بروتوكول لحالتك","3"],["🧠 الأكل الحدسي","3"],["⚖️ برنامج التثبيت","6"],["⭐ متابعة يومية VIP","12"]];
  const has=(k,min)=>+k>=+min;
- const methods=CFG.methods.filter(m=>m.countries.includes(C.country)).concat(CFG.methods.filter(m=>m.countries.includes("*")&&!m.countries.includes(C.country)));
- const ms=methods.map((m,i)=>`<details class="pm" ${i===0?"open":""}><summary>${m.icon} ${esc(m.name)} ${m.countries.includes(C.country)?'<span class="tag">متوفر في '+esc(C.country)+'</span>':""}<em>⌄</em></summary><div class="f">
-   ${m.link?`<a class="btn" href="${esc(usd?CFG.payLink.replace("{usd}",usd):CFG.payLink.split("?")[0])}" target="_blank" rel="noopener">الدفع الإلكتروني ←</a>`:""}
+ let methods=CFG.methods.filter(m=>m.countries.includes(C.country));if(!methods.length)methods=CFG.methods.filter(m=>m.countries.includes("*"));
+ const ms=methods.map((m,i)=>`<details class="pm" ${i===0?"open":""}><summary>${m.icon} ${esc(m.name)}<em>⌄</em></summary><div class="f">
+   ${m.link?`<div class="wal">${(m.wallets||[]).map(w=>`<span>${esc(w)}</span>`).join("")}</div><button class="btn" data-pay="${m.link}">ادفع الآن ←</button>`:""}
    ${m.fields.map(([k,v])=>`<div class="row"><small>${esc(k)}</small><b>${esc(v)}</b><button class="cp" data-c="${esc(v)}">نسخ</button></div>`).join("")}
    ${m.note?`<div class="warn">${esc(m.note)}</div>`:""}</div></details>`).join("");
  $("#main").innerHTML=`
@@ -163,7 +164,13 @@ function render(){
   ${CFG.whatsapp?`<a class="btn g" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent("السلام عليكم، أنا "+C.name+" حوّلت مبلغ اشتراك "+PL[SEL].t+"، وهذا الإيصال 👇")}" target="_blank">📎 أرسل إيصال الدفع على واتساب</a>`:""}</div>`;
 }
 let SEL=null;render();
-document.addEventListener("click",e=>{const pl=e.target.closest("[data-pl]");if(pl){SEL=pl.dataset.pl;const y=scrollY;render();scrollTo(0,y);return}const c=e.target.closest("[data-c]");if(c){navigator.clipboard?.writeText(c.dataset.c);toast("تم النسخ ✓")}
+// ===== تتبع: يوصل للأخصائية ثم يحول على رابط الدفع =====
+function track(ev,extra){const body=JSON.stringify({event:ev,lead:C.id||null,name:C.name,phone:C.phone,country:C.country,plan:SEL,at:new Date().toISOString(),...extra});
+ if(!CFG.track)return;try{navigator.sendBeacon?navigator.sendBeacon(CFG.track,new Blob([body],{type:"text/plain"})):fetch(CFG.track,{method:"POST",body,keepalive:true})}catch(e){}}
+track("report_opened");
+function goPay(k){const pr=(C.prices||{})[SEL],base=(CFG.links||{})[k];if(!base){toast("رابط الدفع غير متوفر حالياً، تواصل معنا");return}
+ const url=pr?base.replace("{usd}",pr):base.replace(/[?&][^=]+=\{usd\}/,"");track("pay_clicked",{method:k,url});toast("جاري تحويلك لصفحة الدفع…");setTimeout(()=>location.href=url,400)}
+document.addEventListener("click",e=>{const py=e.target.closest("[data-pay]");if(py){goPay(py.dataset.pay);return}const pl=e.target.closest("[data-pl]");if(pl){SEL=pl.dataset.pl;const y=scrollY;render();scrollTo(0,y);return}const c=e.target.closest("[data-c]");if(c){navigator.clipboard?.writeText(c.dataset.c);toast("تم النسخ ✓")}
  const o=e.target.closest(".opts button");if(o){o.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===o))}});
 $("#send").onclick=()=>{const v=q=>document.querySelector(`[data-q="${q}"] .on`)?.textContent||"—",g=id=>$("#"+id).value||"—";
  const msg=`بيانات إضافية من ${C.name} (${C.phone||""}):\n• الهدف: ${v("goal")}\n• أمراض/أدوية: ${g("q_med")}\n• حساسية: ${g("q_all")}\n• الوجبات: ${v("meals")}\n• النشاط: ${v("act")}\n• النوم: ${g("q_sleep")}\n• ملاحظة: ${g("q_note")}`;
