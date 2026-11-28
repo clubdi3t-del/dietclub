@@ -96,7 +96,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
  <div class="top"><div class="brand"><b>di3t.club</b><span>تقرير خاص • <span id="dt"></span></span></div>
   <h1 id="hi"></h1><p id="intro"></p></div>
  <div class="wrap" id="main"></div>
- <footer>di3t.club • مركز تغذية علاجية منذ 11 سنة • ترخيص وزارة الصحة 3441/13021<br>هذا التقرير خاص بك ولا يغني عن مراجعة الطبيب</footer>
+ <footer>di3t.club • مركز تغذية علاجية منذ 11 سنة • ترخيص رقم 3441/13021<br>هذا التقرير خاص بك ولا يغني عن مراجعة الطبيب</footer>
 </div>
 <div class="toast" id="toast"></div>
 <div class="stick" id="stick"><span>جاهز تبدأ؟ برنامجك يوصلك خلال 24 ساعة</span><a href="#pay">ابدأ برنامجي</a></div>
@@ -123,7 +123,7 @@ const step=w=>Math.min(diff,+(w*0.6).toFixed(1));
 function render(){
  $("#dt").textContent=new Date().toLocaleDateString("ar");
  $("#hi").textContent=`أهلاً ${C.name.split(" ")[0]} 👋`;
- $("#intro").textContent=`هذا تقريرك الشخصي من ${C.specialist||"أخصائية التغذية"}، جهزناه بناءً على بياناتك${C.complaint?" وشكواك: "+C.complaint:""}.`;
+ $("#intro").textContent=`هذا تقريرك الشخصي من ${C.specialist||"أخصائية التغذية"}، جهزناه بناءً على بياناتك${C.complaint?" وملاحظاتك: "+C.complaint:""}.`;
  const bmiPos=bmi?Math.max(2,Math.min(98,(bmi-15)/(40-15)*100)):50,bmiTxt=!bmi?"":bmi<18.5?"أقل من الطبيعي":bmi<25?"طبيعي":bmi<30?"وزن زائد":"سمنة";
  const cur=CFG.currency[C.country];
  const PL={"3":{t:"3 أشهر",d:""},"6":{t:"6 أشهر",d:"أو مدة العلاج الكاملة"},"12":{t:"12 شهر",d:"سنوية"}};
@@ -140,7 +140,7 @@ function render(){
  <div class="card trust">
   <div class="sp"><div class="spa">${esc(((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"د")[0])}</div><div><b>أخصائية ${esc((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"أخصائية التغذية")}</b><small>${esc(CEN.specialists[(C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")]||"أخصائية تغذية علاجية")} • تحت إشراف فريق طبي استشاري</small></div></div>
   <div class="tn"><div><b>+${CEN.subscribers}</b><small>مشترك</small></div><div><b>+${CEN.clients}</b><small>عميل</small></div><div><b>${CEN.years}</b><small>سنة خبرة</small></div></div>
-  <div class="lic">🏛️ مرخّص من ${esc(CEN.authority)} • رقم التصريح <b dir="ltr">${esc(CEN.license)}</b> • منذ ${esc(CEN.issued)}</div>
+  <div class="lic">🏛️ مرخّص برقم التصريح <b dir="ltr">${esc(CEN.license)}</b> • منذ ${esc(CEN.issued)}</div>
   <a class="rl" href="${esc(CEN.results)}" target="_blank" rel="noopener">شوف نتائج عملائنا الحقيقية ←</a></div>
 
  <div class="card"><h2><i>📋</i>بياناتك</h2>
@@ -173,7 +173,7 @@ function render(){
    ${FT.map(([f,min])=>`<tr><td>${f}</td>${plans.map(k=>`<td class="${SEL===k?"on":""}">${has(k,min)?'<i class="y">✓</i>':'<i class="n">✕</i>'}</td>`).join("")}</tr>`).join("")}</table>
   ${arr(C.gifts).length?`<div class="gift">🎁 <b>هدايا خاصة لك:</b> ${arr(C.gifts).map(esc).join(" • ")}</div>`:""}
   <div class="sub">اختر طريقة الدفع</div>${ms||'<div class="warn">تواصل معنا لطريقة الدفع المناسبة لبلدك</div>'}
-  <div class="agent">🔒 الحسابات المحلية تابعة لوكلائنا المعتمدين لتسهيل الدفع في بلدك، ويصلك <b>إيصال رسمي باسم di3t.club</b> بعد الدفع.</div>
+  <div class="agent">🔒 الحسابات المحلية تابعة لوكلائنا المعتمدين لتسهيل الدفع في بلدك.</div>
   ${CFG.whatsapp?`<a class="btn g" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent("السلام عليكم، أنا "+C.name+" حوّلت مبلغ اشتراك "+PL[SEL].t+"، وهذا الإيصال 👇")}" target="_blank">📎 أرسل إيصال الدفع على واتساب</a>`:""}</div>
  <div class="card"><h2><i>🗓️</i>وش يصير بعد الدفع؟</h2>
   <div class="steps"><div><b>1</b><p>أخصائية التغذية تراجع معلوماتك كاملة</p></div><div><b>2</b><p>الدكتور الاستشاري يعتمد برنامجك</p></div><div><b>3</b><p>أخصائية المتابعة تتواصل معك بنفس الوقت</p></div><div><b>4</b><p>برنامجك يوصلك خلال <b>24 ساعة</b></p></div></div>
