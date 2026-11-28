@@ -96,7 +96,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
  <div class="top"><div class="brand"><b>di3t.club</b><span>تقرير خاص • <span id="dt"></span></span></div>
   <h1 id="hi"></h1><p id="intro"></p></div>
  <div class="wrap" id="main"></div>
- <footer>di3t.club • مركز تغذية علاجية منذ 11 سنة • ترخيص رقم 3441/13021<br>هذا التقرير خاص بك ولا يغني عن مراجعة الطبيب</footer>
+ <footer>di3t.club • مركز تغذية علاجية منذ 11 سنة • ترخيص رقم 4416887.01<br>هذا التقرير خاص بك ولا يغني عن مراجعة الطبيب</footer>
 </div>
 <div class="toast" id="toast"></div>
 <div class="stick" id="stick"><span>جاهز تبدأ؟ برنامجك يوصلك خلال 24 ساعة</span><a href="#pay">ابدأ برنامجي</a></div>
@@ -110,7 +110,7 @@ function load(){const d=new URLSearchParams(location.search).get("d");
   complaint:"انتفاخ بعد الأكل",symptoms:["انتفاخ بعد الأكل","وزن زائد بسيط"],causes:["أكل سريع","وجبات كبيرة"],
   program:"نظام صحي لطيف على المعدة",how:["وجبات صغيرة ومنتظمة","تقليل المقليات"],result:["معدة أريح","نزول بسيط بالوزن"]}}
 const C=load();
-const CEN=Object.assign({license:"3441/13021",authority:"وزارة الصحة",issued:"11 أكتوبر 2020",years:11,subscribers:"45,000",clients:"200,000",results:"https://di3t-club.com/results",
+const CEN=Object.assign({license:"4416887.01",authority:"وزارة الصحة",issued:"14/11/2018",years:11,subscribers:"45,000",clients:"200,000",results:"https://di3t-club.com/results",
  specialists:{"شيرين محمد":{lic:"4416887.01",since:"14/11/2018"},"لميس":{},"ميعاد":{}}},CFG.center||{});
 const PR=Object.assign({"3":95,"6":171,"12":304},CFG.prices||{},C.prices||{});
 const $=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -138,7 +138,7 @@ function render(){
    ${m.note?`<div class="warn">${esc(m.note)}</div>`:""}</div></details>`).join("");
  $("#main").innerHTML=`
  <div class="card trust">
-  <div class="sp"><div class="spa">${esc(((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"د")[0])}</div><div><b>أخصائية ${esc((C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")||"أخصائية التغذية")}</b><small>أخصائية تغذية علاجية • تحت إشراف فريق طبي استشاري</small>${(()=>{const L=CEN.specialists[(C.specialist||"").replace(/^(د\.|أخصائية)\s*/,"")]||{};return L.lic?`<small class="slic">🪪 رخصة مزاولة <b dir="ltr">${esc(L.lic)}</b> • منذ ${esc(L.since)}</small>`:""})()}</div></div>
+  <div class="sp"><div class="spa" style="background:#fff;padding:6px"><img src="https://di3t-club.com/images/lead/logo.ico" alt="di3t.club" style="width:100%;height:100%;object-fit:contain;border-radius:50%" onerror="this.replaceWith('DC');this.parentNode.style.background=''"></div><div><b>دايت كلوب | مركز التغذية العلاجية</b><small>فريق أخصائيات تغذية علاجية • تحت إشراف فريق طبي استشاري</small></div></div>
   <div class="tn"><div><b>+${CEN.subscribers}</b><small>مشترك</small></div><div><b>+${CEN.clients}</b><small>عميل</small></div><div><b>${CEN.years}</b><small>سنة خبرة</small></div></div>
   <div class="lic">🏛️ المركز مرخّص برقم التصريح <b dir="ltr">${esc(CEN.license)}</b> • منذ ${esc(CEN.issued)}</div>
   <a class="rl" href="${esc(CEN.results)}" target="_blank" rel="noopener">شوف نتائج عملائنا الحقيقية ←</a></div>
