@@ -68,6 +68,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .ft{width:100%;border-collapse:collapse;font-size:12.5px}.ft th{font-size:11.5px;color:var(--muted);padding:4px 2px;width:46px;white-space:nowrap}.ft td:first-child{white-space:nowrap;font-size:12.5px}.ft th.on{color:var(--blue)}.ft td{padding:5px 2px;border-top:1px solid var(--line);line-height:1.5}.ft td:not(:first-child){text-align:center}.ft td.on{background:#f5f9ff}
 .ft i{font-style:normal;font-weight:800}.ft .y{color:var(--green)}.ft .n{color:#d1d5db}
 .gift{margin-top:10px;background:#fff7e6;border-radius:12px;padding:9px 12px;font-size:13px;line-height:1.7;color:#7a4b00}
+.now{background:#fff1f2;border:1.5px solid #fecdd3;border-radius:16px;padding:12px 14px}.nl{font-weight:800;color:#be123c;margin-bottom:4px}.sy{font-size:15px;font-weight:700;line-height:1.7}.cz{font-size:12.5px;color:#9f1239;margin-top:6px;opacity:.85}
+.fk{display:block;width:100%;height:46px}
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:10px}.pa{border-radius:16px;padding:12px;font-size:13.5px;line-height:1.6}
+.good{background:#ecfdf3;border:1.5px solid #86efac}.bad{background:#fef2f2;border:1.5px dashed #fca5a5}
+.ph{font-weight:800;font-size:14.5px;margin-bottom:4px}.good .ph{color:#15803d}.bad .ph{color:#b91c1c}
+.pn{font-weight:700;font-size:13px;color:#374151;margin-bottom:6px}.st{color:#374151;font-size:12.5px}.pr{font-weight:800;color:#15803d;margin-top:8px}
+.ok2{font-weight:800;color:#15803d}.no{font-weight:700;color:#b91c1c;margin-bottom:4px}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
 </style>
 </head>
@@ -117,22 +124,25 @@ function render(){
   <div class="stats"><div><b>${esc(C.age||"—")}</b><small>العمر</small></div><div><b>${esc(C.height||"—")}</b><small>الطول سم</small></div><div><b>${esc(C.weight||"—")}</b><small>الوزن كغ</small></div><div><b>${target||"—"}</b><small>الوزن المناسب</small></div></div>
   ${bmi?`<div class="bmi"><div class="t"><span>مؤشر كتلة الجسم</span><b>${bmi.toFixed(1)} • ${bmiTxt}</b></div><div class="sc"><span class="pin" style="right:${100-bmiPos}%"></span></div><div class="lb" style="direction:ltr"><span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span></div></div>`:""}</div>
 
- <div class="card"><h2><i>🩺</i>اللي لاحظناه عندك</h2>
-  <div class="chips">${arr(C.symptoms).map(s=>`<span>${esc(s)}</span>`).join("")}</div>
-  ${arr(C.causes).length?`<div class="sub">الأسباب المحتملة</div><div class="chips c2">${arr(C.causes).map(s=>`<span>${esc(s)}</span>`).join("")}</div>`:""}</div>
+ <div class="card fork"><h2><i>🛤️</i>طريقك من هنا</h2>
+  <div class="now"><div class="nl">📍 وضعك الحين</div>${arr(C.symptoms).map(s=>`<div class="sy">• ${esc(s)}</div>`).join("")}
+   ${arr(C.causes).length?`<div class="cz">السبب غالباً: ${arr(C.causes).map(esc).join("، ")}</div>`:""}</div>
+  <svg class="fk" viewBox="0 0 300 54" preserveAspectRatio="none"><path d="M150 0 V14 Q150 26 225 30 Q300 34 300 54" fill="none" stroke="#22c55e" stroke-width="4" stroke-linecap="round"/><path d="M150 0 V14 Q150 26 75 30 Q0 34 0 54" fill="none" stroke="#f87171" stroke-width="4" stroke-dasharray="7 7" stroke-linecap="round"/></svg>
+  <div class="paths">
+   <div class="pa good"><div class="ph">✅ طريق العلاج</div><div class="pn">${esc(C.program)}</div>
+    ${arr(C.how).map(s=>`<div class="st">➜ ${esc(s)}</div>`).join("")}
+    <div class="pr">النتيجة:</div>${arr(C.result).map(s=>`<div class="ok2">✓ ${esc(s)}</div>`).join("")}</div>
+   <div class="pa bad"><div class="ph">⚠️ بدون بداية</div><div class="pn">الأعراض تقوى مع الوقت</div>
+    ${(arr(C.risks).length?arr(C.risks):["المشكلة تصير مزمنة وأصعب علاجها",diff>0?"الوزن يزيد تدريجياً":"","تأثير أكبر على النوم والطاقة"].filter(Boolean)).map(s=>`<div class="no">✕ ${esc(s)}</div>`).join("")}</div></div>
+  ${C.doctor!==false&&/حرق|ألم|سكر|ضغط|مستمر/.test((C.complaint||"")+arr(C.symptoms).join(""))?`<div class="warn">⚕️ الأعراض المستمرة تحتاج مراجعة الطبيب، وأي دواء يكون منه.</div>`:""}</div>
 
- <div class="card"><h2><i>🥗</i>برنامجك المناسب</h2><div class="plan">${esc(C.program)}</div>
-  <ul class="ul">${arr(C.how).map((s,i)=>`<li><span>${i+1}</span>${esc(s)}</li>`).join("")}</ul>
-  ${C.doctor!==false&&/حرق|ألم|سكر|ضغط|مستمر/.test((C.complaint||"")+arr(C.symptoms).join(""))?`<div class="warn">⚕️ البرنامج الغذائي يساعد، لكن الأعراض المستمرة تحتاج مراجعة الطبيب، وأي دواء يكون منه.</div>`:""}</div>
-
- <div class="card res"><h2><i>🎯</i>النتيجة اللي راح توصل لها</h2>
-  ${diff>0?`<div class="wg"><div><b>${C.weight}</b><small>وزنك الحين</small></div><div class="ar"></div><div><b style="color:#4ade80">${target}</b><small>هدفك</small></div></div>`:""}
+ ${diff>0?`<div class="card res"><h2><i>🎯</i>رحلة وزنك</h2>
+  <div class="wg"><div><b>${C.weight}</b><small>وزنك الحين</small></div><div class="ar"></div><div><b style="color:#4ade80">${target}</b><small>هدفك</small></div></div>
   <div class="tl">
-   <div><b>بعد أسبوعين</b><p>${diff>0?`حوالي <b>-${step(2)} كغ</b> • `:""}${esc(arr(C.result)[0]||"تحسن واضح في الأعراض")}</p></div>
-   <div><b>بعد شهر</b><p>${diff>0?`حوالي <b>-${step(4.3)} كغ</b> • `:""}نظام أكل ثابت ومريح، وطاقة أعلى</p></div>
-   <div><b>بعد 3 أشهر</b><p>${diff>0?`حوالي <b>-${step(13)} كغ</b> • `:""}${esc(arr(C.result).slice(1).join(" • ")||"نتيجة ثابتة ومستمرة")}</p></div></div>
-  <div class="gain">${arr(C.result).map(s=>`<span>✅ ${esc(s)}</span>`).join("")}</div>
-  <small style="color:#93b4dc;display:block;margin-top:10px">* التوقعات تقريبية وتختلف حسب الالتزام والحالة الصحية.</small></div>
+   <div><b>بعد أسبوعين</b><p>حوالي <b>-${step(2)} كغ</b> • تبدأ تحس بالفرق</p></div>
+   <div><b>بعد شهر</b><p>حوالي <b>-${step(4.3)} كغ</b> • طاقة أعلى وأكل منتظم</p></div>
+   <div><b>بعد 3 أشهر</b><p>حوالي <b>-${step(13)} كغ</b> • عادة ثابتة تكمل معك</p></div></div>
+  <small style="color:#93b4dc;display:block;margin-top:10px">* أرقام تقريبية وتختلف حسب الالتزام والحالة الصحية.</small></div>`:""}
 
  <div class="card" id="more"><h2><i>✍️</i>كمّل بياناتك</h2><div style="color:var(--muted);font-size:13.5px">حتى نفصّل برنامجك عليك بالضبط:</div>
   <label>هدفك الأساسي</label><div class="opts" data-q="goal">${["نزول وزن","راحة المعدة","تنظيم السكر","زيادة وزن","صحة عامة"].map(o=>`<button>${o}</button>`).join("")}</div>
