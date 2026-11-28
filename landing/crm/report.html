@@ -62,6 +62,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--blue)}
 .tag{font-size:11px;background:#e8faf0;color:var(--green);border-radius:8px;padding:2px 8px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;border-radius:12px;padding:10px 18px;font-size:14px;opacity:0;transition:.3s;pointer-events:none}.toast.on{opacity:1}
 .ok{text-align:center;padding:10px;color:var(--green);font-weight:800;display:none}
+.plans{display:flex;gap:8px;margin-bottom:12px}.pl{flex:1;position:relative;border:2px solid var(--line);background:#fff;border-radius:16px;padding:14px 6px 10px;font:inherit;cursor:pointer;text-align:center}
+.pl b{display:block;font-size:17px;color:var(--navy)}.pl small{display:block;color:var(--muted);font-size:11.5px;min-height:15px}.pl span{display:block;margin-top:4px;font-size:12.5px;font-weight:800;color:var(--green)}
+.pl.on{border-color:var(--blue);background:#eef5ff;box-shadow:0 6px 16px rgba(26,115,245,.18)}.pl em{position:absolute;top:-10px;right:50%;transform:translateX(50%);font-style:normal;font-size:10.5px;font-weight:800;background:var(--gold);color:#fff;border-radius:8px;padding:1px 8px;white-space:nowrap}
+.ft{width:100%;border-collapse:collapse;font-size:12.5px}.ft th{font-size:11.5px;color:var(--muted);padding:4px 2px;width:46px;white-space:nowrap}.ft td:first-child{white-space:nowrap;font-size:12.5px}.ft th.on{color:var(--blue)}.ft td{padding:5px 2px;border-top:1px solid var(--line);line-height:1.5}.ft td:not(:first-child){text-align:center}.ft td.on{background:#f5f9ff}
+.ft i{font-style:normal;font-weight:800}.ft .y{color:var(--green)}.ft .n{color:#d1d5db}
+.gift{margin-top:10px;background:#fff7e6;border-radius:12px;padding:9px 12px;font-size:13px;line-height:1.7;color:#7a4b00}
 footer{text-align:center;color:var(--muted);font-size:12px;padding:10px}
 </style>
 </head>
@@ -95,10 +101,15 @@ function render(){
  $("#hi").textContent=`أهلاً ${C.name.split(" ")[0]} 👋`;
  $("#intro").textContent=`هذا تقريرك الشخصي من ${C.specialist||"أخصائية التغذية"}، جهزناه بناءً على بياناتك${C.complaint?" وشكواك: "+C.complaint:""}.`;
  const bmiPos=bmi?Math.max(2,Math.min(98,(bmi-15)/(40-15)*100)):50,bmiTxt=!bmi?"":bmi<18.5?"أقل من الطبيعي":bmi<25?"طبيعي":bmi<30?"وزن زائد":"سمنة";
- const cur=CFG.currency[C.country],usd=+C.price||80;
+ const cur=CFG.currency[C.country];
+ const PL={"3":{t:"3 أشهر",d:""},"6":{t:"6 أشهر",d:"أو مدة العلاج الكاملة"},"12":{t:"12 شهر",d:"سنوية"}};
+ const plans=(C.plans&&C.plans.length?C.plans:["3","6"]).filter(k=>PL[k]);if(!plans.includes(SEL))SEL=plans.includes("6")?"6":plans[0];
+ const pr=(C.prices||{})[SEL],usd=pr?+pr:null;
+ const FT=[["🍽 غذائي بأكل بيتك + بدائل","3"],["🏋️ رياضي (نادي/بيت/علاجي)","3"],["🩺 بروتوكول لحالتك","3"],["🧠 الأكل الحدسي","3"],["⚖️ برنامج التثبيت","6"],["⭐ متابعة يومية VIP","12"]];
+ const has=(k,min)=>+k>=+min;
  const methods=CFG.methods.filter(m=>m.countries.includes(C.country)).concat(CFG.methods.filter(m=>m.countries.includes("*")&&!m.countries.includes(C.country)));
  const ms=methods.map((m,i)=>`<details class="pm" ${i===0?"open":""}><summary>${m.icon} ${esc(m.name)} ${m.countries.includes(C.country)?'<span class="tag">متوفر في '+esc(C.country)+'</span>':""}<em>⌄</em></summary><div class="f">
-   ${m.link?`<a class="btn" href="${esc(CFG.payLink.replace("{usd}",usd))}" target="_blank" rel="noopener">ادفع ${usd}$ الآن ←</a>`:""}
+   ${m.link?`<a class="btn" href="${esc(usd?CFG.payLink.replace("{usd}",usd):CFG.payLink.split("?")[0])}" target="_blank" rel="noopener">الدفع الإلكتروني ←</a>`:""}
    ${m.fields.map(([k,v])=>`<div class="row"><small>${esc(k)}</small><b>${esc(v)}</b><button class="cp" data-c="${esc(v)}">نسخ</button></div>`).join("")}
    ${m.note?`<div class="warn">${esc(m.note)}</div>`:""}</div></details>`).join("");
  $("#main").innerHTML=`
@@ -134,13 +145,15 @@ function render(){
   <button class="btn o" id="send">إرسال البيانات للأخصائية</button><div class="ok" id="sent">✓ وصلت بياناتك، شكراً لك</div></div>
 
  <div class="card" id="pay"><h2><i>💳</i>اشترك وابدأ برنامجك</h2>
-  <div class="price"><b>${usd}<small>$</small></b>${cur?`<div class="loc">≈ <b>${(usd*cur[1]).toLocaleString("en",{maximumFractionDigits:cur[1]<1?2:0})} ${esc(cur[0])}</b> <small>(سعر تقريبي)</small></div>`:""}
-   <div class="inc"><span>✓ برنامج غذائي مخصص</span><span>✓ متابعة مع الأخصائية</span><span>✓ تعديل أسبوعي</span></div></div>
+  <div class="plans">${plans.map(k=>`<button class="pl ${SEL===k?"on":""}" data-pl="${k}">${k==="6"?'<em>الأنسب لحالتك</em>':""}<b>${PL[k].t}</b><small>${PL[k].d||"&nbsp;"}</small>${(C.prices||{})[k]?`<span>${C.prices[k]}$${cur?` ≈ ${(C.prices[k]*cur[1]).toLocaleString("en",{maximumFractionDigits:cur[1]<1?2:0})} ${esc(cur[0])}`:""}</span>`:""}</button>`).join("")}</div>
+  <table class="ft"><tr><th></th>${plans.map(k=>`<th class="${SEL===k?"on":""}">${PL[k].t}</th>`).join("")}</tr>
+   ${FT.map(([f,min])=>`<tr><td>${f}</td>${plans.map(k=>`<td class="${SEL===k?"on":""}">${has(k,min)?'<i class="y">✓</i>':'<i class="n">✕</i>'}</td>`).join("")}</tr>`).join("")}</table>
+  ${arr(C.gifts).length?`<div class="gift">🎁 <b>هدايا خاصة لك:</b> ${arr(C.gifts).map(esc).join(" • ")}</div>`:""}
   <div class="sub">اختر طريقة الدفع</div>${ms||'<div class="warn">تواصل معنا لطريقة الدفع المناسبة لبلدك</div>'}
-  ${CFG.whatsapp?`<a class="btn g" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent("السلام عليكم، أنا "+C.name+" حوّلت مبلغ الاشتراك "+usd+"$، وهذا الإيصال 👇")}" target="_blank">📎 أرسل إيصال الدفع على واتساب</a>`:""}</div>`;
+  ${CFG.whatsapp?`<a class="btn g" href="https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent("السلام عليكم، أنا "+C.name+" حوّلت مبلغ اشتراك "+PL[SEL].t+"، وهذا الإيصال 👇")}" target="_blank">📎 أرسل إيصال الدفع على واتساب</a>`:""}</div>`;
 }
-render();
-document.addEventListener("click",e=>{const c=e.target.closest("[data-c]");if(c){navigator.clipboard?.writeText(c.dataset.c);toast("تم النسخ ✓")}
+let SEL=null;render();
+document.addEventListener("click",e=>{const pl=e.target.closest("[data-pl]");if(pl){SEL=pl.dataset.pl;const y=scrollY;render();scrollTo(0,y);return}const c=e.target.closest("[data-c]");if(c){navigator.clipboard?.writeText(c.dataset.c);toast("تم النسخ ✓")}
  const o=e.target.closest(".opts button");if(o){o.parentNode.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b===o))}});
 $("#send").onclick=()=>{const v=q=>document.querySelector(`[data-q="${q}"] .on`)?.textContent||"—",g=id=>$("#"+id).value||"—";
  const msg=`بيانات إضافية من ${C.name} (${C.phone||""}):\n• الهدف: ${v("goal")}\n• أمراض/أدوية: ${g("q_med")}\n• حساسية: ${g("q_all")}\n• الوجبات: ${v("meals")}\n• النشاط: ${v("act")}\n• النوم: ${g("q_sleep")}\n• ملاحظة: ${g("q_note")}`;
